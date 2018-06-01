@@ -22,3 +22,25 @@ h3 {
     margin-top: 30px;
     margin-bottom: 60px;
 }
+
+#left-col, #right-col {
+    padding: 0px;
+}
+
+#info-container {
+    padding-top: 152px;
+    padding-bottom: 152px;
+}
+
+
+#button-row {
+    text-align: center;
+    margin-top: 30px;
+}
+
+
+
+#emojis {
+    margin-top: 120px;
+    margin-bottom: 120px;
+}

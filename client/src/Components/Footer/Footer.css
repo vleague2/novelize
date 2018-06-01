@@ -1,0 +1,14 @@
+.footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: #313638;
+    color: #e8e9eb;
+    padding-top: 15px;
+}
+
+#footer-text {
+    font-size: 12px;
+    font-family: 'Open-Sans', sans-serif;
+}
+
