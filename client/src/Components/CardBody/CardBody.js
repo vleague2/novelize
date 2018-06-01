@@ -1,9 +1,9 @@
 import React from "react";
 import "./CardBody.css";
 
-const CardBody = ({id, children, href}) => (
+const CardBody = ({id, children, onClick}) => (
     <div className="card rounded-0">
-        <a href={href}>
+        <a onClick={onClick}>
             <div className="card-body text-center" id={id}>
                 {children}
             </div>

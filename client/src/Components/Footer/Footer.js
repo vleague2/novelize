@@ -4,8 +4,8 @@ import "./Footer.css";
 
 const Footer = () => (
 
-    <footer class="footer">
-        <p id="footer-text" class="text-center"> © Victoria League 2018 </p>
+    <footer className="footer">
+        <p id="footer-text" className="text-center"> © Victoria League 2018 </p>
     </footer> 
 )
 
