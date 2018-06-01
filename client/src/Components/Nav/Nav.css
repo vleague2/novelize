@@ -1,0 +1,19 @@
+.navbar {
+    background-color: #7e4464;
+    box-shadow: 2px 0px 5px rgb(49, 49, 49);
+}
+
+.navbar-brand {
+    font-family: 'Berkshire Swash', cursive;
+    font-size: 24px;
+}
+
+.nav-item {
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.nav-item:hover {
+    color: white;
+    text-decoration: none;
+}

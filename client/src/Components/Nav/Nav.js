@@ -1,9 +1,13 @@
 import React from "react";
+import "./Nav.css";
 
 const Nav = () => (
-  <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+  <nav className="navbar navbar-expand-lg navbar-dark">
     <a className="navbar-brand" href="/">
-      React Reading List
+      Novelize
+    </a>
+    <a className="nav-item ml-auto" href="/">
+      Login/Register
     </a>
   </nav>
 );

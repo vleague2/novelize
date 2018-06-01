@@ -1,0 +1,24 @@
+#site-h1 {
+    font-size: 60px;
+    font-family: 'Berkshire Swash', cursive;
+    margin-bottom: 15px;
+}
+
+.jumbotron-subtext {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 22px;
+}
+
+h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    text-align: center;
+}
+
+.descr-text {
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
