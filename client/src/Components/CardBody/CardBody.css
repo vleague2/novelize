@@ -8,3 +8,7 @@ a:hover {
     color: black;
     text-decoration: none;
 }
+
+.card-body {
+    font-family: 'Open-Sans', sans-serif;
+}

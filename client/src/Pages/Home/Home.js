@@ -5,13 +5,16 @@ import "./Home.css";
 import {Container, Row, Col} from "../../Components/Grid";
 import CardBody from "../../Components/CardBody"
 import Footer from "../../Components/Footer"
+import FeaturesDisplay from "../../Components/FeaturesDisplay";
 
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            tab: "env"
+            tab: "env",
+            title: "An Integrated Writing Environment",
+            content: "some content here"
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -30,18 +33,38 @@ class Home extends Component {
         switch (tab) {
             case "env":
                 console.log("ENV!!!");
+                this.setState(
+                    {title: "An Integrated Writing Environment",
+                    content: "some things about the writing environment"}
+                );
                 break;
             case "char":
                 console.log("CHAR!!!");
+                this.setState(
+                    {title: "Separate Profiles for Each Character",
+                    content: "some things about the character profiles"}
+                );
                 break;
             case "world":
                 console.log("WORLD!!!");
+                this.setState(
+                    {title: "Build the Components of Your World",
+                    content: "some things about the worldbuilding process"}
+                );
                 break;
             case "plot":
                 console.log("PLOT!!!!");
+                this.setState(
+                    {title: "Chart the Plot on a Timeline",
+                    content: "some things about the plot timeline view"}
+                );
                 break;
             case "note":
                 console.log("NOTE!!!!");
+                this.setState(
+                    {title: "Store Research and Notes",
+                    content: "some things about the note system"}
+                );
                 break;
             default:
                 console.log("broken");
@@ -65,14 +88,14 @@ class Home extends Component {
                     <Row>
                     
                         <Col size="4" id="left-col">
-                            <CardBody id="env" onClick={this.handleClick}>Writing Environment</CardBody>
-                            <CardBody id="char" onClick={this.handleClick}>Character Profiles</CardBody>
-                            <CardBody id="world" onClick={this.handleClick}>World Building</CardBody>
-                            <CardBody id="plot" onClick={this.handleClick}>Plot Outlining</CardBody>
-                            <CardBody id="note" onClick={this.handleClick}>Notes</CardBody>
+                            <CardBody id="env" onClick={this.handleClick}>Writing Environment <i class="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="char" onClick={this.handleClick}>Character Profiles <i class="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="world" onClick={this.handleClick}>World Building <i class="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="plot" onClick={this.handleClick}>Plot Outlining <i class="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="note" onClick={this.handleClick}>Notes <i class="fas fa-angle-right"></i></CardBody>
                         </Col> 
                         <Col size="8" id="right-col">
-                            <CardBody id="info-container">Lots of stuff goes here</CardBody>
+                            <FeaturesDisplay id="info-container" title={this.state.title} content={this.state.content}/>
                         </Col>
                     
                     </Row>

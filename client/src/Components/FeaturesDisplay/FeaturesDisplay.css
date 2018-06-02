@@ -1,0 +1,15 @@
+
+#feature-display {
+    height: 100%;
+    background-color: #dfdfdf;
+}
+
+#feature-title {
+    font-family: 'Open-Sans', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+#feature-descr {
+    font-family: 'Open-Sans', sans-serif;
+}
