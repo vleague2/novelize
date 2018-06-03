@@ -1,3 +1,4 @@
-h1 {
-    margin-bottom: 60px;
+#loginCard, #registerCard {
+    text-align: center;
+    background-color: #dfdfdf;
 }
