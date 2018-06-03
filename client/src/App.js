@@ -4,6 +4,7 @@ import Home from "./Pages/Home/Home";
 import Nav from "./Components/Nav";
 import Footer from "./Components/Footer"
 import Login from "./Pages/Login/Login";
+import Editor from "./Pages/Editor/Editor";
 
 const App = () => (
   <Router>
@@ -12,6 +13,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
+        <Route exact path = "/editor" component={Editor} />
       </Switch>
        {/* ADD IN THE FOOTER */}
       <Footer/>

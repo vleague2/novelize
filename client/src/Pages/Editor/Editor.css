@@ -1,0 +1,19 @@
+.tabBtn {
+    width: 50%;
+    margin-top: 2px;
+}
+
+#editorRow {
+    height: 100%;
+}
+
+#tabsLeft {
+    border-right: 1px solid #dfdfdf;
+    height: 100%;
+}
+
+
+#tabsRight {
+    border-left: 1px solid #dfdfdf;
+    height: 100%;
+}
