@@ -15,7 +15,7 @@ const Login = () => (
                             <button className="btn btn-info btn-block mb-4">Sign Up With Google</button>
                             <h5 className="mb-4">Or create an account:</h5>
 
-                            <form action="/api/user" >
+                            <form action="/auth/login" method="POST">
                                 <div className="form-group">
                                     <label for="emailRegister">Email address</label>
                                     <input type="email" className="form-control" id="emailRegister" placeholder="Enter email"/>
