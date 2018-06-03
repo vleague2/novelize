@@ -9,10 +9,11 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 
 
-// require('./config/passport')(passport); 
-
 // require our database models folder
 const db = require("./models");
+
+// set up passport
+require('./config/passport')(passport);
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
@@ -21,7 +22,7 @@ if (process.env.NODE_ENV === "production") {
 
 //BodyParser Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.urlencoded({ extended: false}));
 app.use(cookieParser());
 
 // session setup
@@ -40,12 +41,15 @@ app.use(passport.session());
 app.use(require("./routes"));
 
 
+
+
 // sync db
 db.sequelize.sync().then(function() {
   app.listen(PORT)
   // Log port number
   console.log(`🌎 ==> Server now on port ${PORT}!`);
 });
+
 
 
 // Send every request to the React app

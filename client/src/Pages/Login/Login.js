@@ -15,7 +15,8 @@ const Login = () => (
                             <button className="btn btn-info btn-block mb-4">Sign Up With Google</button>
                             <h5 className="mb-4">Or create an account:</h5>
 
-                            <form action="/auth/login" method="POST">
+                            {/* proxy here not working so hardcoded path needs to be fixed */}
+                            <form action="http://localhost:3001/register" method="POST">
                                 <div className="form-group">
                                     <label for="emailRegister">Email address</label>
                                     <input type="email" className="form-control" id="emailRegister" placeholder="Enter email"/>

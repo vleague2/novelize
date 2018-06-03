@@ -162,11 +162,11 @@ class Home extends Component {
                         <Col size="4" id="left-col">
 
                             {/* ADD IN 5 CARDBODY COMPONENTS, WITH UNIQUE ID'S AND FEED IT THE HANDLECLICK FUNCTION SO THAT THE FUNCTIONS ABOVE RUN WHEN THE TAB IS CLICKED */}
-                            <CardBody id="env" onClick={this.handleClick}>Writing Environment <i class="fas fa-angle-right"></i></CardBody>
-                            <CardBody id="char" onClick={this.handleClick}>Character Profiles <i class="fas fa-angle-right"></i></CardBody>
-                            <CardBody id="world" onClick={this.handleClick}>World Building <i class="fas fa-angle-right"></i></CardBody>
-                            <CardBody id="plot" onClick={this.handleClick}>Plot Outlining <i class="fas fa-angle-right"></i></CardBody>
-                            <CardBody id="note" onClick={this.handleClick}>Notes <i class="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="env" onClick={this.handleClick}>Writing Environment <i className="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="char" onClick={this.handleClick}>Character Profiles <i className="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="world" onClick={this.handleClick}>World Building <i className="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="plot" onClick={this.handleClick}>Plot Outlining <i className="fas fa-angle-right"></i></CardBody>
+                            <CardBody id="note" onClick={this.handleClick}>Notes <i className="fas fa-angle-right"></i></CardBody>
                         </Col> 
 
                         {/* FEATURES INFO: CALL ANOTHER COLUMN SIZE 8 */}
