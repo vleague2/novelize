@@ -5,7 +5,6 @@ import Button from "../../Components/Button"
 import "./Home.css";
 import {Container, Row, Col} from "../../Components/Grid";
 import CardBody from "../../Components/CardBody"
-import Footer from "../../Components/Footer"
 import FeaturesDisplay from "../../Components/FeaturesDisplay";
 
 
@@ -187,13 +186,12 @@ class Home extends Component {
                             <Button>Get Started</Button>
                         </Col>
                     </Row>
+                    {/* <h1>
+                        <p role="img" aria-label="Face With Rolling Eyes Emoji" id="emojis">
+                        🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄
+                        </p>
+                    </h1> */}
                 </Container>
-
-                <h1>
-                    <p role="img" aria-label="Face With Rolling Eyes Emoji" id="emojis">
-                    🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄
-                    </p>
-                </h1>
             </div>
         )
     }

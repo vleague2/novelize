@@ -6,7 +6,7 @@ const Nav = () => (
     <a className="navbar-brand" href="/">
       Novelize
     </a>
-    <a className="nav-item ml-auto" href="/">
+    <a className="nav-item ml-auto" href="/login">
       Login/Register
     </a>
   </nav>
