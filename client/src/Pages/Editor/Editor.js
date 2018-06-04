@@ -4,6 +4,7 @@ import "./Editor.css";
 import {Container, Row, Col} from "../../Components/Grid";
 import CardBody from "../../Components/CardBody";
 import Button from "../../Components/Button";
+import CharacterCard from "../../Components/CharacterCard";
 
 
 class Editor extends Component {
@@ -11,7 +12,9 @@ class Editor extends Component {
         super(props);
 
         // SET THE STATE
-        this.state = {}
+        this.state = {
+            characters: []
+        }
 
         // BIND THIS FOR HANDLECLICK
         // this.handleClick = this.handleClick.bind(this);
@@ -20,9 +23,32 @@ class Editor extends Component {
     componentDidMount() {
         axios.get("/api/characters")
         .then(res => {
-            console.log(res);
+            let data = res.data;
+
+            this.setState({characters: data});
+
+            console.log(this.state.characters);
+
+            // setTimeout(this.displayCharacters(), 5000);
         })
     }
+
+    displayCharacters() {
+
+        this.state.characters.forEach(character => {
+            let textChild = document.createElement("p");
+            let textNode = document.createTextNode(character.name);
+            textChild.appendChild(textNode);
+            document.getElementById("charactershere").appendChild(textChild);
+        })
+
+        // let string="<CharacterCard id={this.characters[0].id} title={this.characters[0].name} preview={this.characters[0].preview_text}/>";
+        // let div = document.createElement("div");
+        // div.innerHTML(string);
+
+        // document.getElementById("charactershere").appendChild(div);
+    }
+
 
     render() {
         return (
@@ -30,15 +56,18 @@ class Editor extends Component {
             <div>
                 <Row id="editorRow">
                     <Col size="3" id="tabsLeft">
-                        {/* <div className="nav"> */}
-                           <button className="btn btn-dark rounded-0 tabBtn">
-                            Characters
+                            <button className="btn btn-dark rounded-0 tabBtn">
+                                Characters
                             </button>
                             <button className="btn btn-light rounded-0 tabBtn">
-                            Plot
+                                Plot
                             </button>
-                        {/* </div> */}
-                        <h3> tabs go here </h3>
+                        <span id="charactershere">
+                            {this.state.characters.forEach(character => {
+                                return <CharacterCard id={character.id} title={character.name} preview={character.preview_text}/>
+                            })}
+                        </span>
+                        
                     </Col>
 
                     <Col size="6">
