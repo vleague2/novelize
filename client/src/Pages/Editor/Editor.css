@@ -8,6 +8,16 @@
     margin-right: 0px;
 }
 
+#char_tab {
+    background-color: #343a40;
+    color: white;
+}
+
+#plot_tab {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
 #tabsLeft {
     border-right: 1px solid #dfdfdf;
     height: 100%;

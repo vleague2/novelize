@@ -6,7 +6,7 @@ const CharacterCard = (props) => (
         <div className="card-body" id={props.id}>
             <div className="row">
                 <div className="col-4">
-                <img src={props.image} class="char_img"/>
+                <img src={props.image} className="char_img"/>
                 </div>
                 <div className="col-8 pl-0">
                     <p className="char_name mb-1">{props.title}</p>

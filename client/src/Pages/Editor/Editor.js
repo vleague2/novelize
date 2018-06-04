@@ -13,11 +13,12 @@ class Editor extends Component {
 
         // SET THE STATE
         this.state = {
-            characters: []
+            characters: [],
+            leftTab: "char_tab"
         }
 
         // BIND THIS FOR HANDLECLICK
-        // this.handleClick = this.handleClick.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount() {
@@ -29,14 +30,31 @@ class Editor extends Component {
 
             console.log(this.state.characters);
 
-            
-
-            // setTimeout(this.displayCharacters(), 5000);
         });
     }
 
-    displayCharacters() {
+    handleClick(e) {
+        let tab = e.target.id;
 
+        switch (tab) {
+            case "char_tab": 
+                document.getElementById("char_tab").style.backgroundColor = "#343a40";
+                document.getElementById("char_tab").style.color = "#f8f9fa";
+                document.getElementById("plot_tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("plot_tab").style.color = "#343a40";
+                break;
+            case "plot_tab":
+                document.getElementById("char_tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("char_tab").style.color = "#343a40";
+                document.getElementById("plot_tab").style.backgroundColor = "#343a40";
+                document.getElementById("plot_tab").style.color = "#f8f9fa";
+                break;
+            default:
+                console.log("RIP Me");
+        }
+    }
+
+    displayCharacters() {
         axios.get("/api/characters")
         .then(res => {
             let data = res.data;
@@ -44,30 +62,7 @@ class Editor extends Component {
             this.setState({characters: data});
 
             console.log(this.state.characters);
-
-            
-
-            // setTimeout(this.displayCharacters(), 5000);
         })
-        // .then( ()=> {
-            
-        // });
-
-        // this.state.characters.forEach(character => {
-            // return <CharacterCard id={character.id} title={character.name} preview={character.preview_text}/>
-            /*
-            let textChild = document.createElement("CharacterCard");
-            let textNode = document.createTextNode(character.name);
-            textChild.appendChild(textNode);
-            document.getElementById("tabsLeft").appendChild(textChild);
-            */
-        // })
-
-        // let string="<CharacterCard id={this.characters[0].id} title={this.characters[0].name} preview={this.characters[0].preview_text}/>";
-        // let div = document.createElement("div");
-        // div.innerHTML(string);
-
-        // document.getElementById("charactershere").appendChild(div);
     }
 
 
@@ -77,19 +72,19 @@ class Editor extends Component {
             <div>
                 <Row id="editorRow">
                     <Col size="3" id="tabsLeft">
-                            <button className="btn btn-dark rounded-0 tabBtn">
-                                Characters
-                            </button>
-                            <button className="btn btn-light rounded-0 tabBtn">
-                                Plot
-                            </button>
-                
-                            <div>
+                        <button className="btn rounded-0 tabBtn" id="char_tab" onClick={this.handleClick}>
+                            Characters
+                        </button>
+                        <button className="btn rounded-0 tabBtn" id="plot_tab" onClick={this.handleClick}>
+                            Plot
+                        </button>
+            
+                        <div>
                             {this.state.characters.map(character => {
                                 console.log("crying");
                                 return <CharacterCard id={character.id} title={character.name} preview={character.preview_text} key={character.id} image={character.character_image} profile={character.character_text}/>
                             })}
-                            </div>
+                        </div>
                         
                         
                     </Col>
