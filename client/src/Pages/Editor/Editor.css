@@ -48,3 +48,12 @@
 #mceu_34 {
     display: none;
 }
+
+.edit-fullscreen {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 12px;
+    color: rgb(86, 86, 253);
+    cursor: pointer;
+    margin-top: 15px;
+    text-align: center;
+}

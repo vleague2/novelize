@@ -108,6 +108,10 @@ class EditorPage extends Component {
                         </button>
             
                         <div>
+                            <p className="justify-content-center text-center mt-2 mb-2">
+                                <a href="/character-edit" className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                            </p>
+
                             {/* MAP THROUGH THE CHARACTER ARRAY IN THE STATE AND ADD A CHARACTER CARD FOR EACH */}
                             {this.state.characters.map(character => {
                                 console.log("crying");
