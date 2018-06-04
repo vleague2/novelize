@@ -15,6 +15,7 @@ class EditorPage extends Component {
         // SET THE STATE
         this.state = {
             characters: [],
+            story: ""
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -31,6 +32,13 @@ class EditorPage extends Component {
             console.log(this.state.characters);
 
         });
+
+        axios.get("/api/story")
+        .then(res => {
+            let story = res.data.story_text;
+
+            this.setState({story: story})
+        })
 
         // tinymce.init({
         //     selector: '#editortextarea',
@@ -69,20 +77,14 @@ class EditorPage extends Component {
         }
     }
 
-    displayCharacters() {
-        axios.get("/api/characters")
-        .then(res => {
-            let data = res.data;
-
-            this.setState({characters: data});
-
-            console.log(this.state.characters);
-        })
-    }
-
 
     handleEditorChange = (e) => {
-        console.log('Content was updated:', e.target.getContent());
+        // console.log('Content was updated:', e.target.getContent());
+        axios.post('/api/story', {
+            story: e.target.getContent()
+        }).then(res => {
+            console.log(res.data.story_text);
+        })
     }
 
     render() {
@@ -111,7 +113,7 @@ class EditorPage extends Component {
                     <Col size="6" id="editorCol">
                         <Editor
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' cloudChannel='dev'
-                            initialValue="<p>This is the initial content of the editor</p>"
+                            initialValue={`<p>${this.state.story}</p>`}
                             id="textEditor"
                             
                             init={{
@@ -121,7 +123,10 @@ class EditorPage extends Component {
                                 'insertdatetime media table contextmenu paste code help wordcount'
                             ],
                             toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                            menubar: false
+                            menubar: false,
+                            content_css: [
+                                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                                '//www.tinymce.com/css/codepen.min.css'],
                             }}
                             onChange={this.handleEditorChange}
                         />
