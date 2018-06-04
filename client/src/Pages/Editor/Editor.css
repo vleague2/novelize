@@ -42,6 +42,9 @@
 
 #textEditor {
     height: 76%;
-    max-height: 83vh;
-    
+    max-height: 83vh;    
+}
+
+#mceu_34 {
+    display: none;
 }
