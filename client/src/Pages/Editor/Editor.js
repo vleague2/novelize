@@ -5,16 +5,16 @@ import {Container, Row, Col} from "../../Components/Grid";
 import CardBody from "../../Components/CardBody";
 import Button from "../../Components/Button";
 import CharacterCard from "../../Components/CharacterCard";
+import { Editor } from '@tinymce/tinymce-react';
 
 
-class Editor extends Component {
+class EditorPage extends Component {
     constructor(props) {
         super(props);
 
         // SET THE STATE
         this.state = {
             characters: [],
-            leftTab: "char_tab"
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -31,6 +31,21 @@ class Editor extends Component {
             console.log(this.state.characters);
 
         });
+
+        // tinymce.init({
+        //     selector: '#editortextarea',
+        //     height: 500,
+        //     menubar: false,
+        //     plugins: [
+        //       'advlist autolink lists link image charmap print preview anchor textcolor',
+        //       'searchreplace visualblocks code fullscreen',
+        //       'insertdatetime media table contextmenu paste code help wordcount'
+        //     ],
+        //     toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        //     content_css: [
+        //       '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        //       '//www.tinymce.com/css/codepen.min.css']
+        // });
     }
 
     handleClick(e) {
@@ -66,6 +81,10 @@ class Editor extends Component {
     }
 
 
+    handleEditorChange = (e) => {
+        console.log('Content was updated:', e.target.getContent());
+    }
+
     render() {
         return (
 
@@ -89,8 +108,21 @@ class Editor extends Component {
                         
                     </Col>
 
-                    <Col size="6">
-                        <h3> editor goes here </h3>
+                    <Col size="6" id="editorCol">
+                        <Editor
+                            apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' cloudChannel='dev'
+                            initialValue="<p>This is the initial content of the editor</p>"
+                            id="textEditor"
+                            init={{
+                            plugins: [
+                                'advlist autolink lists link image charmap print preview anchor textcolor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table contextmenu paste code help wordcount'
+                            ],
+                            toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+                            }}
+                            onChange={this.handleEditorChange}
+                        />
                     </Col>
 
                     <Col size="3" id="tabsRight">
@@ -109,4 +141,4 @@ class Editor extends Component {
     }
 }
 
-export default Editor;
+export default EditorPage;

@@ -18,6 +18,10 @@
     color: #343a40;
 }
 
+#editorCol {
+    padding: 0px;
+}
+
 #tabsLeft {
     border-right: 1px solid #dfdfdf;
     height: 100%;
@@ -34,4 +38,10 @@
     height: 100%;
     padding-left:0px;
     padding-right: 0px;
+}
+
+#textEditor {
+    height: 70%;
+    max-height: 83vh;
+    
 }
