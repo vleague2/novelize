@@ -57,6 +57,66 @@ module.exports = {
 
     },
 
+    {
+      name: "Kyle",
+      preview_text: "Rio’s boyfriend. Sporty, strong, sweet",
+      character_text: `
+      <ul>
+        <li>extremely strong physically. weaker in magic so he just relies on brute force</li>
+        <li>Basketball and sports nerd (aka jock)</li>
+        <li>Gay!!</li>
+        <li>Is 18 at start of story (one year younger than Rio), set to graduate the same year</li>
+        <li>Normally a very sweet guy</li>
+        <li>Has a fiery temper when he’s pushed past his limit, though</li>
+      </ul>
+      `,
+      character_image: "https://vickileague.files.wordpress.com/2018/06/cbx-263152-unsplash.jpg",
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      name: "Mary",
+      preview_text: "Aria’s only female friend. Modest, earnest, plain",
+      character_text: `
+      <ul>
+        <li>Bisexual</li>
+        <li>Raised in a very normal nuclear family - parents together, two kids (has a younger brother), very supportive family</li>
+        <li>Went to a religious private school up until high school</li>
+        <li>She’s mildly religious still, but retains all of the modesty and manners (modest clothing, no swearing, very polite)</li>
+        <li>She’s gullible and open, and has a hard time understanding people who would do bad things</li>
+        <li>Earnest</li>
+        <li>Likes to bake</li>
+        <li>Develops a fierce confidence in herself from spending time with Aria</li>
+        <li>Calm personality balances Aria</li>
+        <li>She’s a pretty plain person as far as style and makeup, but it suits her</li>
+        <li>Parents are doctors and she plans to become a vet</li>
+      </ul>
+      `,
+      character_image: "https://vickileague.files.wordpress.com/2018/06/henri-pham-348664-unsplash.jpg",
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+
+    {
+      name: "Lena",
+      preview_text: "Aria’s chaperone. Deceased",
+      character_text: `
+      <ul>
+        <li>Took in Aria when she was 20 years old</li>
+        <li>Never wanted kids, never wanted to chaperone. She was just the only commander available for Aria’s cohort</li>
+        <li>Is a serious woman who takes her job seriously</li>
+        <li>Feels empathetic to Aria but mostly hides it</li>
+        <li>Has been dating her boyfriend for a few years</li>
+      </ul>
+      `,
+      character_image: "https://vickileague.files.wordpress.com/2018/06/diana-simumpande-236151-unsplash.jpg",
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+
     ], {});
     },
 
