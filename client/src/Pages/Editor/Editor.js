@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import axios from "axios";
 import "./Editor.css";
 import {Container, Row, Col} from "../../Components/Grid";
 import CardBody from "../../Components/CardBody";
@@ -14,6 +15,13 @@ class Editor extends Component {
 
         // BIND THIS FOR HANDLECLICK
         // this.handleClick = this.handleClick.bind(this);
+    }
+
+    componentDidMount() {
+        axios.get("/api/characters")
+        .then(res => {
+            console.log(res);
+        })
     }
 
     render() {

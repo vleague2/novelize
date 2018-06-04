@@ -41,8 +41,6 @@ app.use(passport.session());
 app.use(require("./routes"));
 
 
-
-
 // sync db
 db.sequelize.sync().then(function() {
   app.listen(PORT)
