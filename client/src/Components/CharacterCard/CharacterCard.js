@@ -11,8 +11,13 @@ const CharacterCard = (props) => (
                 <div className="col-8 pl-0">
                     <p className="char_name mb-1">{props.title}</p>
                     <p className="char_preview mb-1">{props.preview}</p>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-12">
                     <p className="view_more text-right mb-0" data-toggle="collapse" data-target="#collapseProfile">View More v</p>
-                    <p className="char_profile collapse" id="collapseProfile">{props.profile}</p>
+                    
+                    <p className="char_profile collapse" id="collapseProfile" dangerouslySetInnerHTML={{__html: props.profile}}></p>
                 </div>
             </div>
         </div>

@@ -24,3 +24,11 @@
     color: rgb(86, 86, 253);
     text-align: right;
 }
+
+ul {
+    padding-left: 10px;
+}
+
+li {
+    padding-left: 15px;
+}
