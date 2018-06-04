@@ -23,10 +23,11 @@
     font-size: 11px;
     color: rgb(86, 86, 253);
     text-align: right;
+    cursor: pointer;
 }
 
 ul {
-    padding-left: 10px;
+    padding-left: 12px;
 }
 
 li {
