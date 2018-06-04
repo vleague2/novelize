@@ -29,18 +29,39 @@ class Editor extends Component {
 
             console.log(this.state.characters);
 
+            
+
             // setTimeout(this.displayCharacters(), 5000);
-        })
+        });
     }
 
     displayCharacters() {
 
-        this.state.characters.forEach(character => {
-            let textChild = document.createElement("p");
+        axios.get("/api/characters")
+        .then(res => {
+            let data = res.data;
+
+            this.setState({characters: data});
+
+            console.log(this.state.characters);
+
+            
+
+            // setTimeout(this.displayCharacters(), 5000);
+        })
+        // .then( ()=> {
+            
+        // });
+
+        // this.state.characters.forEach(character => {
+            // return <CharacterCard id={character.id} title={character.name} preview={character.preview_text}/>
+            /*
+            let textChild = document.createElement("CharacterCard");
             let textNode = document.createTextNode(character.name);
             textChild.appendChild(textNode);
-            document.getElementById("charactershere").appendChild(textChild);
-        })
+            document.getElementById("tabsLeft").appendChild(textChild);
+            */
+        // })
 
         // let string="<CharacterCard id={this.characters[0].id} title={this.characters[0].name} preview={this.characters[0].preview_text}/>";
         // let div = document.createElement("div");
@@ -62,11 +83,14 @@ class Editor extends Component {
                             <button className="btn btn-light rounded-0 tabBtn">
                                 Plot
                             </button>
-                        <span id="charactershere">
-                            {this.state.characters.forEach(character => {
-                                return <CharacterCard id={character.id} title={character.name} preview={character.preview_text}/>
+                
+                            <div>
+                            {this.state.characters.map(character => {
+                                console.log("crying");
+                                return <CharacterCard id={character.id} title={character.name} preview={character.preview_text} key={character.id} image={character.character_image} profile={character.character_text}/>
                             })}
-                        </span>
+                            </div>
+                        
                         
                     </Col>
 
