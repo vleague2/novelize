@@ -113,13 +113,15 @@ class EditorPage extends Component {
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' cloudChannel='dev'
                             initialValue="<p>This is the initial content of the editor</p>"
                             id="textEditor"
+                            
                             init={{
                             plugins: [
                                 'advlist autolink lists link image charmap print preview anchor textcolor',
                                 'searchreplace visualblocks code fullscreen',
                                 'insertdatetime media table contextmenu paste code help wordcount'
                             ],
-                            toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help'
+                            toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                            menubar: false
                             }}
                             onChange={this.handleEditorChange}
                         />
