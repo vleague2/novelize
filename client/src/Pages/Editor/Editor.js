@@ -114,8 +114,8 @@ class EditorPage extends Component {
             // SEND THE CONTENT OF THE EDITOR
             story: e.target.getContent()
         }).then(res => {
-            // CONSOLE LOG THE RESPONSE BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
-            console.log(res.data.story_text);
+            // CONSOLE LOG THAT WE'RE SAVING BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
+            console.log("Saved!");
         })
     }
 
