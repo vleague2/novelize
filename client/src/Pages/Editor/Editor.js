@@ -190,10 +190,10 @@ class EditorPage extends Component {
             
                         <div>
                             <p className="justify-content-center text-center mt-2 mb-2">
-                                <a href="/character-edit" className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                                <a href={this.state.leftTab === "char_tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
                             </p>
 
-                            {/* MAP THROUGH THE CHARACTER ARRAY IN THE STATE AND ADD A CHARACTER CARD FOR EACH */}
+                            {/* CONDITIONAL RENDER FOR THE LEFT SIDEBAR */}
                             <this.LeftTabRender/>
                         </div>    
                     </Col>
@@ -240,10 +240,10 @@ class EditorPage extends Component {
                         </button>
                         <div>
                             <p className="justify-content-center text-center mt-2 mb-2">
-                                <a href="/world-edit" className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                                <a href={this.state.rightTab === "world_tab" ? "/world-edit" : "/notes-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
                             </p>
 
-                            {/* MAP THROUGH THE WORLDBUILD ARRAY IN THE STATE AND ADD A CARD FOR EACH */}
+                            {/* CONDITIONAL RENDER FOR THE RIGHT SIDEBAR */}
                             <this.RightTabRender/>
                         </div>
                     </Col>
