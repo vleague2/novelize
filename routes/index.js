@@ -9,5 +9,9 @@ app.use(require('./user.js'));
 
 app.use(require("./character.js"));
 
+app.use(require("./story.js"));
+
+app.use(require("./world.js"));
+
 // EXPORT APP FOR APP.JS TO USE
 module.exports = app;

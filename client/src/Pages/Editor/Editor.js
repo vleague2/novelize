@@ -5,6 +5,7 @@ import {Container, Row, Col} from "../../Components/Grid";
 import CardBody from "../../Components/CardBody";
 import Button from "../../Components/Button";
 import CharacterCard from "../../Components/CharacterCard";
+import WorldCard from "../../Components/WorldCards";
 import { Editor } from '@tinymce/tinymce-react';
 
 
@@ -15,7 +16,8 @@ class EditorPage extends Component {
         // SET THE STATE
         this.state = {
             characters: [],
-            story: ""
+            story: "",
+            worldbuilds: []
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -46,6 +48,13 @@ class EditorPage extends Component {
 
             //UPDATE STATE WITH STORY TEXT
             this.setState({story: story})
+        })
+
+        axios.get("/api/worldbuilds")
+        .then(res => {
+            let data = res.data;
+            this.setState({worldbuilds: data});
+            console.log(res.data);
         })
     }
 
@@ -169,8 +178,19 @@ class EditorPage extends Component {
                         </button>
                         <div>
                             <p className="justify-content-center text-center mt-2 mb-2">
-                                <a href="/character-edit" className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                                <a href="/world-edit" className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
                             </p>
+
+                            {/* MAP THROUGH THE WORLDBUILD ARRAY IN THE STATE AND ADD A CARD FOR EACH */}
+                            {this.state.worldbuilds.map(world => {
+                                console.log("crying again");
+                                return <WorldCard 
+                                    id={world.id} 
+                                    title={world.title} 
+                                    descr={world.world_text} 
+                                    key={world.id} 
+                                />
+                            })}
                         </div>
                     </Col>
                 </Row>

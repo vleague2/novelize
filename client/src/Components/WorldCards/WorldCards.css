@@ -1,0 +1,17 @@
+.view_more {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 11px;
+    color: rgb(86, 86, 253);
+    text-align: right;
+    cursor: pointer;
+}
+
+.world-title {
+    font-size: 14px;
+    font-family: 'Open-Sans', sans-serif;
+}
+
+.world-descr {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 12px;
+}
