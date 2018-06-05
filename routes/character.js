@@ -8,5 +8,7 @@ const characterController = require('../controllers/characters.js');
 // ROUTES
 router.get('/api/characters', characterController.findAll);
 
+router.post('/api/characters/:id', characterController.updateOne);
+
 // EXPORT
 module.exports = router;
