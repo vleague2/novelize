@@ -167,9 +167,12 @@ class EditorPage extends Component {
                         <button className="btn btn-light rounded-0 tabBtn">
                             Notes
                         </button>
-                        <h3> more tabs go here </h3>
+                        <div>
+                            <p className="justify-content-center text-center mt-2 mb-2">
+                                <a href="/character-edit" className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                            </p>
+                        </div>
                     </Col>
-
                 </Row>
             </div>
         )

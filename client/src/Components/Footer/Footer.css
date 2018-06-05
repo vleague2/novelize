@@ -4,11 +4,13 @@
     bottom: 0;
     background-color: #313638;
     color: #e8e9eb;
-    padding-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 #footer-text {
     font-size: 12px;
     font-family: 'Open-Sans', sans-serif;
+    margin-bottom: 0px;
 }
 

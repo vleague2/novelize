@@ -27,9 +27,9 @@
     height: 100%;
     padding-right: 0px;
     overflow: auto;
-    max-height: 83vh;
+    max-height: 85vh;
     max-width: 100vh;
-    margin-bottom: 48px;
+    margin-bottom: 30px;
 }
 
 
@@ -41,8 +41,8 @@
 }
 
 #textEditor {
-    height: 76%;
-    max-height: 83vh;    
+    height: 78%;
+    max-height: 85vh;    
 }
 
 #mceu_34 {
