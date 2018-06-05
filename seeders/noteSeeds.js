@@ -11,6 +11,57 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
     },
+    {
+      title: "How to Fire a Gun",
+      note_text: `See this article: www.google.com `,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: "Rewrite",
+      note_text: `Need to rewrite the party scene to reflect Aria and Rio’s updated character bios, and incorporate Kyle into it`,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: "Rio & Camila",
+      note_text: `They need to interact more during the story since they are related`,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: "Healing",
+      note_text: `Adjust Aria's ability to center herself is not a result of healing magic (since other people can now use healing magic) but it has to be related to her actual abilities`,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: "Gov’t collusion",
+      note_text: `so, when Rio & co take over HQ the gov't is probably going to come after them... since they aren't receiving reports any longer... or the commanders that join rio will continue to falsify reports`,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: "Lena",
+      note_text: `with the school kids, aria pretends her chaperone is her mom just bc it means she has less to explain`,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: "remove",
+      note_text: `take out scenes:
+      --monsters attack school, both times
+      `,
+      StoryId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
 
     ], {});
     },

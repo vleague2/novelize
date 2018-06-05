@@ -6,6 +6,7 @@ import CardBody from "../../Components/CardBody";
 import Button from "../../Components/Button";
 import CharacterCard from "../../Components/CharacterCard";
 import WorldCard from "../../Components/WorldCards";
+import NoteCard from "../../Components/NoteCards";
 import { Editor } from '@tinymce/tinymce-react';
 
 
@@ -18,6 +19,7 @@ class EditorPage extends Component {
             characters: [],
             story: "",
             worldbuilds: [],
+            notes: [],
             leftTab: "char_tab",
             rightTab: "world_tab"
         }
@@ -57,6 +59,13 @@ class EditorPage extends Component {
             let data = res.data;
             this.setState({worldbuilds: data});
             console.log(res.data);
+        })
+
+        axios.get("/api/notes")
+        .then(res => {
+            let data = res.data;
+            this.setState({notes: data});
+            console.log(data);
         })
     }
 
@@ -161,6 +170,21 @@ class EditorPage extends Component {
         })
     }
 
+    // CODE TO RUN WHEN WE WANT TO RENDER THE NOTES SIDEBAR
+    NoteTab = () => {
+        // MAP THROUGH EACH OF THE WORLDS IN THE STATE
+        return this.state.notes.map(note => {
+            console.log("crying SO MUCH");
+            // CREATE WORLD CARD WITH ATTRIBUTES
+            return <NoteCard 
+                id={note.id} 
+                title={note.title} 
+                text={note.note_text} 
+                key={note.id} 
+            />
+        })
+    }
+
     // CONDITIONAL RENDER FOR THE LEFT SIDEBAR
     LeftTabRender = () => {
         // IF THE CHARACTER TAB IS SELECTED
@@ -187,7 +211,7 @@ class EditorPage extends Component {
         // OTHERWISE (AKA IF THE NOTES TAB IS SELECTED)
         else {
             // RETURN THE FUNCTION THAT RENDERS OUR NOTES
-            return <h1> Nope!! </h1>
+            return <this.NoteTab/>
         }
     }
 
@@ -212,7 +236,7 @@ class EditorPage extends Component {
                             {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
                                 {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
-                                <a href={this.state.leftTab === "char_tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                                <a href={this.state.leftTab === "char_tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right" ></i></a>
                             </p>
 
                             {/* CONDITIONAL RENDER FOR THE LEFT SIDEBAR */}
@@ -227,7 +251,7 @@ class EditorPage extends Component {
                         <Editor
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
                             cloudChannel='dev'
-                            // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY. WE DON'T HAVE TO RESET THE INITIAL VALUE BECAUSE IT KEEPS TRACK OF CHANGES
+                            // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.story}</p>`}
                             id="textEditor"
                             

@@ -13,5 +13,7 @@ app.use(require("./story.js"));
 
 app.use(require("./world.js"));
 
+app.use(require("./notes.js"));
+
 // EXPORT APP FOR APP.JS TO USE
 module.exports = app;
