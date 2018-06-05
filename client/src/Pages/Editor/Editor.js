@@ -129,9 +129,12 @@ class EditorPage extends Component {
         })
     }
 
+    // CODE TO RUN WHEN WE WANT TO RENDER THE CHARACTER SIDEBAR
     CharTab = () => {
+        // MAP THROUGH EACH CHARACTER IN THE STATE
         return this.state.characters.map(character => {
             console.log("crying");
+            // CREATE CHARACTER CARD WITH ATTRIBUTES
             return <CharacterCard 
                 id={character.id} 
                 title={character.name} 
@@ -143,9 +146,12 @@ class EditorPage extends Component {
         })
     }
 
+    // CODE TO RUN WHEN WE WANT TO RENDER THE WORLD SIDEBAR
     WorldTab = () => {
+        // MAP THROUGH EACH OF THE WORLDS IN THE STATE
         return this.state.worldbuilds.map(world => {
             console.log("crying again");
+            // CREATE WORLD CARD WITH ATTRIBUTES
             return <WorldCard 
                 id={world.id} 
                 title={world.title} 
@@ -155,32 +161,45 @@ class EditorPage extends Component {
         })
     }
 
+    // CONDITIONAL RENDER FOR THE LEFT SIDEBAR
     LeftTabRender = () => {
+        // IF THE CHARACTER TAB IS SELECTED
         if (this.state.leftTab == "char_tab") {
+            // RETURN THE FUNCTION THAT RENDERS OUR CHARACTER CARDS
             return <this.CharTab/>
         }
 
+        // OTHERWISE (AKA IF THE PLOT TAB IS SELECTED)
         else {
+            // RETURN THE FUNCTION THAT RENDERS OUR PLOT
             return <h1> NOpe</h1>
         }
     }
 
+    // CONDITIONAL RENDER FOR THE RIGHT SIDEBAR
     RightTabRender = () => {
+        // IF THE WORLD TAB IS SELECTED
         if (this.state.rightTab == "world_tab") {
+            // RETURN THE FUNCTION THAT RENDERS OUR WORLD CARDS
             return <this.WorldTab/>
         }
 
+        // OTHERWISE (AKA IF THE NOTES TAB IS SELECTED)
         else {
+            // RETURN THE FUNCTION THAT RENDERS OUR NOTES
             return <h1> Nope!! </h1>
         }
     }
 
     render() {
         return (
-            // CONTAINER DIV
+            // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div>
+                {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
                 <Row id="editorRow">
+                    {/* SETTING UP OUR 3-COL SYSTEM. THIS IS THE LEFT COL FOR LEFT TABS*/}
                     <Col size="3" id="tabsLeft">
+                        {/* TABS FOR CHARACTERS AND PLOT */}
                         <button className="btn rounded-0 tabBtn" id="char_tab" onClick={this.handleClick}>
                             Characters
                         </button>
@@ -188,8 +207,11 @@ class EditorPage extends Component {
                             Plot
                         </button>
             
+                        {/* DIV TO HOLD THE SIDEBAR CONTENT */}
                         <div>
+                            {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
+                                {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
                                 <a href={this.state.leftTab === "char_tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
                             </p>
 
@@ -198,25 +220,34 @@ class EditorPage extends Component {
                         </div>    
                     </Col>
 
+                    {/* CENTER COLUMN FOR THE TEXT EDITOR */}
                     <Col size="6" id="editorCol">
+
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
                             cloudChannel='dev'
+                            // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY. WE DON'T HAVE TO RESET THE INITIAL VALUE BECAUSE IT KEEPS TRACK OF CHANGES
                             initialValue={`<p>${this.state.story}</p>`}
                             id="textEditor"
                             
+                            // INITIALIZE A BUNCH OF THINGS
                             init={{
+                                // FUNCTIONALITY PLUGINS
                                 plugins: [
                                     'advlist autolink lists link image charmap print preview anchor textcolor',
                                     'searchreplace visualblocks code fullscreen',
                                     'insertdatetime media table contextmenu paste code help wordcount'
                                 ],
+                                // EDITING OPTIONS
                                 toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                                // HIDE THE MENU BAR FOR FILE STUFF
                                 menubar: false,
+                                // ADD IN SOME CSS FOR FONTS AND SUCH
                                 content_css: [
                                     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
                                     '//www.tinymce.com/css/codepen.min.css'],
+                                // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
                                 setup: function(ed) {
                                     ed.on('keydown', function(event) {
                                         if (event.keyCode == 9) { // tab pressed
@@ -231,15 +262,21 @@ class EditorPage extends Component {
                         />
                     </Col>
 
+                    {/* COLUMN FOR RIGHT SIDEBAR */}
                     <Col size="3" id="tabsRight">
+                        {/* TABS FOR WORLD AND NOTES */}
                         <button className="btn rounded-0 tabBtn" id="world_tab" onClick={this.handleClick}>
                             Worldbuild
                         </button>
                         <button className="btn rounded-0 tabBtn" id="notes_tab" onClick={this.handleClick}>
                             Notes
                         </button>
+
+                        {/* DIV TO HOLD THE SIDEBAR CONTENT */}
                         <div>
+                            {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
+                                {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
                                 <a href={this.state.rightTab === "world_tab" ? "/world-edit" : "/notes-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
                             </p>
 
