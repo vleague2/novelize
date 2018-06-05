@@ -84,7 +84,23 @@ class EditorPage extends Component {
                 document.getElementById("plot_tab").style.backgroundColor = "#343a40";
                 document.getElementById("plot_tab").style.color = "#f8f9fa";
                 break;
-            //IF IT'S NEITHER OF THOSE
+            case "world_tab":
+                // UPDATE COLORS OF WORLD TAB
+                document.getElementById("world_tab").style.backgroundColor = "#343a40";
+                document.getElementById("world_tab").style.color = "#f8f9fa";
+                //UPDATE COLORS OF NOTES TAB
+                document.getElementById("notes_tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("notes_tab").style.color = "#343a40";
+                break;
+            case "notes_tab":
+             // UPDATE COLORS OF WORLD TAB
+                document.getElementById("world_tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("world_tab").style.color = "#343a40";;
+                //UPDATE COLORS OF NOTES TAB
+                document.getElementById("notes_tab").style.backgroundColor = "#343a40";;
+                document.getElementById("notes_tab").style.color = "#f8f9fa";
+                break;
+            //IF IT'S NONe OF THOSE
             default:
                 //THEN THINGS ARE DEFINITELY BROKEN
                 console.log("RIP Me");
@@ -170,10 +186,10 @@ class EditorPage extends Component {
                     </Col>
 
                     <Col size="3" id="tabsRight">
-                        <button className="btn btn-dark rounded-0 tabBtn">
+                        <button className="btn rounded-0 tabBtn" id="world_tab" onClick={this.handleClick}>
                             Worldbuild
                         </button>
-                        <button className="btn btn-light rounded-0 tabBtn">
+                        <button className="btn rounded-0 tabBtn" id="notes_tab" onClick={this.handleClick}>
                             Notes
                         </button>
                         <div>

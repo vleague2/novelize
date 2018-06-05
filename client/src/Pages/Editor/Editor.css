@@ -9,12 +9,12 @@
     margin-right: 0px;
 }
 
-#char_tab {
+#char_tab, #world_tab {
     background-color: #343a40;
     color: white;
 }
 
-#plot_tab {
+#plot_tab, #notes_tab {
     background-color: #f8f9fa;
     color: #343a40;
 }
@@ -39,6 +39,10 @@
     height: 100%;
     padding-left:0px;
     padding-right: 0px;
+    overflow: auto;
+    max-height: 85vh;
+    max-width: 100vh;
+    margin-bottom: 30px;
 }
 
 #textEditor {
