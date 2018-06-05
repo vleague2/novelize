@@ -17,7 +17,9 @@ class EditorPage extends Component {
         this.state = {
             characters: [],
             story: "",
-            worldbuilds: []
+            worldbuilds: [],
+            leftTab: "char_tab",
+            rightTab: "world_tab"
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -74,6 +76,8 @@ class EditorPage extends Component {
                 //UPDATE COLORS OF PLOT TAB
                 document.getElementById("plot_tab").style.backgroundColor = "#f8f9fa";
                 document.getElementById("plot_tab").style.color = "#343a40";
+                // UPDATE STATE
+                this.setState({leftTab: "char_tab"});
                 break;
             //IF IT'S PLOT TAB
             case "plot_tab":
@@ -83,6 +87,8 @@ class EditorPage extends Component {
                 //UPDATE COLORS OF PLOT TAB
                 document.getElementById("plot_tab").style.backgroundColor = "#343a40";
                 document.getElementById("plot_tab").style.color = "#f8f9fa";
+                // UPDATE STATE
+                this.setState({leftTab: "plot_tab"});
                 break;
             case "world_tab":
                 // UPDATE COLORS OF WORLD TAB
@@ -91,6 +97,8 @@ class EditorPage extends Component {
                 //UPDATE COLORS OF NOTES TAB
                 document.getElementById("notes_tab").style.backgroundColor = "#f8f9fa";
                 document.getElementById("notes_tab").style.color = "#343a40";
+                // UPDATE STATE
+                this.setState({rightTab: "world_tab"});
                 break;
             case "notes_tab":
              // UPDATE COLORS OF WORLD TAB
@@ -99,6 +107,8 @@ class EditorPage extends Component {
                 //UPDATE COLORS OF NOTES TAB
                 document.getElementById("notes_tab").style.backgroundColor = "#343a40";;
                 document.getElementById("notes_tab").style.color = "#f8f9fa";
+                // UPDATE STATE
+                this.setState({rightTab: "notes_tab"});
                 break;
             //IF IT'S NONe OF THOSE
             default:
@@ -117,6 +127,52 @@ class EditorPage extends Component {
             // CONSOLE LOG THAT WE'RE SAVING BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
             console.log("Saved!");
         })
+    }
+
+    CharTab = () => {
+        return this.state.characters.map(character => {
+            console.log("crying");
+            return <CharacterCard 
+                id={character.id} 
+                title={character.name} 
+                preview={character.preview_text} 
+                key={character.id} 
+                image={character.character_image} 
+                profile={character.character_text}
+            />
+        })
+    }
+
+    WorldTab = () => {
+        return this.state.worldbuilds.map(world => {
+            console.log("crying again");
+            return <WorldCard 
+                id={world.id} 
+                title={world.title} 
+                descr={world.world_text} 
+                key={world.id} 
+            />
+        })
+    }
+
+    LeftTabRender = () => {
+        if (this.state.leftTab == "char_tab") {
+            return <this.CharTab/>
+        }
+
+        else {
+            return <h1> NOpe</h1>
+        }
+    }
+
+    RightTabRender = () => {
+        if (this.state.rightTab == "world_tab") {
+            return <this.WorldTab/>
+        }
+
+        else {
+            return <h1> Nope!! </h1>
+        }
     }
 
     render() {
@@ -138,17 +194,7 @@ class EditorPage extends Component {
                             </p>
 
                             {/* MAP THROUGH THE CHARACTER ARRAY IN THE STATE AND ADD A CHARACTER CARD FOR EACH */}
-                            {this.state.characters.map(character => {
-                                console.log("crying");
-                                return <CharacterCard 
-                                    id={character.id} 
-                                    title={character.name} 
-                                    preview={character.preview_text} 
-                                    key={character.id} 
-                                    image={character.character_image} 
-                                    profile={character.character_text}
-                                />
-                            })}
+                            <this.LeftTabRender/>
                         </div>    
                     </Col>
 
@@ -198,15 +244,7 @@ class EditorPage extends Component {
                             </p>
 
                             {/* MAP THROUGH THE WORLDBUILD ARRAY IN THE STATE AND ADD A CARD FOR EACH */}
-                            {this.state.worldbuilds.map(world => {
-                                console.log("crying again");
-                                return <WorldCard 
-                                    id={world.id} 
-                                    title={world.title} 
-                                    descr={world.world_text} 
-                                    key={world.id} 
-                                />
-                            })}
+                            <this.RightTabRender/>
                         </div>
                     </Col>
                 </Row>

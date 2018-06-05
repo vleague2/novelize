@@ -14,6 +14,10 @@
     color: white;
 }
 
+#notes_tab:focus, #plot_tab:focus, #char_tab:focus, #world_tab:focus {  
+    box-shadow: none;
+}
+
 #plot_tab, #notes_tab {
     background-color: #f8f9fa;
     color: #343a40;
