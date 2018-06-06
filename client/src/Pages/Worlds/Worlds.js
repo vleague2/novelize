@@ -91,7 +91,7 @@ class WorldPage extends Component {
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
-        axios.post('/api/worlds/' + this.state.character_select, {
+        axios.post('/api/worlds/' + this.state.world_select, {
             // SEND IN THE COLUMN AND CONTENT
             column: name,
             content: value
@@ -112,7 +112,7 @@ class WorldPage extends Component {
     handleEditorChange = (e) => {
         
         //API POST CALL TO THE SERVER 
-        axios.post('/api/worlds/' + this.state.character_select, {
+        axios.post('/api/worlds/' + this.state.world_select, {
             // SEND THE CONTENT OF THE EDITOR
             column: "world_text",
             content: e.target.getContent()
