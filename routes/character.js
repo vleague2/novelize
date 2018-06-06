@@ -10,5 +10,7 @@ router.get('/api/characters', characterController.findAll);
 
 router.post('/api/characters/:id', characterController.updateOne);
 
+router.post('/api/new/character', characterController.addOne);
+
 // EXPORT
 module.exports = router;

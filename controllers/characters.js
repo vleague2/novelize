@@ -19,7 +19,21 @@ let character = {
         )
         .then(response => {
             console.log(response);
-            res.send("saved!");
+            res.send("updated one character!");
+        })
+    },
+
+    addOne: function(req, res) {
+        let characterName = req.body.name;
+        let characterPreview = req.body.preview;
+        let characterImage = req.body.image;
+
+        db.Character.create(
+            {name: characterName, preview_text: characterPreview, character_image: characterImage}
+        )
+        .then(response => {
+            console.log(response);
+            res.send("Added one character!");
         })
     }
 }

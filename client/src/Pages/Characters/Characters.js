@@ -20,6 +20,9 @@ class CharacterPage extends Component {
 
         // BIND THIS FOR HANDLECLICK
         this.handleClick = this.handleClick.bind(this);
+
+        // BIND FOR CLICK
+        this.addNewChar = this.addNewChar.bind(this);
     }
 
     componentDidMount() {
@@ -35,7 +38,11 @@ class CharacterPage extends Component {
 
             console.log(this.state.characters);
 
+            document.getElementById("1").setAttribute("class", "card rounded-0 active-char");
+
         });
+
+        
     }
 
     handleClick(e) {
@@ -124,6 +131,34 @@ class CharacterPage extends Component {
         
     }
 
+    addNewChar = () => {
+        let name = document.getElementById("add-name-input").value;
+        let preview = document.getElementById("add-preview-input").value;
+        let image = document.getElementById("add-image-input").value;
+        
+        axios.post("/api/new/character", {
+            name: name,
+            preview: preview,
+            image: image
+        })
+        .then(res => {
+            console.log(res);
+            
+            //API CALL TO SERVER TO GET CHARACTER LIST
+            axios.get("/api/characters")
+            .then(res => {
+                //PULL ARRAY FROM SERVER RESPONSE
+                let data = res.data;
+
+                //UPDATE STATE WITH CHARACTER LIST
+                this.setState({characters: data});
+
+                console.log(this.state.characters);
+
+            });
+        })
+    }
+
     render() {
         return (
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
@@ -132,18 +167,21 @@ class CharacterPage extends Component {
                 <Row id="charEditorRow">
                     <Col size="8" id="editor-char-col">
                         <Row>
-                            <Col size="2">
-                                <p className="ml-5 mt-3 form-text">Name </p>
+                            <Col size="1">
+                                <a href="/editor" className="ml-3" title="Back to Editor"><i className="fas fa-arrow-circle-left text-left mt-3" id="back-arrow"></i></a>
                             </Col>
-                            <Col size="9">
+                            <Col size="2">
+                                <p className="mt-3 form-text text-right">Name</p>
+                            </Col>
+                            <Col size="8">
                                 <input type="text" className="form-control mt-2 mr-2" id="name-input" value={this.state.name} name="name" onChange={this.handleInputChange}/>
                             </Col>
                         </Row>
                         <Row>
-                            <Col size="2">
-                                <p className="ml-5 mt-3 form-text">Preview</p>
+                            <Col size="3">
+                                <p className="text-right mt-3 form-text">Preview</p>
                             </Col>
-                            <Col size="9">
+                            <Col size="8">
                                 <input type="text" className="form-control mt-2 mr-2" id="preview-input" value={this.state.preview_text} name="preview_text" onChange={this.handleInputChange}/>
                             </Col>
                         </Row>
@@ -200,8 +238,40 @@ class CharacterPage extends Component {
                                 onClick={this.handleClick}
                             />
                         })}
+                        <p className="justify-content-center text-center mt-4 mb-4" data-toggle="modal" data-target="#add-char-modal" id="add-char-prompt">Add a Character <i className="fas fa-plus"></i></p>
                     </Col>
                 </Row>
+
+                <div className="modal fade" tabIndex="-1" role="dialog" id="add-char-modal">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Add a Character</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label htmlFor="add-name-input">Character Name</label>
+                                    <input type="text" className="form-control mt-2 mr-2" id="add-name-input"  name="name"/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="add-preview-input">One-line bio</label>
+                                    <input type="text" className="form-control mt-2 mr-2" id="add-preview-input" name="preview_text"/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="add-image-input">Image Link</label>
+                                    <input type="text" className="form-control mt-2 mr-2" id="add-image-input" name="image"/>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary" id="add-new-char" onClick={this.addNewChar} data-dismiss="modal">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }

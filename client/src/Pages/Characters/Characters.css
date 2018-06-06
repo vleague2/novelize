@@ -25,8 +25,6 @@
     height: 100%;
     overflow: auto;
     max-height: 85vh;
-    /* max-width: 100vh; */
-    /* margin-bottom: 30px; */
 }
 #name_input, #preview_input {
     width: 100%;
@@ -35,4 +33,14 @@
 .form-text {
     font-family: 'Open-Sans', sans-serif;
     font-size: 15px;
+}
+
+#back-arrow {
+    font-size: 27px;
+}
+
+#add-char-prompt {
+    cursor: pointer;
+    color: rgb(86, 86, 253);
+    font-family: 'Open-Sans', sans-serif;
 }
