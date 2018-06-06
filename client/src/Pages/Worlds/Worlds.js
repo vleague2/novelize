@@ -4,6 +4,10 @@ import "./Worlds.css";
 import {Row, Col} from "../../Components/Grid";
 import WorldCardEdit from "../../Components/WorldCardEdit";
 import { Editor } from '@tinymce/tinymce-react';
+import BackButton from "../../Components/BackButton";
+import AddAnItem from "../../Components/AddAnItem";
+import {FormFieldInput} from "../../Components/Form";
+import API from "../../utils/API";
 
 class WorldPage extends Component {
     constructor(props) {
@@ -28,7 +32,7 @@ class WorldPage extends Component {
     componentDidMount() {
 
         //API CALL TO SERVER TO GET WORLD LIST
-        axios.get("/api/worldbuilds")
+        API.getAll("worldbuilds")
         .then(res => {
 
             //PULL ARRAY FROM SERVER RESPONSE
@@ -38,8 +42,26 @@ class WorldPage extends Component {
             this.setState({worlds: data, editor: data[0].world_text, title: data[0].title});
 
             // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-            document.getElementById("1").setAttribute("class", "card rounded-0 active-world");
+            this.changeClass("1", "active-world");
         });
+    }
+
+    // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
+    updateWorldList = () => {
+        // PING THE DATABASE TO GET AN UPDATED WORLD LIST
+        API.getAll("worldbuilds")
+        .then(res => {
+            // PULL OUT THE CHARACTER DATA
+            let data = res.data;
+
+            // UPDATE THE STATE WITH NEW CHARACTER DATA
+            this.setState({worlds: data});
+        })
+    }
+
+    // FUNCTION TO CHANGE THE CLASS OF THE CARDS
+    changeClass(id, active) {
+        document.getElementById(id).setAttribute("class", `card rounded-0 ml-1 ${active}`);
     }
 
     // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY WORLD ITEM
@@ -51,7 +73,7 @@ class WorldPage extends Component {
         // SET THE ARRAY ID OF THE WORLD 
         let idArrayNum = id - 1;
 
-        // SET THE NAME OF THE NEWLY SELECTED WORLD USING THE ARRAY ID
+        // SET THE TITLE OF THE NEWLY SELECTED WORLD USING THE ARRAY ID
         let newWorldTitle = this.state.worlds[idArrayNum].title;
 
         // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE TITLE
@@ -68,13 +90,13 @@ class WorldPage extends Component {
             // IF THE WORLD ID MATCHES THE SELECTED ID
             if (world.id == id) {
                 // CHANGE CLASS TO ACTIVE
-                document.getElementById(world.id).setAttribute("class", "card rounded-0 active-world");
+                this.changeClass(world.id, "active-world");
             }
 
             // IF NOT
             else {
                 // REMOVE ACTIVE CLASS
-                document.getElementById(world.id).setAttribute("class", "card rounded-0")
+                this.changeClass(world.id);
             }
         })
     }
@@ -91,20 +113,10 @@ class WorldPage extends Component {
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
-        axios.post('/api/worlds/' + this.state.world_select, {
-            // SEND IN THE COLUMN AND CONTENT
-            column: name,
-            content: value
-        }).then(res => {
+        API.updateOne("worlds", this.state.world_select, name, value)
+        .then(res => {
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
-            axios.get('/api/worldbuilds')
-            .then(res => {
-                // PULL OUT THE WORLD DATA
-                let data = res.data;
-
-                // UPDATE THE STATE WITH NEW WORLD DATA
-                this.setState({worlds: data});
-            })
+            this.updateWorldList();
         }) 
     }
 
@@ -112,23 +124,13 @@ class WorldPage extends Component {
     handleEditorChange = (e) => {
         
         //API POST CALL TO THE SERVER 
-        axios.post('/api/worlds/' + this.state.world_select, {
-            // SEND THE CONTENT OF THE EDITOR
-            column: "world_text",
-            content: e.target.getContent()
-        }).then(res => {
+        API.updateOne("worlds", this.state.world_select, "world_text", e.target.getContent())
+        .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
 
             //API CALL TO SERVER TO GET WORLD LIST
-            axios.get("/api/worldbuilds")
-            .then(res => {
-                //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
-
-                //UPDATE STATE WITH CHARACTER LIST
-                this.setState({worlds: data});
-            });
+            this.updateWorldList();
         })
     }
 
@@ -139,24 +141,17 @@ class WorldPage extends Component {
         let title = document.getElementById("add-title-input").value;
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        axios.post("/api/new/world", {
-            // SEND IN ALL THE DATA
-            title: title
-        })
+        API.addNewWorld(title)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD
             console.log(res);
             
             //API CALL TO SERVER TO GET WORLD LIST
-            axios.get("/api/worldbuilds")
-            .then(res => {
-                //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
-
-                //UPDATE STATE WITH WORLD LIST
-                this.setState({worlds: data});
-            });
+            this.updateWorldList();
+            
+            // EMPTY MODAL
+            document.getElementById("add-title-input").value = "";
         })
     }
 
@@ -176,7 +171,7 @@ class WorldPage extends Component {
                             {/* A TINY COLUMN TO HOLD THE BACK ARROW */}
                             <Col size="1">
                                 {/* IT TAKES YOU BACK TO THE EDITOR */}
-                                <a href="/editor" className="ml-3" title="Back to Editor"><i className="fas fa-arrow-circle-left text-left mt-3" id="back-arrow"></i></a>
+                                <BackButton/>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM LABEL */}
@@ -186,7 +181,7 @@ class WorldPage extends Component {
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
                             <Col size="8">
-                                <input type="text" className="form-control mt-2 mr-2" id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
+                                <FormFieldInput id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
                             </Col>
                         </Row>
 
@@ -245,7 +240,10 @@ class WorldPage extends Component {
                         })}
 
                         {/* LINK TO ADD A WORLD ITEM, WHICH WILL BRING UP A MODAL */}
-                        <p className="justify-content-center text-center mt-4 mb-4" data-toggle="modal" data-target="#add-world-modal" id="add-world-prompt">Add a WorldBuilding Item <i className="fas fa-plus"></i></p>
+                        <AddAnItem 
+                            id="add-world-prompt"
+                            target="#add-world-modal"
+                        > Add a WorldBuilding Item </AddAnItem>
                     </Col>
                 </Row>
 
@@ -265,7 +263,7 @@ class WorldPage extends Component {
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-title-input">Title of Worldbuilding Item</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-title-input"  name="title" placeholder="i.e. setting"/>
+                                    <FormFieldInput id="add-title-input"  name="title" placeholder="i.e. setting"/>
                                 </div>
                             </div>
                             {/* BUTTONS AT MODAL BOTTOM */}

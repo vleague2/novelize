@@ -35,10 +35,6 @@
     font-size: 15px;
 }
 
-#back-arrow {
-    font-size: 27px;
-}
-
 #add-char-prompt {
     cursor: pointer;
     color: rgb(86, 86, 253);

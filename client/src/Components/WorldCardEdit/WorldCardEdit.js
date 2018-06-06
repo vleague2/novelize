@@ -2,7 +2,7 @@ import React from "react";
 import "./WorldCardEdit.css";
 
 const WorldCardEdit = (props) => (
-    <div className="card rounded-0" id={props.id}>
+    <div className="card rounded-0 ml-1" id={props.id}>
         <div className="card-body">
             <p className="world-title mb-0">
                 {props.title}

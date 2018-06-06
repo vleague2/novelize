@@ -1,9 +1,12 @@
 import React, {Component} from "react";
-import axios from "axios";
 import "./Characters.css";
 import {Row, Col} from "../../Components/Grid";
 import CharacterCardEdit from "../../Components/CharacterCardEdit";
 import { Editor } from '@tinymce/tinymce-react';
+import BackButton from "../../Components/BackButton";
+import AddAnItem from "../../Components/AddAnItem";
+import {FormFieldInput} from "../../Components/Form";
+import API from "../../utils/API";
 
 class CharacterPage extends Component {
     constructor(props) {
@@ -28,8 +31,8 @@ class CharacterPage extends Component {
     // AS SOON AS THE APP LOADS
     componentDidMount() {
 
-        //API CALL TO SERVER TO GET CHARACTER LIST
-        axios.get("/api/characters")
+        // GET CHARACTER LIST FROM DB
+        API.getAll("characters")
         .then(res => {
 
             //PULL ARRAY FROM SERVER RESPONSE
@@ -39,8 +42,26 @@ class CharacterPage extends Component {
             this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text});
 
             // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-            document.getElementById("1").setAttribute("class", "card rounded-0 active-char");
+            this.changeClass("1", "active-char");
         });
+    }
+
+    // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
+    updateCharList = () => {
+        // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+        API.getAll("characters")
+        .then(res => {
+            // PULL OUT THE CHARACTER DATA
+            let data = res.data;
+
+            // UPDATE THE STATE WITH NEW CHARACTER DATA
+            this.setState({characters: data});
+        })
+    }
+
+    // FUNCTION TO CHANGE THE CLASS OF THE CARDS
+    changeClass(id, active) {
+        document.getElementById(id).setAttribute("class", `card rounded-0 ml-1 ${active}`);
     }
 
     // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY CHARACTER
@@ -72,13 +93,13 @@ class CharacterPage extends Component {
             // IF THE CHARACTER ID MATCHES THE SELECTED ID
             if (character.id == id) {
                 // CHANGE CLASS TO ACTIVE
-                document.getElementById(character.id).setAttribute("class", "card rounded-0 active-char");
+                this.changeClass(character.id, "active-char");
             }
 
             // IF NOT
             else {
                 // REMOVE ACTIVE CLASS
-                document.getElementById(character.id).setAttribute("class", "card rounded-0")
+                this.changeClass(character.id);
             }
         })
     }
@@ -95,44 +116,24 @@ class CharacterPage extends Component {
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
-        axios.post('/api/characters/' + this.state.character_select, {
-            // SEND IN THE COLUMN AND CONTENT
-            column: name,
-            content: value
-        }).then(res => {
-            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
-            axios.get('/api/characters')
-            .then(res => {
-                // PULL OUT THE CHARACTER DATA
-                let data = res.data;
-
-                // UPDATE THE STATE WITH NEW CHARACTER DATA
-                this.setState({characters: data});
-            })
+        API.updateOne("characters", this.state.character_select, name, value)
+        .then(res => {
+            // GET AN UPDATED CHARACTER LIST
+            this.updateCharList();
         }) 
     }
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
         
-        //API POST CALL TO THE SERVER 
-        axios.post('/api/characters/' + this.state.character_select, {
-            // SEND THE CONTENT OF THE EDITOR
-            column: "character_text",
-            content: e.target.getContent()
-        }).then(res => {
+        //API POST CALL TO THE SERVER, SENDING IN URL, ID, COLUMN NAME, AND CONTENT OF EDITOR
+        API.updateOne("characters", this.state.character_select, "character_text", e.target.getContent())
+        .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
 
-            //API CALL TO SERVER TO GET CHARACTER LIST
-            axios.get("/api/characters")
-            .then(res => {
-                //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
-
-                //UPDATE STATE WITH CHARACTER LIST
-                this.setState({characters: data});
-            });
+            //GET UPDATED CHARACTER LIST
+            this.updateCharList();
         })
     }
 
@@ -149,26 +150,19 @@ class CharacterPage extends Component {
         let image = document.getElementById("add-image-input").value;
         
         // PING THE DATABASE TO ADD A NEW CHARACTER
-        axios.post("/api/new/character", {
-            // SEND IN ALL THE DATA
-            name: name,
-            preview: preview,
-            image: image
-        })
+        API.addNewCharacter(name, preview, image)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW CHARACTER
             console.log(res);
             
             //API CALL TO SERVER TO GET CHARACTER LIST
-            axios.get("/api/characters")
-            .then(res => {
-                //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
+            this.updateCharList();
 
-                //UPDATE STATE WITH CHARACTER LIST
-                this.setState({characters: data});
-            });
+            // EMPTY MODAL
+            document.getElementById("add-name-input").value = "";
+            document.getElementById("add-preview-input").value = "";
+            document.getElementById("add-image-input").value = "";
         })
     }
 
@@ -188,7 +182,7 @@ class CharacterPage extends Component {
                             {/* A TINY COLUMN TO HOLD THE BACK ARROW */}
                             <Col size="1">
                                 {/* IT TAKES YOU BACK TO THE EDITOR */}
-                                <a href="/editor" className="ml-3" title="Back to Editor"><i className="fas fa-arrow-circle-left text-left mt-3" id="back-arrow"></i></a>
+                                <BackButton/>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM LABEL */}
@@ -198,7 +192,12 @@ class CharacterPage extends Component {
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
                             <Col size="8">
-                                <input type="text" className="form-control mt-2 mr-2" id="name-input" value={this.state.name} name="name" onChange={this.handleInputChange}/>
+                                <FormFieldInput 
+                                    id="name-input" 
+                                    value={this.state.name} 
+                                    name="name" 
+                                    onChange={this.handleInputChange}
+                                />
                             </Col>
                         </Row>
 
@@ -210,7 +209,12 @@ class CharacterPage extends Component {
                             </Col>
                             {/* COLUMN TO HOLD THE FORM INPUT FOR PREVIEW TEXT */}
                             <Col size="8">
-                                <input type="text" className="form-control mt-2 mr-2" id="preview-input" value={this.state.preview_text} name="preview_text" onChange={this.handleInputChange}/>
+                                <FormFieldInput
+                                    id="preview-input" 
+                                    value={this.state.preview_text} 
+                                    name="preview_text" 
+                                    onChange={this.handleInputChange}
+                                />
                             </Col>
                         </Row>
                         {/*SET UP THE TEXT EDITOR*/}
@@ -270,7 +274,10 @@ class CharacterPage extends Component {
                         })}
 
                         {/* LINK TO ADD A CHARACTER, WHICH WILL BRING UP A MODAL */}
-                        <p className="justify-content-center text-center mt-4 mb-4" data-toggle="modal" data-target="#add-char-modal" id="add-char-prompt">Add a Character <i className="fas fa-plus"></i></p>
+                        <AddAnItem
+                            id="add-char-prompt"
+                            target="#add-char-modal"
+                        >Add a Character </AddAnItem>
                     </Col>
                 </Row>
 
@@ -290,17 +297,17 @@ class CharacterPage extends Component {
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-name-input">Character Name</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-name-input"  name="name" placeholder="Jane Doe"/>
+                                    <FormFieldInput id="add-name-input"  name="name" placeholder="Jane Doe" />
                                 </div>
                                 {/* FORM FIELD TO ADD PREVIEW */}
                                 <div className="form-group">
                                     <label htmlFor="add-preview-input">One-line bio</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
+                                    <FormFieldInput id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
                                 </div>
                                 {/* FORM FIELD TO ADD IMAGE LINK */}
                                 <div className="form-group">
                                     <label htmlFor="add-image-input">Image Link</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-image-input" name="image" placeholder="Square images look best!"/>
+                                    <FormFieldInput id="add-image-input" name="image" placeholder="Square images look best!"/>
                                 </div>
                             </div>
                             {/* BUTTONS AT MODAL BOTTOM */}
