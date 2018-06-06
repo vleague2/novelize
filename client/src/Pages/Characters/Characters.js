@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import "./Characters.css";
-import {Container, Row, Col} from "../../Components/Grid";
+import {Row, Col} from "../../Components/Grid";
 import CharacterCardEdit from "../../Components/CharacterCardEdit";
 import { Editor } from '@tinymce/tinymce-react';
 
@@ -14,8 +14,8 @@ class CharacterPage extends Component {
             characters: [],
             editor: "",
             character_select: "1",
-            character_name: "",
-            character_preview: ""
+            name: "",
+            preview_text: ""
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -31,11 +31,9 @@ class CharacterPage extends Component {
             let data = res.data;
 
             //UPDATE STATE WITH CHARACTER LIST
-            this.setState({characters: data, editor: data[0].character_text, character_name: data[0].name, character_preview: data[0].preview_text});
+            this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text});
 
             console.log(this.state.characters);
-            console.log(this.state.character_name)
-            console.log(this.state.character_preview)
 
         });
     }
@@ -51,7 +49,7 @@ class CharacterPage extends Component {
         // the preview of the newly selected character
         let newCharPreview = this.state.characters[idArrayNum].preview_text;
         // set the state to the database id because we will send it to the db
-        this.setState({character_select: id, character_name: newCharName, character_preview: newCharPreview});
+        this.setState({character_select: id, name: newCharName, preview_text: newCharPreview});
         
         console.log("current character num: " + this.state.character_select);
         let newCharText = this.state.characters[idArrayNum].character_text;    
@@ -66,8 +64,21 @@ class CharacterPage extends Component {
         let name = e.target.name;
         let value = e.target.value;
         this.setState({[name]: value});
-        console.log(this.state.character_name)
-        console.log(this.state.character_preview)
+        console.log(this.state.name)
+        console.log(this.state.preview_text)
+
+        axios.post('/api/characters/' + this.state.character_select, {
+            column: name,
+            content: value
+        }).then(res => {
+            console.log(res);
+            axios.get('/api/characters')
+            .then(res => {
+                let data = res.data;
+                this.setState({characters: data});
+                console.log(this.state.characters);
+            })
+        }) 
     }
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
@@ -79,7 +90,8 @@ class CharacterPage extends Component {
         //API POST CALL TO THE SERVER 
         axios.post('/api/characters/' + this.state.character_select, {
             // SEND THE CONTENT OF THE EDITOR
-            character: e.target.getContent()
+            column: "character_text",
+            content: e.target.getContent()
         }).then(res => {
             // CONSOLE LOG THAT WE'RE SAVING BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
             console.log(res);
@@ -109,18 +121,18 @@ class CharacterPage extends Component {
                     <Col size="8" id="editor-char-col">
                         <Row>
                             <Col size="2">
-                                <p className="ml-5 mt-1">Name </p>
+                                <p className="ml-5 mt-3 form-text">Name </p>
                             </Col>
-                            <Col size="10">
-                                <input type="text" className="form-control" id="name-input" value={this.state.character_name} name="character_name" onChange={this.handleInputChange}/>
+                            <Col size="9">
+                                <input type="text" className="form-control mt-2 mr-2" id="name-input" value={this.state.name} name="name" onChange={this.handleInputChange}/>
                             </Col>
                         </Row>
                         <Row>
                             <Col size="2">
-                                <p className="ml-5 mt-1">Preview</p>
+                                <p className="ml-5 mt-3 form-text">Preview</p>
                             </Col>
-                            <Col size="10">
-                                <input type="text" className="form-control" id="preview-input" value={this.state.character_preview} name="character_preview" onChange={this.handleInputChange}/>
+                            <Col size="9">
+                                <input type="text" className="form-control mt-2 mr-2" id="preview-input" value={this.state.preview_text} name="preview_text" onChange={this.handleInputChange}/>
                             </Col>
                         </Row>
                         {/*SET UP THE TEXT EDITOR*/}
@@ -147,7 +159,7 @@ class CharacterPage extends Component {
                                 content_css: [
                                     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
                                     '//www.tinymce.com/css/codepen.min.css'],
-                                height: 496,
+                                height: 386,
                                 // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
                                 setup: function(ed) {
                                     ed.on('keydown', function(event) {

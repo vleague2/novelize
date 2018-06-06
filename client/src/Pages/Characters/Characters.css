@@ -31,3 +31,8 @@
 #name_input, #preview_input {
     width: 100%;
 }
+
+.form-text {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 15px;
+}

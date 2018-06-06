@@ -10,11 +10,12 @@ let character = {
 
     updateOne: function(req, res) {
         let id = req.params.id;
-        let character_text = req.body.character;
+        let column_name = req.body.column;
+        let content_update = req.body.content;
 
         db.Character.update(
-            {character_text: character_text},
-            {where: {id: id}}
+            {[column_name]: content_update},
+            {where: {id:id}}
         )
         .then(response => {
             console.log(response);
