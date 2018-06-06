@@ -1,9 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import "./Editor.css";
-import {Container, Row, Col} from "../../Components/Grid";
-import CardBody from "../../Components/CardBody";
-import Button from "../../Components/Button";
+import {Row, Col} from "../../Components/Grid";
 import CharacterCard from "../../Components/CharacterCard";
 import WorldCard from "../../Components/WorldCards";
 import NoteCard from "../../Components/NoteCards";
@@ -188,7 +186,7 @@ class EditorPage extends Component {
     // CONDITIONAL RENDER FOR THE LEFT SIDEBAR
     LeftTabRender = () => {
         // IF THE CHARACTER TAB IS SELECTED
-        if (this.state.leftTab == "char_tab") {
+        if (this.state.leftTab === "char_tab") {
             // RETURN THE FUNCTION THAT RENDERS OUR CHARACTER CARDS
             return <this.CharTab/>
         }
@@ -203,7 +201,7 @@ class EditorPage extends Component {
     // CONDITIONAL RENDER FOR THE RIGHT SIDEBAR
     RightTabRender = () => {
         // IF THE WORLD TAB IS SELECTED
-        if (this.state.rightTab == "world_tab") {
+        if (this.state.rightTab === "world_tab") {
             // RETURN THE FUNCTION THAT RENDERS OUR WORLD CARDS
             return <this.WorldTab/>
         }
@@ -274,7 +272,7 @@ class EditorPage extends Component {
                                 // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
                                 setup: function(ed) {
                                     ed.on('keydown', function(event) {
-                                        if (event.keyCode == 9) { // tab pressed
+                                        if (event.keyCode === 9) { // tab pressed
                                             ed.execCommand('mceInsertContent', false, '&emsp;'); 
                                             event.preventDefault();
                                             return false;

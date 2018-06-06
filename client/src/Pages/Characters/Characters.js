@@ -52,12 +52,24 @@ class CharacterPage extends Component {
         this.setState({character_select: id, name: newCharName, preview_text: newCharPreview});
         
         console.log("current character num: " + this.state.character_select);
-        let newCharText = this.state.characters[idArrayNum].character_text;    
-        console.log(newCharText);    
-        // this.setState({editor: newCharText});
 
-        // console.log(document.getElementById("textEditor-char_ifr"))
+        // CREATE A VARIABLE TO HOLD THE CHARACTER TEXT OF THE NEW SELECTED CHARACTER
+        let newCharText = this.state.characters[idArrayNum].character_text;          
+
+        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
         window.frames['textEditor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML= newCharText;
+
+        // MAKE THAT CHARACTER CARD ACTIVE
+        this.state.characters.forEach(character => {
+            if (character.id == id) {
+                document.getElementById(character.id).setAttribute("class", "card rounded-0 active-char");
+            }
+
+            else {
+                document.getElementById(character.id).setAttribute("class", "card rounded-0")
+            }
+        })
+        // document.getElementById(id).setAttribute("class", "active-char");
     }
 
     handleInputChange = (e) => {
@@ -163,7 +175,7 @@ class CharacterPage extends Component {
                                 // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
                                 setup: function(ed) {
                                     ed.on('keydown', function(event) {
-                                        if (event.keyCode == 9) { // tab pressed
+                                        if (event.keyCode === 9) { // tab pressed
                                             ed.execCommand('mceInsertContent', false, '&emsp;'); 
                                             event.preventDefault();
                                             return false;

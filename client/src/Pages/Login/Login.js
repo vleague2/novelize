@@ -1,8 +1,8 @@
 import React from "react";
 import "./Login.css";
 import {Container, Row, Col} from "../../Components/Grid";
-import CardBody from "../../Components/CardBody";
-import Button from "../../Components/Button";
+// import CardBody from "../../Components/CardBody";
+// import Button from "../../Components/Button";
 
 const Login = () => (
     <div>

@@ -2,8 +2,8 @@ import React from "react";
 import "./CharacterCardEdit.css";
 
 const CharacterCardEdit = (props) => (
-    <div className="card rounded-0">
-        <div className="card-body" id={props.id}>
+    <div className="card rounded-0" id={props.id}>
+        <div className="card-body">
             <div className="row">
                 <div className="col-3">
                 <img src={props.image} className="char_img" alt={props.name}/>

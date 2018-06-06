@@ -20,3 +20,7 @@
     text-align: right;
     cursor: pointer;
 }
+
+.active-char {
+    background-color: lightgray;
+}
