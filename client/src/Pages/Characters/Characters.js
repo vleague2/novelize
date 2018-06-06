@@ -13,7 +13,9 @@ class CharacterPage extends Component {
         this.state = {
             characters: [],
             editor: "",
-            character_select: "1"
+            character_select: "1",
+            character_name: "",
+            character_preview: ""
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -29,9 +31,11 @@ class CharacterPage extends Component {
             let data = res.data;
 
             //UPDATE STATE WITH CHARACTER LIST
-            this.setState({characters: data, editor: data[0].character_text});
+            this.setState({characters: data, editor: data[0].character_text, character_name: data[0].name, character_preview: data[0].preview_text});
 
             console.log(this.state.characters);
+            console.log(this.state.character_name)
+            console.log(this.state.character_preview)
 
         });
     }
@@ -42,8 +46,13 @@ class CharacterPage extends Component {
         let id = e.target.id;
         // the array id of the character
         let idArrayNum = id - 1;
+        // the name of the newly selected character
+        let newCharName = this.state.characters[idArrayNum].name;
+        // the preview of the newly selected character
+        let newCharPreview = this.state.characters[idArrayNum].preview_text;
         // set the state to the database id because we will send it to the db
-        this.setState({character_select: id})
+        this.setState({character_select: id, character_name: newCharName, character_preview: newCharPreview});
+        
         console.log("current character num: " + this.state.character_select);
         let newCharText = this.state.characters[idArrayNum].character_text;    
         console.log(newCharText);    
@@ -51,6 +60,14 @@ class CharacterPage extends Component {
 
         // console.log(document.getElementById("textEditor-char_ifr"))
         window.frames['textEditor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML= newCharText;
+    }
+
+    handleInputChange = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        this.setState({[name]: value});
+        console.log(this.state.character_name)
+        console.log(this.state.character_preview)
     }
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
@@ -90,6 +107,22 @@ class CharacterPage extends Component {
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
                 <Row id="charEditorRow">
                     <Col size="8" id="editor-char-col">
+                        <Row>
+                            <Col size="2">
+                                <p className="ml-5 mt-1">Name </p>
+                            </Col>
+                            <Col size="10">
+                                <input type="text" className="form-control" id="name-input" value={this.state.character_name} name="character_name" onChange={this.handleInputChange}/>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col size="2">
+                                <p className="ml-5 mt-1">Preview</p>
+                            </Col>
+                            <Col size="10">
+                                <input type="text" className="form-control" id="preview-input" value={this.state.character_preview} name="character_preview" onChange={this.handleInputChange}/>
+                            </Col>
+                        </Row>
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 

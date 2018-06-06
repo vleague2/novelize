@@ -28,3 +28,6 @@
     /* max-width: 100vh; */
     /* margin-bottom: 30px; */
 }
+#name_input, #preview_input {
+    width: 100%;
+}
