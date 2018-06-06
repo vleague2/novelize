@@ -296,17 +296,17 @@ class CharacterPage extends Component {
                             <div className="modal-body">
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
-                                    <label htmlFor="add-name-input">Character Name</label>
+                                    <label htmlFor="add-name-input" className="label-title">Character Name</label>
                                     <FormFieldInput id="add-name-input"  name="name" placeholder="Jane Doe" />
                                 </div>
                                 {/* FORM FIELD TO ADD PREVIEW */}
                                 <div className="form-group">
-                                    <label htmlFor="add-preview-input">One-line bio</label>
+                                    <label htmlFor="add-preview-input" className="label-title">One-line bio</label>
                                     <FormFieldInput id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
                                 </div>
                                 {/* FORM FIELD TO ADD IMAGE LINK */}
                                 <div className="form-group">
-                                    <label htmlFor="add-image-input">Image Link</label>
+                                    <label htmlFor="add-image-input" className="label-title">Image Link</label>
                                     <FormFieldInput id="add-image-input" name="image" placeholder="Square images look best!"/>
                                 </div>
                             </div>
@@ -315,7 +315,7 @@ class CharacterPage extends Component {
                                 {/* CLOSE THE MODAL */}
                                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <button type="button" className="btn btn-primary" id="add-new-char" onClick={this.addNewChar} data-dismiss="modal">Save</button>
+                                <button type="button" className="btn btn-save-modal" id="add-new-char" onClick={this.addNewChar} data-dismiss="modal">Save</button>
                             </div>
                         </div>
                     </div>

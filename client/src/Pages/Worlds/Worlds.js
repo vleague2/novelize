@@ -261,8 +261,8 @@ class WorldPage extends Component {
                             <div className="modal-body">
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
-                                    <label htmlFor="add-title-input">Title of Worldbuilding Item</label>
-                                    <FormFieldInput id="add-title-input"  name="title" placeholder="i.e. setting"/>
+                                    <label htmlFor="add-title-input" className="label-title">Title of Worldbuilding Item</label>
+                                    <FormFieldInput id="add-title-input" name="title" placeholder="i.e. setting"/>
                                 </div>
                             </div>
                             {/* BUTTONS AT MODAL BOTTOM */}
@@ -270,7 +270,7 @@ class WorldPage extends Component {
                                 {/* CLOSE THE MODAL */}
                                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <button type="button" className="btn btn-primary" id="add-new-world" onClick={this.addNewWorld} data-dismiss="modal">Save</button>
+                                <button type="button" className="btn btn-save-modal" id="add-new-world" onClick={this.addNewWorld} data-dismiss="modal">Save</button>
                             </div>
                         </div>
                     </div>
