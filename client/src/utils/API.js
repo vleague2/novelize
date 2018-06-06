@@ -6,7 +6,7 @@ export default {
     },
 
     updateOne: function(URL, id, col, con) {
-        return axios.post(`/api/${URL}` + id, {
+        return axios.post(`/api/${URL}/` + id, {
             column: col,
             content: con
         });
@@ -23,6 +23,12 @@ export default {
     addNewWorld: function(title) {
         return axios.post('/api/new/world', {
             // SEND IN THE COLUMN AND CONTENT
+            title: title
+        })
+    },
+
+    addNewNote: function(title) {
+        return axios.post('/api/new/note', {
             title: title
         })
     }
