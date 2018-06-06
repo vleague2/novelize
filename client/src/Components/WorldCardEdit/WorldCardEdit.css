@@ -1,0 +1,17 @@
+.world-title {
+    font-size: 14px;
+    font-family: 'Open-Sans', sans-serif;
+    font-weight: 700;
+}
+
+.edit-world {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 11px;
+    color: rgb(86, 86, 253);
+    text-align: right;
+    cursor: pointer;
+}
+
+.active-world {
+    background-color: lightgray;
+}

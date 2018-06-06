@@ -1,0 +1,46 @@
+#textEditor-world {
+    height: 100%;
+    max-height: 90vh;    
+}
+
+.mce-notification {
+    display: none;
+}
+
+#editor-world-col {
+    height: 100%;
+    max-height: 100vh;
+    padding-right: 0px;
+}
+
+#worldEditorRow {
+    height: 100%;
+    margin-right: 0px;
+}
+
+#world-list-col {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-right: 0px;
+    height: 100%;
+    overflow: auto;
+    max-height: 85vh;
+}
+#title_input {
+    width: 100%;
+}
+
+.form-text {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 15px;
+}
+
+#back-arrow {
+    font-size: 27px;
+}
+
+#add-world-prompt {
+    cursor: pointer;
+    color: rgb(86, 86, 253);
+    font-family: 'Open-Sans', sans-serif;
+}

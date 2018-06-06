@@ -206,7 +206,7 @@ class CharacterPage extends Component {
                         <Row>
                             {/* COLUMN TO HOLD THE FORM LABEL */}
                             <Col size="3">
-                                <p className="text-right mt-3 form-text">Preview</p>
+                                <p className="text-right mt-3 form-text">One-line Bio</p>
                             </Col>
                             {/* COLUMN TO HOLD THE FORM INPUT FOR PREVIEW TEXT */}
                             <Col size="8">
@@ -290,17 +290,17 @@ class CharacterPage extends Component {
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-name-input">Character Name</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-name-input"  name="name"/>
+                                    <input type="text" className="form-control mt-2 mr-2" id="add-name-input"  name="name" placeholder="Jane Doe"/>
                                 </div>
                                 {/* FORM FIELD TO ADD PREVIEW */}
                                 <div className="form-group">
                                     <label htmlFor="add-preview-input">One-line bio</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-preview-input" name="preview_text"/>
+                                    <input type="text" className="form-control mt-2 mr-2" id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
                                 </div>
                                 {/* FORM FIELD TO ADD IMAGE LINK */}
                                 <div className="form-group">
                                     <label htmlFor="add-image-input">Image Link</label>
-                                    <input type="text" className="form-control mt-2 mr-2" id="add-image-input" name="image"/>
+                                    <input type="text" className="form-control mt-2 mr-2" id="add-image-input" name="image" placeholder="Square images look best!"/>
                                 </div>
                             </div>
                             {/* BUTTONS AT MODAL BOTTOM */}
