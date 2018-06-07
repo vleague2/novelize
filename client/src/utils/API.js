@@ -5,6 +5,10 @@ export default {
         return axios.get(`/api/${URL}`);
     },
 
+    getOne: function(URL, id) {
+        return axios.get(`/api/${URL}/` + id);
+    },
+
     updateOne: function(URL, id, col, con) {
         return axios.post(`/api/${URL}/` + id, {
             column: col,

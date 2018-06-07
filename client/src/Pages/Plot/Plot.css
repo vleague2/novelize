@@ -1,13 +1,14 @@
 #entire-page {
-    height: 85vh;
-    margin-bottom: 60px;
+    height: 86vh;
+    padding-bottom: 60px;
+    overflow: auto;
 }
 
 #plot-editor-row {
     margin-right: 0px;
     margin-left: 0px;
     width: 100%;
-    overflow: auto;
+    /* overflow: auto; */
     
 }
 

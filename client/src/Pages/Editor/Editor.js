@@ -6,6 +6,7 @@ import CharacterCard from "../../Components/CharacterCard";
 import WorldCard from "../../Components/WorldCards";
 import NoteCard from "../../Components/NoteCards";
 import { Editor } from '@tinymce/tinymce-react';
+import API from "../../utils/API";
 
 
 class EditorPage extends Component {
@@ -15,6 +16,7 @@ class EditorPage extends Component {
         // SET THE STATE
         this.state = {
             characters: [],
+            select_story: "",
             story: "",
             worldbuilds: [],
             notes: [],
@@ -30,7 +32,7 @@ class EditorPage extends Component {
     componentDidMount() {
 
         //API CALL TO SERVER TO GET CHARACTER LIST
-        axios.get("/api/characters")
+        API.getAll("characters")
         .then(res => {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
@@ -43,27 +45,34 @@ class EditorPage extends Component {
         });
 
         //API CALL TO SERVER TO GET STORY FOR INITIAL VALUE OF EDITOR
-        axios.get("/api/story")
+        API.getOne("story", "1")
         .then(res => {
             //PULL STORY FROM SERVER RESPONSE
             let story = res.data.story_text;
+            let select_story = res.data.id;
 
             //UPDATE STATE WITH STORY TEXT
-            this.setState({story: story})
+            this.setState({story: story, select_story: select_story})
         })
 
-        axios.get("/api/worldbuilds")
+        // API CALL TO GET THE WORLDBUILD INFO
+        API.getAll("worldbuilds")
         .then(res => {
+            // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
+
+            // UPDATE STATE WITH WORLDBUILD DATA
             this.setState({worldbuilds: data});
-            console.log(res.data);
         })
 
-        axios.get("/api/notes")
+        // API CALL TO GET NOTES
+        API.getAll("notes")
         .then(res => {
+            // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
+
+            // UPDATE STATE WITH NOTES DATA
             this.setState({notes: data});
-            console.log(data);
         })
     }
 
@@ -126,11 +135,9 @@ class EditorPage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
-        //API POST CALL TO THE SERVER 
-        axios.post('/api/story', {
-            // SEND THE CONTENT OF THE EDITOR
-            story: e.target.getContent()
-        }).then(res => {
+        //API POST CALL TO THE SERVER
+        API.updateOne("story", this.state.select_story, "story_text", e.target.getContent)
+        .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
             console.log("Saved!");
         })
@@ -140,7 +147,7 @@ class EditorPage extends Component {
     CharTab = () => {
         // MAP THROUGH EACH CHARACTER IN THE STATE
         return this.state.characters.map(character => {
-            console.log("crying");
+  
             // CREATE CHARACTER CARD WITH ATTRIBUTES
             return <CharacterCard 
                 id={character.id} 
@@ -157,7 +164,7 @@ class EditorPage extends Component {
     WorldTab = () => {
         // MAP THROUGH EACH OF THE WORLDS IN THE STATE
         return this.state.worldbuilds.map(world => {
-            console.log("crying again");
+
             // CREATE WORLD CARD WITH ATTRIBUTES
             return <WorldCard 
                 id={world.id} 
@@ -172,7 +179,7 @@ class EditorPage extends Component {
     NoteTab = () => {
         // MAP THROUGH EACH OF THE WORLDS IN THE STATE
         return this.state.notes.map(note => {
-            console.log("crying SO MUCH");
+  
             // CREATE WORLD CARD WITH ATTRIBUTES
             return <NoteCard 
                 id={note.id} 

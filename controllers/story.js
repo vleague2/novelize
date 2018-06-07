@@ -3,7 +3,9 @@ const db = require("./../models");
 
 let story = {
     findOne: function(req, res) {
-        db.Story.findOne({where: {id: 1}})
+        let id = req.params.id;
+
+        db.Story.findOne({where: {id: id}})
         .then(story => {
             res.send(story);
         })
@@ -11,13 +13,14 @@ let story = {
 
     updateOne: function(req, res) {
         let storyUpdate = req.body.story;
+        let id = req.params.id;
         
         db.Story.update(
             {story_text: storyUpdate}, 
-            {where: {id: 1}})
+            {where: {id: id}})
         .then(response => {
             // res.send(story);
-            db.Story.findOne({where: {id: 1}})
+            db.Story.findOne({where: {id: id}})
             .then(story => {
                 res.send(story);
             })

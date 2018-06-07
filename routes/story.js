@@ -6,9 +6,9 @@ const router = express.Router();
 const storyController = require('../controllers/story.js');
 
 // ROUTES
-router.get('/api/story', storyController.findOne);
+router.get('/api/story/:id', storyController.findOne);
 
-router.post('/api/story', storyController.updateOne);
+router.post('/api/story/:id', storyController.updateOne);
 
 // EXPORT
 module.exports = router;
