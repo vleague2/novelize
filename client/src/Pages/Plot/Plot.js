@@ -19,7 +19,7 @@ class PlotPage extends Component {
 
     render() {
         return (
-            <div>
+            <div id="entire-page">
                 <Row id="plot-editor-row">
                     <Row id="back-button-row">
                         <Col size="12">
@@ -27,10 +27,16 @@ class PlotPage extends Component {
                         </Col>
                     </Row>
 
-                    {/* <TimelineItem title="Card title">
+                    <TimelineItem title="Card title">
                         Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
-                    </TimelineItem> */}
-                    <Row id="timeline-row">
+                    </TimelineItem>
+                    <TimelineItem title="Card title">
+                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
+                    </TimelineItem>
+                    <TimelineItem title="Card title">
+                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
+                    </TimelineItem>
+                    {/* <Row id="timeline-row">
                         <Col size="2" id="line-col">
                             <div className="circle"/>
                         </Col>
@@ -42,7 +48,7 @@ class PlotPage extends Component {
                                 </div>
                             </div>
                         </Col>
-                    </Row>
+                    </Row> */}
 
                     {/* <Row id="timeline-row">
                         <Col size="2" id="line-col">
