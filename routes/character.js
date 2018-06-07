@@ -12,5 +12,7 @@ router.post('/api/characters/:id', characterController.updateOne);
 
 router.post('/api/new/character', characterController.addOne);
 
+router.delete('/api/characters/:id', characterController.deleteOne);
+
 // EXPORT
 module.exports = router;

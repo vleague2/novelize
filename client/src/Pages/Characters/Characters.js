@@ -73,6 +73,10 @@ class CharacterPage extends Component {
         // SET THE ARRAY ID OF THE CHARACTER 
         let idArrayNum = id - 1;
 
+        this.updateEditor(id, idArrayNum);
+    }
+
+    updateEditor = (id, idArrayNum) => {
         // SET THE NAME OF THE NEWLY SELECTED CHARACTER USING THE ARRAY ID
         let newCharName = this.state.characters[idArrayNum].name;
 
@@ -166,6 +170,27 @@ class CharacterPage extends Component {
         })
     }
 
+    // FUNCTION TO DELETE A CHARACTER FROM THE DB
+    deleteChar = () => {
+        // GRAB ID OF CHARACTER FROM STATE
+        let id = this.state.character_select;
+
+        // PING API TO DELETE A CHARACTER
+        API.deleteOne("characters", id)
+        .then(res => {
+            console.log(res);
+
+            // CALL DB TO UPDATE CHARACTER LIST
+            this.updateCharList();
+
+            // PULL THE ID OF THE FIRST ITEM IN THE CHARACTERS ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
+            let newSelectId = this.state.characters[0].id;
+
+            // UPDATE THE EDITOR (USING 0 AS ARRAY NUM BECAUSE WE WANT THE FIRST ONE)
+            this.updateEditor(newSelectId, "0");
+        })
+    }
+
     // RENDER THINGS TO THE PAGE
     render() {
         return (
@@ -191,13 +216,17 @@ class CharacterPage extends Component {
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
-                            <Col size="8">
+                            <Col size="6">
                                 <FormFieldInput 
                                     id="name-input" 
                                     value={this.state.name} 
                                     name="name" 
                                     onChange={this.handleInputChange}
                                 />
+                                
+                            </Col>
+                            <Col size="3">
+                                <button className="btn btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </button>
                             </Col>
                         </Row>
 
@@ -208,7 +237,7 @@ class CharacterPage extends Component {
                                 <p className="text-right mt-3 form-text">One-line Bio</p>
                             </Col>
                             {/* COLUMN TO HOLD THE FORM INPUT FOR PREVIEW TEXT */}
-                            <Col size="8">
+                            <Col size="7">
                                 <FormFieldInput
                                     id="preview-input" 
                                     value={this.state.preview_text} 

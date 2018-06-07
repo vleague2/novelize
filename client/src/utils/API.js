@@ -12,6 +12,10 @@ export default {
         });
     },
 
+    deleteOne: function(URL, id) {
+        return axios.delete(`/api/${URL}/` + id);
+    },
+
     addNewCharacter: function(name, preview, image) {
         return axios.post("/api/new/character", {
             name: name,

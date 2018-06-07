@@ -35,6 +35,18 @@ let character = {
             console.log(response);
             res.send("Added one character!");
         })
+    },
+
+    deleteOne: function(req, res) {
+        let id = req.params.id;
+
+        db.Character.destroy(
+            {where: {id:id}}
+        )
+        .then(response => {
+            console.log(response);
+            res.send("Deleted one character");
+        })
     }
 }
 
