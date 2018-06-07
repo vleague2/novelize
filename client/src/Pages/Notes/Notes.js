@@ -23,37 +23,37 @@ class NotePage extends Component {
         // BIND THIS FOR HANDLECLICK
         this.handleClick = this.handleClick.bind(this);
 
-        // BIND FOR ADD NEW WORLD CLICK
+        // BIND FOR ADD NEW NOTE CLICK
         this.addNewNote = this.addNewNote.bind(this);
     }
 
     // AS SOON AS THE APP LOADS
     componentDidMount() {
 
-        //API CALL TO SERVER TO GET WORLD LIST
+        //API CALL TO SERVER TO GET NOTE LIST
         API.getAll("notes")
         .then(res => {
 
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
 
-            //UPDATE STATE WITH WORLD LIST, SET THE FIRST WORLD ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST WORLD'S TITLE
+            //UPDATE STATE WITH NOTE LIST, SET THE FIRST NOTE ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST NOTE'S TITLE
             this.setState({notes: data, editor: data[0].note_text, title: data[0].title});
 
-            // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+            // SET THE FIRST NOTE CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
             this.changeClass("1", "active-world");
         });
     }
 
     // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
     updateNoteList = () => {
-        // PING THE DATABASE TO GET AN UPDATED WORLD LIST
+        // PING THE DATABASE TO GET AN UPDATED NOTE LIST
         API.getAll("notes")
         .then(res => {
-            // PULL OUT THE CHARACTER DATA
+            // PULL OUT THE NOTE DATA
             let data = res.data;
 
-            // UPDATE THE STATE WITH NEW CHARACTER DATA
+            // UPDATE THE STATE WITH NEW NOTE DATA
             this.setState({notes: data});
         })
     }
@@ -102,11 +102,11 @@ class NotePage extends Component {
         // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
         this.setState({note_select: id, title: newNoteTitle});
 
-        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
+        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW NOTE TEXT
         window.frames['textEditor-note_ifr'].contentDocument.getElementById('tinymce').innerHTML = newNoteText;
     }
 
-    // FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
+    // FUNCTION TO HANDLE WHEN THE NOTE NAME IS UPDATED
     handleInputChange = (e) => {
         // THIS WILL BE THE COLUMN NAME, SO WE ARE PULLING OUT THE NAME ATTRIBUTE OF THE INPUT FIELD
         let name = e.target.name;
@@ -117,10 +117,10 @@ class NotePage extends Component {
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
-        // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
+        // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED NOTE
         API.updateOne("notes", this.state.note_select, name, value)
         .then(res => {
-            // PING THE DATABASE TO GET AN UPDATED WORLD LIST
+            // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList();
         }) 
     }

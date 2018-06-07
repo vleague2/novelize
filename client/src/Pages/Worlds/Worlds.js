@@ -50,10 +50,10 @@ class WorldPage extends Component {
         // PING THE DATABASE TO GET AN UPDATED WORLD LIST
         API.getAll("worldbuilds")
         .then(res => {
-            // PULL OUT THE CHARACTER DATA
+            // PULL OUT THE WORLD DATA
             let data = res.data;
 
-            // UPDATE THE STATE WITH NEW CHARACTER DATA
+            // UPDATE THE STATE WITH NEW WORLD DATA
             this.setState({worlds: data});
         })
     }
@@ -69,6 +69,7 @@ class WorldPage extends Component {
         // SET THE DATABASE ID OF THE WORLD
         let id = e.target.id;
 
+        // UPDATE THE EDITOR
         this.updateEditor(id);
     }
 
@@ -116,7 +117,7 @@ class WorldPage extends Component {
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
-        // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
+        // PING THE DATABASE TO UPDATE THE WORLD ITEM, AND CONCATENATE THE ID OF THE SELECTED WORLD ITEM
         API.updateOne("worlds", this.state.world_select, name, value)
         .then(res => {
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
