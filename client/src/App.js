@@ -8,6 +8,7 @@ import Editor from "./Pages/Editor/Editor";
 import Character from "./Pages/Characters/Characters";
 import World from "./Pages/Worlds/Worlds";
 import Note from "./Pages/Notes/Notes";
+import Plot from "./Pages/Plot/Plot";
 
 const App = () => (
   <Router>
@@ -20,6 +21,7 @@ const App = () => (
         <Route exact path = "/character-edit" component={Character}/>
         <Route exact path = "/world-edit" component={World}/>
         <Route exact path = "/notes-edit" component={Note}/>
+        <Route exact path = "/plot-edit" component={Plot}/>
       </Switch>
        {/* ADD IN THE FOOTER */}
       <Footer/>
