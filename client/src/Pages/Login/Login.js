@@ -9,34 +9,34 @@ const Login = () => (
         <Container>
             <Row>
                 <Col size="6">
-                    <div className="card mt-4" id="registerCard">
+                    <div className="card mt-4" id="register-card">
                         <div className="card-body">
                             <h3 className=" mt-3 mb-4"> Register </h3>
                             <button className="btn btn-info btn-block mb-4">Sign Up With Google</button>
                             <h5 className="mb-4">Or create an account:</h5>
 
-                            {/* proxy here not working so hardcoded path needs to be fixed */}
-                            <form action="http://localhost:3001/register" method="POST">
+                            {/* PROBABLY SHOULD BE AN AXIOS CALL...... */}
+                            <form action="/register" method="POST">
                                 <div className="form-group">
-                                    <label for="emailRegister">Email address</label>
-                                    <input type="email" className="form-control" id="emailRegister" placeholder="Enter email"/>
+                                    <label for="email-register">Email address</label>
+                                    <input type="email" className="form-control" id="email-register" placeholder="Enter email"/>
                                 </div>
                                 <div className="form-group">
-                                    <label for="usernameRegister">Username</label>
-                                    <input type="text" className="form-control" id="usernameRegister" placeholder="Enter a username"/>
+                                    <label for="username-register">Username</label>
+                                    <input type="text" className="form-control" id="username-register" placeholder="Enter a username"/>
                                 </div>
                                 <div className="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                                    <label for="password-register">Password</label>
+                                    <input type="password" className="form-control" id="password-register" placeholder="Password"/>
                                 </div>
-                                <button type="submit" class="btn submitBtns mb-3">Submit</button>
+                                <button type="submit" class="btn submit-btns mb-3">Submit</button>
                             </form>
                         </div>
                     </div>
                 </Col>
 
                 <Col size="6">
-                    <div className="card mt-4" id="loginCard">
+                    <div className="card mt-4" id="login-card">
                         <div className="card-body">
                             <h3> Login </h3>
                         </div>

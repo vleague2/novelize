@@ -186,11 +186,6 @@ class Home extends Component {
                             <Button>Get Started</Button>
                         </Col>
                     </Row>
-                    {/* <h1>
-                        <p role="img" aria-label="Face With Rolling Eyes Emoji" id="emojis">
-                        🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄🙄
-                        </p>
-                    </h1> */}
                 </Container>
             </div>
         )

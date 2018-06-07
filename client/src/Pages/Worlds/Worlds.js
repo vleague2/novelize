@@ -103,7 +103,7 @@ class WorldPage extends Component {
         this.setState({world_select: id, title: newWorldTitle});
 
         // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW WORLD TEXT
-        window.frames['textEditor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML = newWorldText;
+        window.frames['text-editor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML = newWorldText;
     }
 
     // FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
@@ -187,7 +187,7 @@ class WorldPage extends Component {
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div id="world-edit">
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
-                <Row id="worldEditorRow">
+                <Row id="editor-world-row">
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
                     <Col size="8" id="editor-world-col">
@@ -221,7 +221,7 @@ class WorldPage extends Component {
                             cloudChannel='dev'
                             // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.editor}</p>`}
-                            id="textEditor-world"
+                            id="text-editor-world"
                             
                             // INITIALIZE A BUNCH OF THINGS
                             init={{

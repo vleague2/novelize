@@ -107,7 +107,7 @@ class CharacterPage extends Component {
         this.setState({character_select: id, name: newCharName, preview_text: newCharPreview});
 
         // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
-        window.frames['textEditor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML = newCharText;
+        window.frames['text-editor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML = newCharText;
     }
 
     // FUNCTION TO HANDLE WHEN THE CHARACTER NAME OR PREVIEW IS UPDATED
@@ -199,7 +199,7 @@ class CharacterPage extends Component {
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div id="char-edit">
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
-                <Row id="charEditorRow">
+                <Row id="editor-char-row">
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
                     <Col size="8" id="editor-char-col">
@@ -254,7 +254,7 @@ class CharacterPage extends Component {
                             cloudChannel='dev'
                             // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.editor}</p>`}
-                            id="textEditor-char"
+                            id="text-editor-char"
                             
                             // INITIALIZE A BUNCH OF THINGS
                             init={{

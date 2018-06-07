@@ -1,24 +1,24 @@
-.char_img {
+.char-img {
     width: 100%
 }
 
-.char_name {
+.char-name {
     font-size: 14px;
     font-family: 'Open-Sans', sans-serif;
     font-weight: 700;
 }
 
-.char_preview {
+.char-preview {
     font-family: 'Open-Sans', sans-serif;
     font-size: 12px;
 }
 
-.char_profile {
+.char-profile {
     font-family: 'Open-Sans', sans-serif;
     font-size: 12px;
 }
 
-.view_more {
+.view-more {
     font-family: 'Open-Sans', sans-serif;
     font-size: 11px;
     color: rgb(86, 86, 253);

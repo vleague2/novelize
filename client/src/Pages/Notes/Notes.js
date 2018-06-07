@@ -103,7 +103,7 @@ class NotePage extends Component {
         this.setState({note_select: id, title: newNoteTitle});
 
         // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW NOTE TEXT
-        window.frames['textEditor-note_ifr'].contentDocument.getElementById('tinymce').innerHTML = newNoteText;
+        window.frames['text-editor-note_ifr'].contentDocument.getElementById('tinymce').innerHTML = newNoteText;
     }
 
     // FUNCTION TO HANDLE WHEN THE NOTE NAME IS UPDATED
@@ -187,7 +187,7 @@ class NotePage extends Component {
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div id="note-edit">
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
-                <Row id="noteEditorRow">
+                <Row id="editor-note-row">
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
                     <Col size="8" id="editor-note-col">
@@ -221,7 +221,7 @@ class NotePage extends Component {
                             cloudChannel='dev'
                             // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.editor}</p>`}
-                            id="textEditor-note"
+                            id="text-editor-note"
                             
                             // INITIALIZE A BUNCH OF THINGS
                             init={{

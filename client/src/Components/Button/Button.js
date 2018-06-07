@@ -2,7 +2,7 @@ import React from "react";
 import "./Button.css";
 
 const Button = ({ children }) => (
-    <button type="button" className="btn submitBtns">
+    <button type="button" className="btn submit-btns">
         {children}
     </button>
 );

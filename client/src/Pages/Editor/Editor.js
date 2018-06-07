@@ -18,8 +18,8 @@ class EditorPage extends Component {
             story: "",
             worldbuilds: [],
             notes: [],
-            leftTab: "char_tab",
-            rightTab: "world_tab"
+            leftTab: "char-tab",
+            rightTab: "world-tab"
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -76,46 +76,46 @@ class EditorPage extends Component {
         //DECIDE WHAT TO DO BASED ON WHAT ID IT IS
         switch (tab) {
             //IF IT'S CHARACTER TAB
-            case "char_tab": 
+            case "char-tab": 
                 //UPDATE COLORS OF CHARACTER TAB
-                document.getElementById("char_tab").style.backgroundColor = "#343a40";
-                document.getElementById("char_tab").style.color = "#f8f9fa";
+                document.getElementById("char-tab").style.backgroundColor = "#343a40";
+                document.getElementById("char-tab").style.color = "#f8f9fa";
                 //UPDATE COLORS OF PLOT TAB
-                document.getElementById("plot_tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("plot_tab").style.color = "#343a40";
+                document.getElementById("plot-tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("plot-tab").style.color = "#343a40";
                 // UPDATE STATE
-                this.setState({leftTab: "char_tab"});
+                this.setState({leftTab: "char-tab"});
                 break;
             //IF IT'S PLOT TAB
-            case "plot_tab":
+            case "plot-tab":
                 // UPDATE COLORS OF CHARACTER TAB
-                document.getElementById("char_tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("char_tab").style.color = "#343a40";
+                document.getElementById("char-tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("char-tab").style.color = "#343a40";
                 //UPDATE COLORS OF PLOT TAB
-                document.getElementById("plot_tab").style.backgroundColor = "#343a40";
-                document.getElementById("plot_tab").style.color = "#f8f9fa";
+                document.getElementById("plot-tab").style.backgroundColor = "#343a40";
+                document.getElementById("plot-tab").style.color = "#f8f9fa";
                 // UPDATE STATE
-                this.setState({leftTab: "plot_tab"});
+                this.setState({leftTab: "plot-tab"});
                 break;
-            case "world_tab":
+            case "world-tab":
                 // UPDATE COLORS OF WORLD TAB
-                document.getElementById("world_tab").style.backgroundColor = "#343a40";
-                document.getElementById("world_tab").style.color = "#f8f9fa";
+                document.getElementById("world-tab").style.backgroundColor = "#343a40";
+                document.getElementById("world-tab").style.color = "#f8f9fa";
                 //UPDATE COLORS OF NOTES TAB
-                document.getElementById("notes_tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("notes_tab").style.color = "#343a40";
+                document.getElementById("notes-tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("notes-tab").style.color = "#343a40";
                 // UPDATE STATE
-                this.setState({rightTab: "world_tab"});
+                this.setState({rightTab: "world-tab"});
                 break;
-            case "notes_tab":
+            case "notes-tab":
              // UPDATE COLORS OF WORLD TAB
-                document.getElementById("world_tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("world_tab").style.color = "#343a40";;
+                document.getElementById("world-tab").style.backgroundColor = "#f8f9fa";
+                document.getElementById("world-tab").style.color = "#343a40";;
                 //UPDATE COLORS OF NOTES TAB
-                document.getElementById("notes_tab").style.backgroundColor = "#343a40";;
-                document.getElementById("notes_tab").style.color = "#f8f9fa";
+                document.getElementById("notes-tab").style.backgroundColor = "#343a40";;
+                document.getElementById("notes-tab").style.color = "#f8f9fa";
                 // UPDATE STATE
-                this.setState({rightTab: "notes_tab"});
+                this.setState({rightTab: "notes-tab"});
                 break;
             //IF IT'S NONe OF THOSE
             default:
@@ -186,7 +186,7 @@ class EditorPage extends Component {
     // CONDITIONAL RENDER FOR THE LEFT SIDEBAR
     LeftTabRender = () => {
         // IF THE CHARACTER TAB IS SELECTED
-        if (this.state.leftTab === "char_tab") {
+        if (this.state.leftTab === "char-tab") {
             // RETURN THE FUNCTION THAT RENDERS OUR CHARACTER CARDS
             return <this.CharTab/>
         }
@@ -201,7 +201,7 @@ class EditorPage extends Component {
     // CONDITIONAL RENDER FOR THE RIGHT SIDEBAR
     RightTabRender = () => {
         // IF THE WORLD TAB IS SELECTED
-        if (this.state.rightTab === "world_tab") {
+        if (this.state.rightTab === "world-tab") {
             // RETURN THE FUNCTION THAT RENDERS OUR WORLD CARDS
             return <this.WorldTab/>
         }
@@ -218,14 +218,14 @@ class EditorPage extends Component {
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div>
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
-                <Row id="editorRow">
+                <Row id="editor-row">
                     {/* SETTING UP OUR 3-COL SYSTEM. THIS IS THE LEFT COL FOR LEFT TABS*/}
-                    <Col size="3" id="tabsLeft">
+                    <Col size="3" id="tabs-left">
                         {/* TABS FOR CHARACTERS AND PLOT */}
-                        <button className="btn rounded-0 tabBtn" id="char_tab" onClick={this.handleClick}>
+                        <button className="btn rounded-0 tab-btn" id="char-tab" onClick={this.handleClick}>
                             Characters
                         </button>
-                        <button className="btn rounded-0 tabBtn" id="plot_tab" onClick={this.handleClick}>
+                        <button className="btn rounded-0 tab-btn" id="plot-tab" onClick={this.handleClick}>
                             Plot
                         </button>
             
@@ -234,7 +234,7 @@ class EditorPage extends Component {
                             {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
                                 {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
-                                <a href={this.state.leftTab === "char_tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right" ></i></a>
+                                <a href={this.state.leftTab === "char-tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right" ></i></a>
                             </p>
 
                             {/* CONDITIONAL RENDER FOR THE LEFT SIDEBAR */}
@@ -243,7 +243,7 @@ class EditorPage extends Component {
                     </Col>
 
                     {/* CENTER COLUMN FOR THE TEXT EDITOR */}
-                    <Col size="6" id="editorCol">
+                    <Col size="6" id="editor-col">
 
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
@@ -251,7 +251,7 @@ class EditorPage extends Component {
                             cloudChannel='dev'
                             // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.story}</p>`}
-                            id="textEditor"
+                            id="text-editor"
                             
                             // INITIALIZE A BUNCH OF THINGS
                             init={{
@@ -285,12 +285,12 @@ class EditorPage extends Component {
                     </Col>
 
                     {/* COLUMN FOR RIGHT SIDEBAR */}
-                    <Col size="3" id="tabsRight">
+                    <Col size="3" id="tabs-right">
                         {/* TABS FOR WORLD AND NOTES */}
-                        <button className="btn rounded-0 tabBtn" id="world_tab" onClick={this.handleClick}>
+                        <button className="btn rounded-0 tab-btn" id="world-tab" onClick={this.handleClick}>
                             Worldbuild
                         </button>
-                        <button className="btn rounded-0 tabBtn" id="notes_tab" onClick={this.handleClick}>
+                        <button className="btn rounded-0 tab-btn" id="notes-tab" onClick={this.handleClick}>
                             Notes
                         </button>
 
@@ -299,7 +299,7 @@ class EditorPage extends Component {
                             {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
                                 {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
-                                <a href={this.state.rightTab === "world_tab" ? "/world-edit" : "/notes-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                                <a href={this.state.rightTab === "world-tab" ? "/world-edit" : "/notes-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
                             </p>
 
                             {/* CONDITIONAL RENDER FOR THE RIGHT SIDEBAR */}

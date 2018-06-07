@@ -1,33 +1,33 @@
-.tabBtn {
+.tab-btn {
     width: 50%;
     margin-top: 0px;
     font-family: 'Open-Sans', sans-serif;
 }
 
-#editorRow {
+#editor-row {
     height: 100%;
     margin-right: 0px;
 }
 
-#char_tab, #world_tab {
+#char-tab, #world-tab {
     background-color: #343a40;
     color: white;
 }
 
-#notes_tab:focus, #plot_tab:focus, #char_tab:focus, #world_tab:focus {  
+#notes-tab:focus, #plot-tab:focus, #char-tab:focus, #world-tab:focus {  
     box-shadow: none;
 }
 
-#plot_tab, #notes_tab {
+#plot-tab, #notes-tab {
     background-color: #f8f9fa;
     color: #343a40;
 }
 
-#editorCol {
+#editor-col {
     padding: 0px;
 }
 
-#tabsLeft {
+#tabs-left {
     border-right: 1px solid #dfdfdf;
     height: 100%;
     padding-right: 0px;
@@ -38,7 +38,7 @@
 }
 
 
-#tabsRight {
+#tabs-right {
     border-left: 1px solid #dfdfdf;
     height: 100%;
     padding-left:0px;
@@ -49,7 +49,7 @@
     margin-bottom: 30px;
 }
 
-#textEditor {
+#text-editor {
     height: 78%;
     max-height: 85vh;    
 }

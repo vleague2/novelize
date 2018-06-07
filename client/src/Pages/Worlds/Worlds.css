@@ -1,4 +1,4 @@
-#textEditor-world {
+#text-editor-world {
     height: 100%;
     max-height: 90vh;    
 }
@@ -13,7 +13,7 @@
     padding-right: 0px;
 }
 
-#worldEditorRow {
+#editor-world-row {
     height: 100%;
     margin-right: 0px;
 }

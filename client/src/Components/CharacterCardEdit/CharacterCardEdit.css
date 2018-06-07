@@ -1,14 +1,14 @@
-.char_img {
+.char-img {
     width: 100%
 }
 
-.char_name {
+.char-name {
     font-size: 14px;
     font-family: 'Open-Sans', sans-serif;
     font-weight: 700;
 }
 
-.char_preview {
+.char-preview {
     font-family: 'Open-Sans', sans-serif;
     font-size: 12px;
 }

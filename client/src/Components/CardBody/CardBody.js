@@ -3,7 +3,7 @@ import "./CardBody.css";
 
 const CardBody = ({id, children, onClick}) => (
     <div className="card rounded-0">
-        <a onClick={onClick} className="cardLink">
+        <a onClick={onClick} className="card-link">
             <div className="card-body text-center" id={id}>
                 {children}
             </div>
