@@ -8,9 +8,7 @@ const NoteCard = (props) => (
             {props.title}
            </p>
 
-           <p className="note-text">
-            {props.text}
-           </p>
+           <p className="note-text" dangerouslySetInnerHTML={{__html: props.text}}></p>
         </div>
     </div>
 )
