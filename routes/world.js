@@ -12,5 +12,7 @@ router.post('/api/worlds/:id', worldController.updateOne);
 
 router.post('/api/new/world', worldController.addOne);
 
+router.delete('/api/worlds/:id', worldController.deleteOne);
+
 // EXPORT
 module.exports = router;

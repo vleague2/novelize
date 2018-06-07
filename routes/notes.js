@@ -12,5 +12,7 @@ router.post('/api/notes/:id', noteController.updateOne);
 
 router.post('/api/new/note', noteController.addOne);
 
+router.delete('/api/notes/:id', noteController.deleteOne);
+
 // EXPORT
 module.exports = router;

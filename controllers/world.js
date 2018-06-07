@@ -33,6 +33,18 @@ let world = {
             console.log(response);
             res.send("Added one world item!");
         })
+    },
+
+    deleteOne: function(req, res) {
+        let id = req.params.id;
+
+        db.World.destroy(
+            {where: {id:id}}
+        )
+        .then(response => {
+            console.log(response);
+            res.send("Deleted one world item!");
+        })
     }
 }
 

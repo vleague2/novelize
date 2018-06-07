@@ -45,3 +45,7 @@
     background-color: #7e4464;
     color: white;
 }
+
+.delete-btn:focus, .delete-btn:active {
+    box-shadow: none;
+}

@@ -63,32 +63,32 @@ class NotePage extends Component {
         document.getElementById(id).setAttribute("class", `card rounded-0 ml-1 ${active}`);
     }
 
-    // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY WORLD ITEM
+    // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY NOTE ITEM
     handleClick(e) {
        
-        // SET THE DATABASE ID OF THE WORLD
+        // SET THE DATABASE ID OF THE NOTE
         let id = e.target.id;
 
-        // SET THE ARRAY ID OF THE WORLD 
-        let idArrayNum = id - 1;
+        // CALL UPDATE EDITOR FUNCTION
+        this.updateEditor(id);
+    }
 
-        // SET THE TITLE OF THE NEWLY SELECTED WORLD USING THE ARRAY ID
-        let newNoteTitle = this.state.notes[idArrayNum].title;
+    // FUNCTION TO UPDATE THE EDITOR
+    updateEditor = (id) => {
 
-        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE TITLE
-        this.setState({note_select: id, title: newNoteTitle});
+        // INIT NEW NOTE VALUES
+        let newNoteTitle = "";
+        let newNoteText = "";
 
-        // CREATE A VARIABLE TO HOLD THE WORLD TEXT OF THE NEW SELECTED WORLD
-        let newNoteText = this.state.notes[idArrayNum].note_text;          
-
-        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW WORLD TEXT
-        window.frames['textEditor-note_ifr'].contentDocument.getElementById('tinymce').innerHTML= newNoteText;
-
-        // MAKE THAT WORLD CARD ACTIVE BY LOOPING THRU WORLD ARRAY
+        // LOOP THROUGH NOTES 
         this.state.notes.forEach(note => {
-            // IF THE WORLD ID MATCHES THE SELECTED ID
+            // IF THE NOTE ID MATCHES THE SELECTED ID
             if (note.id == id) {
-                // CHANGE CLASS TO ACTIVE
+                // PULL OUT VALUE AND REASSIGN TO NOTE VALUE
+                newNoteTitle = note.title;
+                newNoteText = note.note_text;
+
+                // CHANGE CLASS OF THAT CARD TO ACTIVE
                 this.changeClass(note.id, "active-world");
             }
 
@@ -98,6 +98,12 @@ class NotePage extends Component {
                 this.changeClass(note.id);
             }
         })
+
+        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
+        this.setState({note_select: id, title: newNoteTitle});
+
+        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
+        window.frames['textEditor-note_ifr'].contentDocument.getElementById('tinymce').innerHTML = newNoteText;
     }
 
     // FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
@@ -154,6 +160,27 @@ class NotePage extends Component {
         })
     }
 
+    // FUNCTION TO DELETE A NOTES ITEM FROM THE DB
+    deleteNote = () => {
+        // GRAB ID OF NOTE FROM STATE
+        let id = this.state.note_select;
+
+        // PING API TO DELETE A NOTE
+        API.deleteOne("notes", id)
+        .then(res => {
+            console.log(res);
+
+            // CALL DB TO UPDATE NOTE LIST
+            this.updateNoteList();
+
+            // PULL THE ID OF THE FIRST ITEM IN THE NOTES ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
+            let newSelectId = this.state.notes[0].id;
+
+            // UPDATE THE EDITOR
+            this.updateEditor(newSelectId);
+        })
+    }
+
     // RENDER THINGS TO THE PAGE
     render() {
         return (
@@ -179,8 +206,12 @@ class NotePage extends Component {
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
-                            <Col size="8">
+                            <Col size="6">
                                 <FormFieldInput id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
+                            </Col>
+
+                            <Col size="3">
+                                <button className="btn btn-danger delete-btn" onClick={this.deleteNote}>Delete Note </button>
                             </Col>
                         </Row>
 

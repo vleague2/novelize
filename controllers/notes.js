@@ -33,6 +33,18 @@ let note = {
             console.log(response);
             res.send("Added one note item!");
         })
+    },
+
+    deleteOne: function(req, res) {
+        let id = req.params.id;
+
+        db.Note.destroy(
+            {where: {id:id}}
+        )
+        .then(response => {
+            console.log(response);
+            res.send("Deleted one note!");
+        })
     }
 }
 

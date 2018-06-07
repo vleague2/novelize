@@ -75,6 +75,7 @@ class CharacterPage extends Component {
         this.updateEditor(id);
     }
 
+    // FUNCTION TO UPDATE THE EDITOR
     updateEditor = (id) => {
 
         // INIT NEW CHARACTER VALUES
