@@ -8,10 +8,15 @@ const TimelineItem = (props) => (
             <div className="circle"/>
         </Col>
         <Col size="8" id="plot-col">
-            <div className="card">
+            <div className="card" id = {props.id}>
                 <div className="card-body">
                     <h4 className="card-title">{props.title}</h4>
                     <p className="card-text">{props.children}</p>
+                    <div className="text-right">
+                        <button className="btn btn-sm btn-secondary mr-3" id={props.id}>Edit</button>
+                        <button className="btn btn-sm btn-info mr-3" id={props.id}>Reorder</button>
+                        <button className="btn btn-sm btn-danger mr-3" id={props.id}>Delete</button>
+                    </div>
                 </div>
             </div>
         </Col>

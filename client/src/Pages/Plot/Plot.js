@@ -3,6 +3,8 @@ import "./Plot.css";
 import {Row, Col} from "../../Components/Grid";
 import BackButton from "../../Components/BackButton";
 import TimelineItem from "../../Components/TimelineItem";
+import AddAnItem from "../../Components/AddAnItem";
+import API from "../../utils/API";
 
 class PlotPage extends Component {
     constructor(props) {
@@ -10,11 +12,27 @@ class PlotPage extends Component {
 
         // SET THE STATE
         this.state = {
-            
+            plots: []
         }
+
+        
 
         // BIND THIS FOR HANDLECLICK
         // this.handleClick = this.handleClick.bind(this);
+    }
+
+
+    componentDidMount() {
+
+        API.getAll("plots")
+        .then(res => {
+            console.log(res);
+            let data = res.data;
+
+            this.setState({plots: data});
+
+            console.log(this.state.plots);
+        })
     }
 
     render() {
@@ -22,62 +40,32 @@ class PlotPage extends Component {
             <div id="entire-page">
                 <Row id="plot-editor-row">
                     <Row id="back-button-row">
-                        <Col size="12">
+                        <Col size="3">
                             <BackButton />
                         </Col>
-                    </Row>
 
-                    <TimelineItem title="Card title">
-                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
-                    </TimelineItem>
-                    <TimelineItem title="Card title">
-                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
-                    </TimelineItem>
-                    <TimelineItem title="Card title">
-                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
-                    </TimelineItem>
-                    {/* <Row id="timeline-row">
-                        <Col size="2" id="line-col">
-                            <div className="circle"/>
-                        </Col>
-                        <Col size="8" id="plot-col">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h4 className="card-title">Card title</h4>
-                                    <p className="card-text">Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row> */}
-
-                    {/* <Row id="timeline-row">
-                        <Col size="2" id="line-col">
-                            <div className="circle"/>
-                        </Col>
-                        <Col size="8" id="plot-col">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h4 className="card-title">Card title</h4>
-                                    <p className="card-text">Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
-                                </div>
-                            </div>
+                        <Col size="6">
+                            <AddAnItem id="add-plot-prompt">Add a Plot Point </AddAnItem>
                         </Col>
                     </Row>
 
-                    <Row id="timeline-row">
-                        <Col size="2" id="line-col">
-                            <div className="circle"/>
-                        </Col>
-                        <Col size="8" id="plot-col">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h4 className="card-title">Card title</h4>
-                                    <p className="card-text">Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row> */}
-                    
+                    {this.state.plots.map(plot => {
+                        return <TimelineItem 
+                                id={plot.id} 
+                                key={plot.id}
+                                title={plot.title}>
+                                    {plot.plot_text}
+                                </TimelineItem>
+                    })}
+                    {/* <TimelineItem title="Card title">
+                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
+                    </TimelineItem>
+                    <TimelineItem title="Card title">
+                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
+                    </TimelineItem>
+                    <TimelineItem title="Card title">
+                        Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.
+                    </TimelineItem>                     */}
                 </Row>
             </div>
         )

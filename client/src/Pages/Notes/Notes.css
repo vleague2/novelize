@@ -35,12 +35,6 @@
     font-size: 15px;
 }
 
-#add-note-prompt {
-    cursor: pointer;
-    color: rgb(86, 86, 253);
-    font-family: 'Open-Sans', sans-serif;
-}
-
 .btn-save-modal {
     background-color: #7e4464;
     color: white;

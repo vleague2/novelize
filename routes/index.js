@@ -15,5 +15,7 @@ app.use(require("./world.js"));
 
 app.use(require("./notes.js"));
 
+app.use(require("./plot.js"));
+
 // EXPORT APP FOR APP.JS TO USE
 module.exports = app;

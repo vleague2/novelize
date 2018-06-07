@@ -35,12 +35,6 @@
     font-size: 15px;
 }
 
-#add-world-prompt {
-    cursor: pointer;
-    color: rgb(86, 86, 253);
-    font-family: 'Open-Sans', sans-serif;
-}
-
 .label-title {
     font-family: 'Open-Sans', sans-serif;
 }

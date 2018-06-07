@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import axios from "axios";
 import "./Editor.css";
 import {Row, Col} from "../../Components/Grid";
 import CharacterCard from "../../Components/CharacterCard";
