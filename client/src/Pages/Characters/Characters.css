@@ -51,3 +51,7 @@
     font-family: 'Open-Sans', sans-serif;
     margin-top: 10px;
 }
+
+.delete-btn:focus, .delete-btn:active {
+    box-shadow: none;
+}

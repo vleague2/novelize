@@ -69,34 +69,29 @@ class CharacterPage extends Component {
        
         // SET THE DATABASE ID OF THE CHARACTER
         let id = e.target.id;
+        console.log("id: " + id);
 
-        // SET THE ARRAY ID OF THE CHARACTER 
-        let idArrayNum = id - 1;
-
-        this.updateEditor(id, idArrayNum);
+        // PASS IN PARAMETER TO UPDATE EDITOR
+        this.updateEditor(id);
     }
 
-    updateEditor = (id, idArrayNum) => {
-        // SET THE NAME OF THE NEWLY SELECTED CHARACTER USING THE ARRAY ID
-        let newCharName = this.state.characters[idArrayNum].name;
+    updateEditor = (id) => {
 
-        // SET THE PREVIEW TEXT OF THE NEWLY SELECTED CHARACTER USING THE ARRAY ID
-        let newCharPreview = this.state.characters[idArrayNum].preview_text;
+        // INIT NEW CHARACTER VALUES
+        let newCharName = "";
+        let newCharPreview = "";
+        let newCharText = "";
 
-        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
-        this.setState({character_select: id, name: newCharName, preview_text: newCharPreview});
-
-        // CREATE A VARIABLE TO HOLD THE CHARACTER TEXT OF THE NEW SELECTED CHARACTER
-        let newCharText = this.state.characters[idArrayNum].character_text;          
-
-        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
-        window.frames['textEditor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML= newCharText;
-
-        // MAKE THAT CHARACTER CARD ACTIVE BY LOOPING THRU CHARACTER ARRAY
+        // LOOP THROUGH CHARACTERS 
         this.state.characters.forEach(character => {
             // IF THE CHARACTER ID MATCHES THE SELECTED ID
             if (character.id == id) {
-                // CHANGE CLASS TO ACTIVE
+                // PULL OUT VALUES AND REASSIGN TO CHARACTER VALUES
+                newCharName = character.name;
+                newCharPreview = character.preview_text;
+                newCharText = character.character_text;
+
+                // CHANGE CLASS OF THAT CARD TO ACTIVE
                 this.changeClass(character.id, "active-char");
             }
 
@@ -106,6 +101,12 @@ class CharacterPage extends Component {
                 this.changeClass(character.id);
             }
         })
+
+        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
+        this.setState({character_select: id, name: newCharName, preview_text: newCharPreview});
+
+        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
+        window.frames['textEditor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML = newCharText;
     }
 
     // FUNCTION TO HANDLE WHEN THE CHARACTER NAME OR PREVIEW IS UPDATED
@@ -186,8 +187,8 @@ class CharacterPage extends Component {
             // PULL THE ID OF THE FIRST ITEM IN THE CHARACTERS ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
             let newSelectId = this.state.characters[0].id;
 
-            // UPDATE THE EDITOR (USING 0 AS ARRAY NUM BECAUSE WE WANT THE FIRST ONE)
-            this.updateEditor(newSelectId, "0");
+            // UPDATE THE EDITOR
+            this.updateEditor(newSelectId);
         })
     }
 
