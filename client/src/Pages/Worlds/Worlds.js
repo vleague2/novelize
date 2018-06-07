@@ -69,26 +69,25 @@ class WorldPage extends Component {
         // SET THE DATABASE ID OF THE WORLD
         let id = e.target.id;
 
-        // SET THE ARRAY ID OF THE WORLD 
-        let idArrayNum = id - 1;
+        this.updateEditor(id);
+    }
 
-        // SET THE TITLE OF THE NEWLY SELECTED WORLD USING THE ARRAY ID
-        let newWorldTitle = this.state.worlds[idArrayNum].title;
+    // FUNCTION TO UPDATE THE EDITOR
+    updateEditor = (id) => {
 
-        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE TITLE
-        this.setState({world_select: id, title: newWorldTitle});
+        // INIT NEW WORLD VALUES
+        let newWorldTitle = "";
+        let newWorldText = "";
 
-        // CREATE A VARIABLE TO HOLD THE WORLD TEXT OF THE NEW SELECTED WORLD
-        let newWorldText = this.state.worlds[idArrayNum].world_text;          
-
-        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW WORLD TEXT
-        window.frames['textEditor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML= newWorldText;
-
-        // MAKE THAT WORLD CARD ACTIVE BY LOOPING THRU WORLD ARRAY
+        // LOOP THROUGH WORLDS 
         this.state.worlds.forEach(world => {
             // IF THE WORLD ID MATCHES THE SELECTED ID
             if (world.id == id) {
-                // CHANGE CLASS TO ACTIVE
+                // PULL OUT VALUE AND REASSIGN TO WORLD VALUE
+                newWorldTitle = world.title;
+                newWorldText = world.world_text;
+
+                // CHANGE CLASS OF THAT CARD TO ACTIVE
                 this.changeClass(world.id, "active-world");
             }
 
@@ -98,6 +97,12 @@ class WorldPage extends Component {
                 this.changeClass(world.id);
             }
         })
+
+        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
+        this.setState({world_select: id, title: newWorldTitle});
+
+        // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW WORLD TEXT
+        window.frames['textEditor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML = newWorldText;
     }
 
     // FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
@@ -153,6 +158,27 @@ class WorldPage extends Component {
             document.getElementById("add-title-input").value = "";
         })
     }
+    
+    // FUNCTION TO DELETE A WORLD ITEM FROM THE DB
+    deleteWorld = () => {
+        // GRAB ID OF WORLD FROM STATE
+        let id = this.state.world_select;
+
+        // PING API TO DELETE A WORLD
+        API.deleteOne("worlds", id)
+        .then(res => {
+            console.log(res);
+
+            // CALL DB TO UPDATE WORLD LIST
+            this.updateWorldList();
+
+            // PULL THE ID OF THE FIRST ITEM IN THE WORLD ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
+            let newSelectId = this.state.worlds[0].id;
+
+            // UPDATE THE EDITOR
+            this.updateEditor(newSelectId);
+        })
+    }
 
     // RENDER THINGS TO THE PAGE
     render() {
@@ -179,8 +205,12 @@ class WorldPage extends Component {
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
-                            <Col size="8">
+                            <Col size="6">
                                 <FormFieldInput id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
+                            </Col>
+
+                            <Col size="3">
+                                <button className="btn btn-danger delete-btn" onClick={this.deleteWorld}>Delete Item </button>
                             </Col>
                         </Row>
 
