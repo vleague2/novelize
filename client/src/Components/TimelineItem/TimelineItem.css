@@ -34,3 +34,7 @@
     font-family: 'Open-Sans', sans-serif;
     font-size: 14px;
 }
+
+.btn:focus, .btn:active {
+    box-shadow: none;
+}
