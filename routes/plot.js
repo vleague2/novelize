@@ -6,7 +6,7 @@ const router = express.Router();
 const plotController = require('../controllers/plot.js');
 
 // ROUTES
-router.get('/api/plots', plotController.findAll);
+router.get('/api/plots/:storyid', plotController.findAll);
 
 router.post('/api/plots/:id', plotController.updateOne);
 

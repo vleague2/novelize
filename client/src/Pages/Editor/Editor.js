@@ -52,6 +52,8 @@ class EditorPage extends Component {
             let story = res.data.story_text;
             let select_story = res.data.id;
 
+            localStorage.setItem("currentStoryId", select_story);
+
             //UPDATE STATE WITH STORY TEXT
             this.setState({story: story, select_story: select_story})
         })

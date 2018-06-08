@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export default {
-    getAll: function(URL) {
-        return axios.get(`/api/${URL}`);
+    getAll: function(URL, id) {
+        return axios.get(`/api/${URL}/` + id);
     },
 
     getOne: function(URL, id) {
@@ -41,11 +41,12 @@ export default {
         })
     },
 
-    addNewPlot: function(title, plot, position) {
+    addNewPlot: function(title, plot, position, storyId) {
         return axios.post('/api/new/plot', {
             title: title,
             plot: plot,
-            position: position
+            position: position,
+            storyId: storyId
         });
     }
 }

@@ -22,7 +22,12 @@ class PlotPage extends Component {
     }
 
     updatePlotList = () => {
-        API.getAll("plots")
+
+        let storyId = localStorage.getItem("currentStoryId");
+
+        console.log(storyId);
+
+        API.getAll("plots", storyId)
         .then(res => {
             console.log(res);
             let data = res.data;
@@ -70,12 +75,11 @@ class PlotPage extends Component {
     addNewPlot = () => {
         let title = document.getElementById("add-title-input").value;
         let plot = document.getElementById("add-plot-input").value;
-        console.log(title)
-        console.log(plot)
-        let position = this.state.plots.length + 1;
-        console.log(position);
 
-        API.addNewPlot(title, plot, position)
+        let position = this.state.plots.length + 1;
+        let storyId = localStorage.getItem("currentStoryId");
+
+        API.addNewPlot(title, plot, position, storyId)
         .then(res => {
             console.log(res);
             this.updatePlotList();
