@@ -6,7 +6,7 @@ const router = express.Router();
 const worldController = require('../controllers/world.js');
 
 // ROUTES
-router.get('/api/worldbuilds', worldController.findAll);
+router.get('/api/worldbuilds/:storyid', worldController.findAll);
 
 router.post('/api/worlds/:id', worldController.updateOne);
 

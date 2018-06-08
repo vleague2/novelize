@@ -6,7 +6,7 @@ const router = express.Router();
 const characterController = require('../controllers/characters.js');
 
 // ROUTES
-router.get('/api/characters', characterController.findAll);
+router.get('/api/characters/:storyid', characterController.findAll);
 
 router.post('/api/characters/:id', characterController.updateOne);
 

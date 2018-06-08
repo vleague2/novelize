@@ -32,8 +32,10 @@ class EditorPage extends Component {
     // AS SOON AS PAGE LOADS
     componentDidMount() {
 
+        let storyId = localStorage.getItem("currentStoryId");
+
         //API CALL TO SERVER TO GET CHARACTER LIST
-        API.getAll("characters")
+        API.getAll("characters", storyId)
         .then(res => {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
@@ -46,7 +48,7 @@ class EditorPage extends Component {
         });
 
         //API CALL TO SERVER TO GET STORY FOR INITIAL VALUE OF EDITOR
-        API.getOne("story", "1")
+        API.getOne("story", storyId)
         .then(res => {
             //PULL STORY FROM SERVER RESPONSE
             let story = res.data.story_text;
@@ -59,7 +61,7 @@ class EditorPage extends Component {
         })
 
         // API CALL TO GET THE WORLDBUILD INFO
-        API.getAll("worldbuilds")
+        API.getAll("worldbuilds", storyId)
         .then(res => {
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
@@ -69,7 +71,7 @@ class EditorPage extends Component {
         })
 
         // API CALL TO GET NOTES
-        API.getAll("notes")
+        API.getAll("notes", storyId)
         .then(res => {
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
@@ -79,7 +81,7 @@ class EditorPage extends Component {
         })
 
         // API CALL TO GET PLOTS
-        API.getAll("plots")
+        API.getAll("plots", storyId)
         .then(res => {
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;

@@ -3,7 +3,12 @@ const db = require("./../models");
 
 let character = {
     findAll: function(req, res) {
-        db.Character.findAll().then(characters => {
+
+        let storyId = req.params.storyid;
+
+        db.Character.findAll({
+            where: {StoryId: storyId}
+        }).then(characters => {
             res.send(characters);
         })
     },

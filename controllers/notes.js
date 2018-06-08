@@ -3,7 +3,12 @@ const db = require("./../models");
 
 let note = {
     findAll: function(req, res) {
-        db.Note.findAll().then(notes => {
+
+        let storyId = req.params.storyid
+
+        db.Note.findAll({
+            where: {StoryId: storyId}
+        }).then(notes => {
             res.send(notes);
         })
     },

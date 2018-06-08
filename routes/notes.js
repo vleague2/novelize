@@ -6,7 +6,7 @@ const router = express.Router();
 const noteController = require('../controllers/notes.js');
 
 // ROUTES
-router.get('/api/notes', noteController.findAll);
+router.get('/api/notes/:storyid', noteController.findAll);
 
 router.post('/api/notes/:id', noteController.updateOne);
 

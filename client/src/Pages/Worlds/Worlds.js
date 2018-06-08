@@ -47,8 +47,12 @@ class WorldPage extends Component {
 
     // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
     updateWorldList = () => {
+
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         // PING THE DATABASE TO GET AN UPDATED WORLD LIST
-        API.getAll("worldbuilds")
+        API.getAll("worldbuilds", storyId)
         .then(res => {
             // PULL OUT THE WORLD DATA
             let data = res.data;
