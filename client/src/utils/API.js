@@ -39,5 +39,13 @@ export default {
         return axios.post('/api/new/note', {
             title: title
         })
+    },
+
+    addNewPlot: function(title, plot, position) {
+        return axios.post('/api/new/plot', {
+            title: title,
+            plot: plot,
+            position: position
+        });
     }
 }

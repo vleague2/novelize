@@ -3,7 +3,11 @@ const db = require("./../models");
 
 let plot = {
     findAll: function(req, res) {
-        db.Plot.findAll().then(plots => {
+        db.Plot.findAll({
+            order: [
+                ['position', 'ASC']
+            ]
+        }).then(plots => {
             res.send(plots);
         })
     },
@@ -25,9 +29,15 @@ let plot = {
 
     addOne: function(req, res) {
         let plotTitle = req.body.title;
+        let plotBody = req.body.plot;
+        let plotPosition = req.body.position;
+
+        console.log(plotTitle)
+        console.log(plotBody)
+        console.log(plotPosition)
 
         db.Plot.create(
-            {title: plotTitle}
+            {title: plotTitle, plot_text: plotBody, position: plotPosition}
         )
         .then(response => {
             console.log(response);

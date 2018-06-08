@@ -24,3 +24,13 @@
     right: -15px;
     top: 50px;
 }
+
+.timeline-title {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 18px;
+}
+
+.timeline-text {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 14px;
+}

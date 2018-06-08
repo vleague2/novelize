@@ -10,12 +10,12 @@ const TimelineItem = (props) => (
         <Col size="8" id="plot-col">
             <div className="card" id = {props.id}>
                 <div className="card-body">
-                    <h4 className="card-title">{props.title}</h4>
-                    <p className="card-text">{props.children}</p>
+                    <h4 className="card-title timeline-title">{props.title}</h4>
+                    <p className="card-text timeline-text">{props.children}</p>
                     <div className="text-right">
-                        <button className="btn btn-sm btn-secondary mr-3" id={props.id}>Edit</button>
+                        <button className="btn btn-sm btn-secondary mr-3" id={props.id} data-target={props.target} onClick={props.onEdit} data-toggle="modal">Edit</button>
                         <button className="btn btn-sm btn-info mr-3" id={props.id}>Reorder</button>
-                        <button className="btn btn-sm btn-danger mr-3" id={props.id}>Delete</button>
+                        <button className="btn btn-sm btn-danger mr-3" id={props.id} onClick={props.onDelete}>Delete</button>
                     </div>
                 </div>
             </div>
