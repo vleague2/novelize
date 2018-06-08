@@ -1,0 +1,36 @@
+#line-col-editor-page {
+    border-right: 3px solid #7e4464;
+    position: relative;
+    padding-top: 40px;
+}
+
+#timeline-row-editor-page {
+    width: 100%;
+    margin: 0px;
+}
+
+#plot-col-editor-page {
+    padding-left: 40px;
+    padding-top: 40px;
+}
+
+.circle-editor-page {
+    height: 15px;
+    width: 15px;
+    background-color: #7e4464;
+    border-radius: 50%;
+    position: absolute;
+    right: -9px;
+    top: 50px;
+}
+
+.timeline-title-editor-page {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700
+}
+
+.timeline-text-editor-page {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 12px;
+}

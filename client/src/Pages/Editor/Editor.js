@@ -4,6 +4,7 @@ import {Row, Col} from "../../Components/Grid";
 import CharacterCard from "../../Components/CharacterCard";
 import WorldCard from "../../Components/WorldCards";
 import NoteCard from "../../Components/NoteCards";
+import PlotCard from "../../Components/PlotCards";
 import { Editor } from '@tinymce/tinymce-react';
 import API from "../../utils/API";
 
@@ -19,6 +20,7 @@ class EditorPage extends Component {
             story: "",
             worldbuilds: [],
             notes: [],
+            plots: [],
             leftTab: "char-tab",
             rightTab: "world-tab"
         }
@@ -72,6 +74,16 @@ class EditorPage extends Component {
 
             // UPDATE STATE WITH NOTES DATA
             this.setState({notes: data});
+        })
+
+        // API CALL TO GET PLOTS
+        API.getAll("plots")
+        .then(res => {
+            // PULL DATA FROM SERVER RESPONSE
+            let data = res.data;
+
+            // UPDATE STATE WITH PLOT DATA
+            this.setState({plots: data});
         })
     }
 
@@ -159,6 +171,20 @@ class EditorPage extends Component {
         })
     }
 
+    // CODE TO RUN WHEN WE WANT TO RENDER THE PLOT SIDEBAR
+    PlotTab = () => {
+        return this.state.plots.map(plot => {
+
+            // CREATE PLOT CARDS WITH ATTRIBUTES
+            return <PlotCard
+                    id={plot.id}
+                    key={plot.id}
+                    title={plot.title}>
+                    {plot.plot_text}
+                    </PlotCard>
+        })
+    }
+
     // CODE TO RUN WHEN WE WANT TO RENDER THE WORLD SIDEBAR
     WorldTab = () => {
         // MAP THROUGH EACH OF THE WORLDS IN THE STATE
@@ -200,7 +226,7 @@ class EditorPage extends Component {
         // OTHERWISE (AKA IF THE PLOT TAB IS SELECTED)
         else {
             // RETURN THE FUNCTION THAT RENDERS OUR PLOT
-            return <h1> NOpe</h1>
+            return <this.PlotTab/>
         }
     }
 
