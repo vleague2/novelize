@@ -30,8 +30,11 @@ class WorldPage extends Component {
     // AS SOON AS THE APP LOADS
     componentDidMount() {
 
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         //API CALL TO SERVER TO GET WORLD LIST
-        API.getAll("worldbuilds")
+        API.getAll("worldbuilds", storyId)
         .then(res => {
 
             //PULL ARRAY FROM SERVER RESPONSE
@@ -146,11 +149,14 @@ class WorldPage extends Component {
     // FUNCTION TO HANDLE WHEN THE USER SAVES A NEW WORLD ITEM
     addNewWorld = () => {
 
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         // PULL OUT THE WORLD TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value;
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewWorld(title)
+        API.addNewWorld(title, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD

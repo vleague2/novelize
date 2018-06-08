@@ -29,9 +29,10 @@ let world = {
 
     addOne: function(req, res) {
         let worldTitle = req.body.title;
+        let storyId = req.body.storyId
 
         db.World.create(
-            {title: worldTitle}
+            {title: worldTitle, StoryId: storyId}
         )
         .then(response => {
             console.log(response);

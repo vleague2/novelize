@@ -29,9 +29,12 @@ class NotePage extends Component {
 
     // AS SOON AS THE APP LOADS
     componentDidMount() {
+        
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
 
         //API CALL TO SERVER TO GET NOTE LIST
-        API.getAll("notes")
+        API.getAll("notes", storyId)
         .then(res => {
 
             //PULL ARRAY FROM SERVER RESPONSE
@@ -47,8 +50,12 @@ class NotePage extends Component {
 
     // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
     updateNoteList = () => {
+
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         // PING THE DATABASE TO GET AN UPDATED NOTE LIST
-        API.getAll("notes")
+        API.getAll("notes", storyId)
         .then(res => {
             // PULL OUT THE NOTE DATA
             let data = res.data;
@@ -142,11 +149,14 @@ class NotePage extends Component {
     // FUNCTION TO HANDLE WHEN THE USER SAVES A NEW WORLD ITEM
     addNewNote = () => {
 
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         // PULL OUT THE WORLD TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value;
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewNote(title)
+        API.addNewNote(title, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD

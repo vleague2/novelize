@@ -31,8 +31,11 @@ class CharacterPage extends Component {
     // AS SOON AS THE APP LOADS
     componentDidMount() {
 
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         // GET CHARACTER LIST FROM DB
-        API.getAll("characters")
+        API.getAll("characters", storyId)
         .then(res => {
 
             //PULL ARRAY FROM SERVER RESPONSE
@@ -48,8 +51,12 @@ class CharacterPage extends Component {
 
     // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
     updateCharList = () => {
+
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
+
         // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
-        API.getAll("characters")
+        API.getAll("characters", storyId)
         .then(res => {
             // PULL OUT THE CHARACTER DATA
             let data = res.data;
@@ -154,9 +161,12 @@ class CharacterPage extends Component {
 
         // PULL OUT THE IMAGE URL FROM THE FORM
         let image = document.getElementById("add-image-input").value;
+
+        // GRAB STORY ID FROM LOCAL STORAGE
+        let storyId = localStorage.getItem("currentStoryId");
         
         // PING THE DATABASE TO ADD A NEW CHARACTER
-        API.addNewCharacter(name, preview, image)
+        API.addNewCharacter(name, preview, image, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW CHARACTER

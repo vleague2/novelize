@@ -30,9 +30,10 @@ let note = {
 
     addOne: function(req, res) {
         let noteTitle = req.body.title;
+        let storyId = req.body.storyId;
 
         db.Note.create(
-            {title: noteTitle}
+            {title: noteTitle, StoryId: storyId}
         )
         .then(response => {
             console.log(response);

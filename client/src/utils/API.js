@@ -20,24 +20,27 @@ export default {
         return axios.delete(`/api/${URL}/` + id);
     },
 
-    addNewCharacter: function(name, preview, image) {
+    addNewCharacter: function(name, preview, image, storyId) {
         return axios.post("/api/new/character", {
             name: name,
             preview: preview,
-            image: image
+            image: image,
+            storyId: storyId
         })
     },
 
-    addNewWorld: function(title) {
+    addNewWorld: function(title, storyId) {
         return axios.post('/api/new/world', {
             // SEND IN THE COLUMN AND CONTENT
-            title: title
+            title: title,
+            storyId: storyId
         })
     },
 
-    addNewNote: function(title) {
+    addNewNote: function(title, storyId) {
         return axios.post('/api/new/note', {
-            title: title
+            title: title,
+            storyId: storyId
         })
     },
 

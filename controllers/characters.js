@@ -32,9 +32,10 @@ let character = {
         let characterName = req.body.name;
         let characterPreview = req.body.preview;
         let characterImage = req.body.image;
+        let storyId = req.body.storyId
 
         db.Character.create(
-            {name: characterName, preview_text: characterPreview, character_image: characterImage}
+            {name: characterName, preview_text: characterPreview, character_image: characterImage, StoryId: storyId}
         )
         .then(response => {
             console.log(response);
