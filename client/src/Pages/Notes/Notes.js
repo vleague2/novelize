@@ -7,6 +7,7 @@ import BackButton from "../../Components/BackButton";
 import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
+import { body } from 'express-validator/check';
 
 class NotePage extends Component {
     constructor(props) {
@@ -40,6 +41,14 @@ class NotePage extends Component {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
 
+            // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(note => {
+                note.title = decodeURIComponent(note.title)
+                note.note_text = decodeURIComponent(note.note_text);
+            })
+
+            console.log(data);
+
             //UPDATE STATE WITH NOTE LIST, SET THE FIRST NOTE ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST NOTE'S TITLE
             this.setState({notes: data, editor: data[0].note_text, title: data[0].title});
 
@@ -59,6 +68,12 @@ class NotePage extends Component {
         .then(res => {
             // PULL OUT THE NOTE DATA
             let data = res.data;
+
+            // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(note => {
+                note.title = decodeURIComponent(note.title)
+                note.note_text = decodeURIComponent(note.note_text);
+            })
 
             // UPDATE THE STATE WITH NEW NOTE DATA
             this.setState({notes: data});
@@ -121,11 +136,14 @@ class NotePage extends Component {
         // THIS WILL BE THE NEW VALUE FOR THE COLUMN, SO WE ARE PULLING OUT THE VALUE ATTRIBUTE OF THE INPUT FIELD
         let value = e.target.value;
 
+        // FRONT-END VALIDATION -- WE ARE ENCODING THE INPUT SO NO HARMFUL SCRIPT GOES INTO THE DB
+        let encodedValue = encodeURIComponent(value);
+
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED NOTE
-        API.updateOne("notes", this.state.note_select, name, value)
+        API.updateOne("notes", this.state.note_select, name, encodedValue)
         .then(res => {
             // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList();
@@ -134,9 +152,12 @@ class NotePage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
+
+        // FRONT-END VALIDATION -- WE ARE ENCODING THE TEXT FROM THE EDITOR SO THAT ANY HARMFUL SCRIPTS DON'T GO INTO THE DATABASE
+        let encodedData = encodeURIComponent(e.target.getContent());
         
         //API POST CALL TO THE SERVER 
-        API.updateOne("notes", this.state.note_select, "note_text", e.target.getContent())
+        API.updateOne("notes", this.state.note_select, "note_text", encodedData)
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
@@ -154,9 +175,12 @@ class NotePage extends Component {
 
         // PULL OUT THE WORLD TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
+
+        // FRONT-END VALIDATION SO THAT NO HARMFUL SCRIPT GOES INTO THE DATABASE
+        let encodedTitle = encodeURIComponent(title);
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewNote(title, storyId)
+        API.addNewNote(encodedTitle, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD

@@ -41,6 +41,12 @@ class CharacterPage extends Component {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
 
+            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(character => {
+                character.name = decodeURIComponent(character.name)
+                character.character_text = decodeURIComponent(character.character_text);
+            })
+
             //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
             this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text});
 

@@ -1,5 +1,7 @@
 const express = require('express');
 const db = require("./../models");
+const { body } = require('express-validator/check');
+
 
 let note = {
     findAll: function(req, res) {
@@ -9,6 +11,7 @@ let note = {
         db.Note.findAll({
             where: {StoryId: storyId}
         }).then(notes => {
+            
             res.send(notes);
         })
     },
