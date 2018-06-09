@@ -52,7 +52,7 @@ class NotePage extends Component {
     updateNoteList = () => {
 
         // GRAB STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
+        let storyId = localStorage.getItem("currentStoryId");                                                
 
         // PING THE DATABASE TO GET AN UPDATED NOTE LIST
         API.getAll("notes", storyId)
