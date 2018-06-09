@@ -40,6 +40,12 @@ class WorldPage extends Component {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
 
+            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(world => {
+                world.title = decodeURIComponent(world.title)
+                world.world_text = decodeURIComponent(world.world_text);
+            })
+
             //UPDATE STATE WITH WORLD LIST, SET THE FIRST WORLD ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST WORLD'S TITLE
             this.setState({worlds: data, editor: data[0].world_text, title: data[0].title});
 
@@ -59,6 +65,12 @@ class WorldPage extends Component {
         .then(res => {
             // PULL OUT THE WORLD DATA
             let data = res.data;
+
+            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(world => {
+                world.title = decodeURIComponent(world.title)
+                world.world_text = decodeURIComponent(world.world_text);
+            })
 
             // UPDATE THE STATE WITH NEW WORLD DATA
             this.setState({worlds: data});
@@ -121,11 +133,13 @@ class WorldPage extends Component {
         // THIS WILL BE THE NEW VALUE FOR THE COLUMN, SO WE ARE PULLING OUT THE VALUE ATTRIBUTE OF THE INPUT FIELD
         let value = e.target.value;
 
+        let encodedValue = encodeURIComponent(value);
+
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE WORLD ITEM, AND CONCATENATE THE ID OF THE SELECTED WORLD ITEM
-        API.updateOne("worlds", this.state.world_select, name, value)
+        API.updateOne("worlds", this.state.world_select, name, encodedValue)
         .then(res => {
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
             this.updateWorldList();
@@ -134,9 +148,11 @@ class WorldPage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
+
+        let encodedContent = encodeURIComponent(e.target.getContent());
         
         //API POST CALL TO THE SERVER 
-        API.updateOne("worlds", this.state.world_select, "world_text", e.target.getContent())
+        API.updateOne("worlds", this.state.world_select, "world_text", encodedContent)
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
@@ -154,9 +170,11 @@ class WorldPage extends Component {
 
         // PULL OUT THE WORLD TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
+
+        let encodedTitle = encodeURIComponent(title);
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewWorld(title, storyId)
+        API.addNewWorld(encodedTitle, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD

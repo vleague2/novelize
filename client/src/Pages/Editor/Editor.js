@@ -40,6 +40,14 @@ class EditorPage extends Component {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
 
+            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(character => {
+                character.name = decodeURIComponent(character.name)
+                character.character_text = decodeURIComponent(character.character_text);
+                character.preview_text = decodeURIComponent(character.preview_text);
+                character.image = decodeURIComponent(character.image)
+            })
+
             //UPDATE STATE WITH CHARACTER LIST
             this.setState({characters: data});
 
@@ -54,10 +62,14 @@ class EditorPage extends Component {
             let story = res.data.story_text;
             let select_story = res.data.id;
 
+            // FRONT END VALIDATION TO PULL OUT STORY
+            let decodedStory = decodeURIComponent(story);
+
+            // SET THE LOCAL STORAGE TO THE CURRENT STORY ID BECAUSE WE NEED IT FOR LIKE EVERYTHING
             localStorage.setItem("currentStoryId", select_story);
 
             //UPDATE STATE WITH STORY TEXT
-            this.setState({story: story, select_story: select_story})
+            this.setState({story: decodedStory, select_story: select_story})
         })
 
         // API CALL TO GET THE WORLDBUILD INFO
@@ -65,6 +77,12 @@ class EditorPage extends Component {
         .then(res => {
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
+
+            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(world => {
+                world.title = decodeURIComponent(world.title)
+                world.world_text = decodeURIComponent(world.world_text);
+            })
 
             // UPDATE STATE WITH WORLDBUILD DATA
             this.setState({worldbuilds: data});
@@ -76,6 +94,12 @@ class EditorPage extends Component {
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
 
+            // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(note => {
+                note.title = decodeURIComponent(note.title)
+                note.note_text = decodeURIComponent(note.note_text);
+            })
+
             // UPDATE STATE WITH NOTES DATA
             this.setState({notes: data});
         })
@@ -85,6 +109,12 @@ class EditorPage extends Component {
         .then(res => {
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
+
+            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+            data.forEach(plot => {
+                plot.title = decodeURIComponent(plot.title)
+                plot.plot_text = decodeURIComponent(plot.plot_text);
+            })
 
             // UPDATE STATE WITH PLOT DATA
             this.setState({plots: data});
@@ -150,8 +180,11 @@ class EditorPage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
+        // FRONT END VALIDATION - ENCODE CONTENT SO NO HARMFUL SCRIPTS GO INTO DB
+        let encodedContent = encodeURIComponent(e.target.getContent());
+
         //API POST CALL TO THE SERVER
-        API.updateOne("story", this.state.select_story, "story_text", e.target.getContent)
+        API.updateOne("story", this.state.select_story, "story_text", encodedContent)
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
             console.log("Saved!");
