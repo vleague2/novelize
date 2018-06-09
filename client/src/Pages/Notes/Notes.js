@@ -136,14 +136,11 @@ class NotePage extends Component {
         // THIS WILL BE THE NEW VALUE FOR THE COLUMN, SO WE ARE PULLING OUT THE VALUE ATTRIBUTE OF THE INPUT FIELD
         let value = e.target.value;
 
-        // FRONT-END VALIDATION -- WE ARE ENCODING THE INPUT SO NO HARMFUL SCRIPT GOES INTO THE DB
-        let encodedValue = encodeURIComponent(value);
-
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED NOTE
-        API.updateOne("notes", this.state.note_select, name, encodedValue)
+        API.updateOne("notes", this.state.note_select, name, value)
         .then(res => {
             // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList();
@@ -153,11 +150,9 @@ class NotePage extends Component {
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
 
-        // FRONT-END VALIDATION -- WE ARE ENCODING THE TEXT FROM THE EDITOR SO THAT ANY HARMFUL SCRIPTS DON'T GO INTO THE DATABASE
-        let encodedData = encodeURIComponent(e.target.getContent());
-        
+       
         //API POST CALL TO THE SERVER 
-        API.updateOne("notes", this.state.note_select, "note_text", encodedData)
+        API.updateOne("notes", this.state.note_select, "note_text", e.target.getContent())
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
@@ -175,12 +170,9 @@ class NotePage extends Component {
 
         // PULL OUT THE WORLD TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
-
-        // FRONT-END VALIDATION SO THAT NO HARMFUL SCRIPT GOES INTO THE DATABASE
-        let encodedTitle = encodeURIComponent(title);
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewNote(encodedTitle, storyId)
+        API.addNewNote(title, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD

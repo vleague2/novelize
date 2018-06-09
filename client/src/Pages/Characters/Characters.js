@@ -141,14 +141,11 @@ class CharacterPage extends Component {
         // THIS WILL BE THE NEW VALUE FOR THE COLUMN, SO WE ARE PULLING OUT THE VALUE ATTRIBUTE OF THE INPUT FIELD
         let value = e.target.value;
 
-        // FRONT-END VALIDATION -- WE ARE ENCODING THE INPUT SO NO HARMFUL SCRIPT GOES INTO THE DB
-        let encodedValue = encodeURIComponent(value);
-
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
-        API.updateOne("characters", this.state.character_select, name, encodedValue)
+        API.updateOne("characters", this.state.character_select, name, value)
         .then(res => {
             // GET AN UPDATED CHARACTER LIST
             this.updateCharList();
@@ -157,12 +154,9 @@ class CharacterPage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
-
-        // FRONT-END VALIDATION -- WE ARE ENCODING THE INPUT SO NO HARMFUL SCRIPT GOES INTO THE DB
-        let encodedContent = encodeURIComponent(e.target.getContent());
         
         //API POST CALL TO THE SERVER, SENDING IN URL, ID, COLUMN NAME, AND CONTENT OF EDITOR
-        API.updateOne("characters", this.state.character_select, "character_text", encodedContent)
+        API.updateOne("characters", this.state.character_select, "character_text", e.target.getContent())
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
@@ -177,21 +171,18 @@ class CharacterPage extends Component {
 
         // PULL OUT THE CHARACTER NAME FROM THE FORM
         let name = document.getElementById("add-name-input").value.trim();
-        let encodedName = encodeURIComponent(name);
 
         // PULL OUT THE PREVIEW TEXT FROM THE FORM
         let preview = document.getElementById("add-preview-input").value.trim();
-        let encodedPreview = encodeURIComponent(preview);
 
         // PULL OUT THE IMAGE URL FROM THE FORM
         let image = document.getElementById("add-image-input").value.trim();
-        let encodedImage = encodeURIComponent(image);
 
         // GRAB STORY ID FROM LOCAL STORAGE
         let storyId = localStorage.getItem("currentStoryId");
         
         // PING THE DATABASE TO ADD A NEW CHARACTER
-        API.addNewCharacter(encodedName, encodedPreview, encodedImage, storyId)
+        API.addNewCharacter(name, preview, image, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW CHARACTER

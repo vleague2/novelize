@@ -10,9 +10,10 @@ export default {
     },
 
     updateOne: function(URL, id, col, con) {
+        let encodedCon = encodeURIComponent(con);
         return axios.post(`/api/${URL}/` + id, {
             column: col,
-            content: con
+            content: encodedCon
         });
     },
 
@@ -21,33 +22,43 @@ export default {
     },
 
     addNewCharacter: function(name, preview, image, storyId) {
+        let encodedName = encodeURIComponent(name);
+        let encodedPreview = encodeURIComponent(preview);
+        let encodedImage = encodeURIComponent(image);
+        
         return axios.post("/api/new/character", {
-            name: name,
-            preview: preview,
-            image: image,
+            name: encodedName,
+            preview: encodedPreview,
+            image: encodedImage,
             storyId: storyId
         })
     },
 
     addNewWorld: function(title, storyId) {
+        let encodedTitle = encodeURIComponent(title);
+
         return axios.post('/api/new/world', {
-            // SEND IN THE COLUMN AND CONTENT
-            title: title,
+            title: encodedTitle,
             storyId: storyId
         })
     },
 
     addNewNote: function(title, storyId) {
+        let encodedTitle = encodeURIComponent(title);
+
         return axios.post('/api/new/note', {
-            title: title,
+            title: encodedTitle,
             storyId: storyId
         })
     },
 
     addNewPlot: function(title, plot, position, storyId) {
+        let encodedTitle = encodeURIComponent(title);
+        let encodedPlot = encodeURIComponent(plot);
+
         return axios.post('/api/new/plot', {
-            title: title,
-            plot: plot,
+            title: encodedTitle,
+            plot: encodedPlot,
             position: position,
             storyId: storyId
         });

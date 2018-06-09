@@ -133,13 +133,11 @@ class WorldPage extends Component {
         // THIS WILL BE THE NEW VALUE FOR THE COLUMN, SO WE ARE PULLING OUT THE VALUE ATTRIBUTE OF THE INPUT FIELD
         let value = e.target.value;
 
-        let encodedValue = encodeURIComponent(value);
-
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
         // PING THE DATABASE TO UPDATE THE WORLD ITEM, AND CONCATENATE THE ID OF THE SELECTED WORLD ITEM
-        API.updateOne("worlds", this.state.world_select, name, encodedValue)
+        API.updateOne("worlds", this.state.world_select, name, value)
         .then(res => {
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
             this.updateWorldList();
@@ -148,11 +146,9 @@ class WorldPage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
-
-        let encodedContent = encodeURIComponent(e.target.getContent());
         
         //API POST CALL TO THE SERVER 
-        API.updateOne("worlds", this.state.world_select, "world_text", encodedContent)
+        API.updateOne("worlds", this.state.world_select, "world_text", e.target.getContent())
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING
             console.log(res);
@@ -170,11 +166,9 @@ class WorldPage extends Component {
 
         // PULL OUT THE WORLD TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
-
-        let encodedTitle = encodeURIComponent(title);
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewWorld(encodedTitle, storyId)
+        API.addNewWorld(title, storyId)
         .then(res => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW WORLD

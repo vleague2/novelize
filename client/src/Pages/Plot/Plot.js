@@ -88,12 +88,8 @@ class PlotPage extends Component {
         // GRAB THE TITLE FROM THE INPUT FIELD
         let title = document.getElementById("add-title-input").value.trim();
 
-        // ENCODE SO NO HARMFUL SCRIPTS GO INTO DB
-        let encodedTitle = encodeURIComponent(title);
-
         // GRAB THE PLOT TEXT FROM THE INPUT FIELD 
         let plot = document.getElementById("add-plot-input").value.trim();
-        let encodedPlot = encodeURIComponent(plot);
 
         // THE NEW POSITION WILL BE AFTER THE LAST ITEM'S POSITION, WHICH WE CAN CALCULATE WITH THE LENGTH OF THE ARRAY AND THEN ADD ONE
         let position = this.state.plots.length + 1;
@@ -102,7 +98,7 @@ class PlotPage extends Component {
         let storyId = localStorage.getItem("currentStoryId");
 
         // PING API TO ADD A NEW PLOT WITH THE DATA
-        API.addNewPlot(encodedTitle, encodedPlot, position, storyId)
+        API.addNewPlot(title, plot, position, storyId)
         .then(res => {
             console.log(res);
             // UPDATE THE PLOT LIST
@@ -150,16 +146,14 @@ class PlotPage extends Component {
 
         // GRAB THE TITLE FROM THE FORM INPUT
         let title = document.getElementById("update-title-input").value.trim();
-        let encodedTitle = encodeURIComponent(title);
 
         // GRAB THE PLOT TEXT FROM THE FORM INPUT
         let plotText = document.getElementById("update-plot-input").value.trim();
-        let encodedPlot = encodeURIComponent(plotText);
 
         // API CALL TO UPDATE ONE ITEM, WITH THE DATA WE GOT. BUT WE HAVE TO DO 2 SEPARATE API CALLS BECAUSE THE API UTIL ONLY UPDATES ONE COLUMN LOL.
-        API.updateOne("plots", id, "title", encodedTitle)
+        API.updateOne("plots", id, "title", title)
         .then(res => {
-            API.updateOne("plots", id, "plot_text", encodedPlot)
+            API.updateOne("plots", id, "plot_text", plot)
             .then(res => {
                 console.log(res);
                 // UPDATE THE PLOT LIST
