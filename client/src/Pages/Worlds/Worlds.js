@@ -153,7 +153,7 @@ class WorldPage extends Component {
         let storyId = localStorage.getItem("currentStoryId");
 
         // PULL OUT THE WORLD TITLE FROM THE FORM
-        let title = document.getElementById("add-title-input").value;
+        let title = document.getElementById("add-title-input").value.trim();
         
         // PING THE DATABASE TO ADD A NEW WORLD
         API.addNewWorld(title, storyId)

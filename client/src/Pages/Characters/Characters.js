@@ -154,13 +154,13 @@ class CharacterPage extends Component {
     addNewChar = () => {
 
         // PULL OUT THE CHARACTER NAME FROM THE FORM
-        let name = document.getElementById("add-name-input").value;
+        let name = document.getElementById("add-name-input").value.trim();
 
         // PULL OUT THE PREVIEW TEXT FROM THE FORM
-        let preview = document.getElementById("add-preview-input").value;
+        let preview = document.getElementById("add-preview-input").value.trim();
 
         // PULL OUT THE IMAGE URL FROM THE FORM
-        let image = document.getElementById("add-image-input").value;
+        let image = document.getElementById("add-image-input").value.trim();
 
         // GRAB STORY ID FROM LOCAL STORAGE
         let storyId = localStorage.getItem("currentStoryId");

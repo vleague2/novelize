@@ -80,10 +80,10 @@ class PlotPage extends Component {
     // FUNCTION TO ADD A NEW PLOT POINT
     addNewPlot = () => {
         // GRAB THE TITLE FROM THE INPUT FIELD
-        let title = document.getElementById("add-title-input").value;
+        let title = document.getElementById("add-title-input").value.trim();
 
         // GRAB THE PLOT TEXT FROM THE INPUT FIELD 
-        let plot = document.getElementById("add-plot-input").value;
+        let plot = document.getElementById("add-plot-input").value.trim();
 
         // THE NEW POSITION WILL BE AFTER THE LAST ITEM'S POSITION, WHICH WE CAN CALCULATE WITH THE LENGTH OF THE ARRAY AND THEN ADD ONE
         let position = this.state.plots.length + 1;
@@ -139,10 +139,10 @@ class PlotPage extends Component {
         let id = document.getElementById("update-plot-save").getAttribute('data-id');
 
         // GRAB THE TITLE FROM THE FORM INPUT
-        let title = document.getElementById("update-title-input").value;
+        let title = document.getElementById("update-title-input").value.trim();
 
         // GRAB THE PLOT TEXT FROM THE FORM INPUT
-        let plotText = document.getElementById("update-plot-input").value;
+        let plotText = document.getElementById("update-plot-input").value.trim();
 
         // API CALL TO UPDATE ONE ITEM, WITH THE DATA WE GOT. BUT WE HAVE TO DO 2 SEPARATE API CALLS BECAUSE THE API UTIL ONLY UPDATES ONE COLUMN LOL.
         API.updateOne("plots", id, "title", title)
