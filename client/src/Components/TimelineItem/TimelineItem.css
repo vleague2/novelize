@@ -38,3 +38,8 @@
 .btn:focus, .btn:active {
     box-shadow: none;
 }
+
+.form-control:active, .form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da
+}
