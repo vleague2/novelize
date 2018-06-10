@@ -37,8 +37,6 @@ let user = {
         else {
 
             // pull out values of things that passed validation
-            let username = matchedData(req).username;
-
             let password = matchedData(req).password;
 
             let email = matchedData(req).email;
@@ -70,8 +68,6 @@ let user = {
                         bcrypt.hash(password, salt, (err, hash)=> {
                             // create the newuser object that we'll send to the db
                             let newUser = {
-                                // lowercase the username so it's not case sensitive
-                                username: username.toLowerCase(),
                                 email: email,
                                 password: hash
                             }
@@ -99,101 +95,6 @@ let user = {
         req.logout();
         res.send("success");
     }
-}
-/*
+}  
 
-router.post('/register', (req, res) => {
-    let errors = [];
-    // This requires the password to be longer than 5 characters
-    if (req.body.password.length < 5) {
-        errors.push({
-            text: "Password must be at least 5 characters"
-        });
-    }
-    if (errors.length > 0) {
-        //This will allow us to refresh the page but keep the users info populated if they cause an error.
-        res.render('users/register', {
-            errors: errors,
-            userName: req.body.userName,
-            email: req.body.email
-
-        });
-
-    } else {
-        // Find if a user already exists
-        db.User.findOne({
-            where: {
-                username: req.body.username
-            }
-        }).then((user) => {
-            // If a user exists re-render the page and keep their fields populated
-            if (user) {
-                errors.push({
-                    text: "User already exists, please choose a new username"
-                });
-                res.render('users/register', {
-                    errors: errors,
-                    userName: req.body.userName,
-                    email: req.body.email
-
-                });
-            } else {
-                let insecurePass = req.body.password;
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(insecurePass, salt, (err, hash) => {
-                        let newUser = {
-                            username: req.body.userName.toLowerCase(),
-                            email: req.body.email,
-                            password: hash
-                        }
-                        db.User.create(newUser).then(function (user) {
-                            res.redirect('/auth/login');
-                        });
-                    });
-                });
-            }
-        })
-    }
-
-
-
-});
-
-router.post('/login', (req, res, next) => {
-    db.User.findOne({
-        where: {
-            username: req.body.userName.toLowerCase()
-        }
-    }).then((user) => {
-        let userId = user.dataValues.id;
-        if (user) {
-            // calling passport authenticate method
-            console.log('redirecting user..');
-            passport.authenticate('local', {
-                successRedirect: `/profile/${req.body.userName.toLowerCase()}`,
-                failureRedirect: "/auth/login",
-                failureFlash: "Invalid username or password",
-                successFlash: `Welcome ${user.dataValues.username}`
-            })(req, res, next);
-        }
-    });
-});
-*/
-/********************************************************* */
-
-/*****************GOOGLE AUTH ROUTES************************** */
-
-/*
-router.get('/google', passport.authenticate('google', {
-    // scope is what do you want from google
-    scope: ['profile', 'email']
-}));
-router.get('/google/callback', passport.authenticate('google', {
-    failureRedirect: '/'
-}), (req, res) => {
-    let username = res.req.user.dataValues.username;
-    res.redirect(`/profile/${username}`);
-});
-*/
 module.exports = user;
-

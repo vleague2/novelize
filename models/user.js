@@ -5,14 +5,7 @@ module.exports = function (sequelize, DataTypes) {
     googleId: {
       type: DataTypes.STRING
     },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
-
-    },
+    
     password: {
       type: DataTypes.STRING,
       allowNull: true,

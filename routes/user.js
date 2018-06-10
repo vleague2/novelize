@@ -29,10 +29,6 @@ router.post('/register',
         .trim()
         .isLength({min: 5})
         .withMessage("Password must be 5 characters long"),
-    check('username')
-        .trim()
-        .isLength({min: 5})    
-        .withMessage("Username must be 5 characters long") 
 ],
  userController.register);
 

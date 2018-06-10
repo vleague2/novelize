@@ -1,105 +1,94 @@
 import React, {Component} from "react";
 import "./Login.css";
 import {Container, Row, Col} from "../../Components/Grid";
-import API from "../../utils/API";
-// import CardBody from "../../Components/CardBody";
-// import Button from "../../Components/Button";
+import API from "../../utils/API";;
 
 class Login extends Component {
-    
-    login = () => {
-        sessionStorage.setItem("userId", "1");
-        window.location.href="/dashboard";
-    }   
 
+    // FUNCTION TO RUN WHEN THE USER SUBMITS NEW USER REGISTRATION
     onSubmit = (e) => {
+        // DON'T RELOAD THE PAGE
         e.preventDefault();
-        let username = document.getElementById("username-register").value;
+
+        // GRAB THE EMAIL AND PASSWORD VALUES FROM THE FORM
         let email = document.getElementById("email-register").value;
         let password = document.getElementById("password-register").value;
-        console.log(username)
-        console.log(email)
-        console.log(password)
 
-        API.registerUser(username, email, password)
+        // CALL API TO REGISTER A NEW USER
+        API.registerUser(email, password)
         .then(res => {
 
-            // first we gotta check if theres errors in the first place
+            // IF THERE ARE ANY ERRORS FROM THE RESPONSE, THEN WE HAVE TO DISPLAY SOME UI HELP BECAUSE THE USER DID SOMETHING WORNG
             if (res.data.error) {
                 console.log(res);
-
+                // IF THERE'S A PASSWORD ERROR
                 if (res.data.error[0].password) {
+                    // DISPLAY THE PASSWORD HELP TEXT AND EMPTY THE PASSWORD FIELD
                     document.getElementById("password-help").innerHTML = "Password must be more than 5 characters"
                     document.getElementById("password-help").style.display = "inline";
                     document.getElementById("password-register").value = "";
                 }
+                // OTHERWISE, KEEP THE HELP TEXT HIDDEN (THIS IS IN CASE THEY TRY AGAIN)
                 else {
                     document.getElementById("password-help").style.display = "none";
                 }
-    
+                // IF THERE'S AN EMAIL ERROR
                 if (res.data.error[0].email) {
+                    // DISPLAY THE EMAIL HELP TEXT AND EMPTY THE EMAIL FIELD
                     document.getElementById("email-help").innerHTML = "Please enter a valid email"
                     document.getElementById("email-help").style.display = "inline";
                     document.getElementById("email-register").value = ""; 
                 }
+                // OTHERWISE, KEEP THE HELP TEXT HIDDEN (THIS IS IN CASE THEY TRY AGAIN)
                 else {
                     document.getElementById("email-help").style.display = "none";
                 }
-    
-                if (res.data.error[0].username) {
-                    document.getElementById("username-help").innerHTML = "Username must be more than 5 characters"
-                    document.getElementById("username-help").style.display = "inline";
-                }
-                else {
-                    document.getElementById("username-help").style.display = "none";
-                }
-    
+                // IF THE USER ALREADY EXISTS
                 if (res.data.error[0].user) {
+                    // DISPLAY EMAIL HELP TEXT AND EMPTY THE EMAIL FIELD
                     document.getElementById("email-help").innerHTML = "Email already registered"
                     document.getElementById("email-help").style.display = "inline";
                     document.getElementById("email-register").value = ""; 
                 }
-                // if there's no user error and no email error, then we can hide the thing
+                // IF THERE'S NO USER ERROR AND NO EMAIL ERROR, THEN HIDE THE HELP FIELD 
                 else if (!res.data.error[0].user && !res.data.error[0].email) {
+                    // HIDE THE HELP TEXT
                     document.getElementById("email-help").style.display = "none";
                 }
             } 
 
+            // IF THERE ARE NO ERRORS, THEN THE USER IS GOOD TO GO!!
             else {
-                console.log(res);
-
-                let userId = res.data.id;
-
-                sessionStorage.setItem("userId", userId);
-                window.location.href="/dashboard";
+                // SOME MAGIC TO SIMULATE A LOGIN AFTER THEY REGISTER, BECAUSE IT'S ANNOYING TO REGISTER THEN LOGIN. FILL IN THE LOGIN FORM WITH THE USER'S VALUES AND THEN SIMULATE A BUTTON CLICK
+                document.getElementById("email-login").value = email;
+                document.getElementById("password-login").value = password;
+                document.getElementById("login-btn").click();
 
             }
         })
     }
 
+    // WHEN THE USER CLICKS THE LOGIN BUTTON
     onLogin = (e) => {
+        // DON'T RELOAD THE PAGE
         e.preventDefault();
+
+        // GRAB THE EMAIL AND PASSWORD VALUES FROM THE LOGIN FORM
         let email = document.getElementById("email-login").value;
         let password = document.getElementById("password-login").value;
 
-        // console.log(email)
-        // console.log(password)
-
+        // PING THE SERVER TO LOG IN THE USER
         API.loginUser(email, password)
         .then(res => {
-            console.log(res);
-            let userId = res.data.id;
-
-                sessionStorage.setItem("userId", userId);
-                window.location.href="/dashboard";
+            // SEND THEM TO THE DASHBOARD
+            window.location.href="/dashboard";
                 
         })
+        // IN CASE THERE ARE ERRORS, THEN THE USER'S EMAIL OR PASSWORD IS INCORRECT
         .catch(error => {
-            console.log(error);
-            console.log("Username or password is incorrect");
+            // DISPLAY THE LOGIN HELP TEXT AND EMPTY THE PASSWORD FIELD
             document.getElementById("login-help").innerHTML = "Incorrect email or password"
             document.getElementById("login-help").style.display = "inline";
-            document.getElementById("email-login").value = "";
             document.getElementById("password-login").value = "";
         })
     }
@@ -124,16 +113,11 @@ class Login extends Component {
                                             <small id="email-help" className="form-text"></small>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="username-register">Username</label>
-                                            <input type="text" className="form-control" id="username-register" placeholder="Enter a username"/>
-                                            <small id="username-help" className="form-text"></small>
-                                        </div>
-                                        <div className="form-group">
                                             <label htmlFor="password-register">Password</label>
                                             <input type="password" className="form-control" id="password-register" placeholder="Password"/>
                                             <small id="password-help" className="form-text"></small>
                                         </div>
-                                        <button type="submit" className="btn submit-btns mb-3" onClick={this.onSubmit}>Submit</button>
+                                        <button type="submit" className="btn submit-btns mb-3" onClick={this.onSubmit}>Create Account</button>
                                     </form>
                                 </div>
                             </div>

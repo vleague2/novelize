@@ -77,12 +77,10 @@ export default {
         return axios.get(`/api/stories/`);
     },
 
-    registerUser: function(username, email, password) {
-        let encodedUser = encodeURIComponent(username);
+    registerUser: function(email, password) {
         let encodedPassword = encodeURIComponent(password);
 
         return axios.post('/register', {
-            username: encodedUser,
             email: email,
             password: encodedPassword
         })
