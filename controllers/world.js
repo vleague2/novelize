@@ -10,18 +10,24 @@ let world = {
             where: {StoryId: storyId}
         }).then(worlds => {
 
-            // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
-            worlds.forEach(world => {
-                if (world.title !== null) {
-                    world.title = he.decode(world.title);
-                }
-                if (world.world_text !== null) {
-                    world.world_text = he.decode(world.world_text);
-                }
-                
-            })
+            if (worlds.length > 0) {
+                // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
+                worlds.forEach(world => {
+                    if (world.title !== null) {
+                        world.title = he.decode(world.title);
+                    }
+                    if (world.world_text !== null) {
+                        world.world_text = he.decode(world.world_text);
+                    }
+                    
+                })
 
-            res.send(worlds);
+                res.send(worlds);
+            }
+            else {
+                res.send([]);
+            }
+            
         })
     },
 
@@ -52,8 +58,8 @@ let world = {
             {title: encodedTitle, StoryId: storyId}
         )
         .then(response => {
-            console.log(response);
-            res.send("Added one world item!");
+            console.log(response.dataValues);
+            res.send(response.dataValues);
         })
     },
 

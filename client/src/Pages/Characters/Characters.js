@@ -227,8 +227,6 @@ class CharacterPage extends Component {
             document.getElementById("add-image-input").value = "";
 
             // VERY BAD CODE TO GET CHARACTER LIST
-            // GRAB STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");
 
             // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
             API.getAll("characters", storyId)
