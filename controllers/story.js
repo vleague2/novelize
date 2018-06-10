@@ -1,10 +1,15 @@
 const express = require('express');
 const db = require("./../models");
 const he = require('he');
+const passport = require('passport');
+
+
 
 let story = {
     findAll: function(req, res) {
-        let userId = req.params.userid;
+
+        console.log("user id in session: " + req.session.passport.user)
+        let userId = req.session.passport.user;
 
         db.Story.findAll({where: {UserId: userId}})
         .then(stories => {
@@ -43,7 +48,7 @@ let story = {
 
     addOne: function(req, res) {
         let title = req.body.title;
-        let userId = req.body.userId;
+        let userId = req.session.passport.user;
 
         let encodedTitle = he.encode(title);
 

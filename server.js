@@ -32,6 +32,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+
 app.use(flash());
 
 // passport setup

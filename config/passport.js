@@ -39,25 +39,29 @@ module.exports = function (passport) {
                         });
                     }
                 })
+
+                // Serializing the user
+                passport.serializeUser((user, done) => {
+                    console.log("serializing user")
+                    done(null, user.id)
+                });
+                //Deserializing the user (this is copy pasta from passport)
+                passport.deserializeUser((id, done) => {
+                    console.log("deserializing user")
+                    db.User.findOne({
+                        where: {
+                            id: id
+                        }
+                }).then((user) => {
+                    done(null, user)
+            });
+        });
     
             }).catch((err) => {
                 console.log(err);
             });
         }));
-        // Serializing the user
-        passport.serializeUser((user, done) => {
-            done(null, user.id)
-        });
-        //Deserializing the user (this is copy pasta from passport)
-        passport.deserializeUser((id, done) => {
-            db.User.findOne({
-                where: {
-                    id: id
-                }
-            }).then((user) => {
-                done(null, user)
-            });
-        });
+        
 
 
     

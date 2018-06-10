@@ -11,6 +11,8 @@ const Nav = () => {
       axios.get("/auth/logout")
       .then(res => {
         console.log(res);
+        sessionStorage.removeItem("userId");
+        window.location.href="/";
       })
     }
     else {

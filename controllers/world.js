@@ -18,8 +18,7 @@ let world = {
                     }
                     if (world.world_text !== null) {
                         world.world_text = he.decode(world.world_text);
-                    }
-                    
+                    }      
                 })
 
                 res.send(worlds);

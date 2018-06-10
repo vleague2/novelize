@@ -18,27 +18,34 @@ class Dashboard extends Component {
     }
 
     updateStoriesList = () => {
-        let userId = sessionStorage.getItem("userId")
-        API.getAll("stories", userId)
+        API.getAllStories("stories")
         .then(res => {
-            console.log(res);
-            let data = res.data;
 
-            // IF WE HAVE DATA FROM THE DB
-            if (data.length > 0) {
-                data.forEach(story => {
-                    story.title = decodeURIComponent(story.title)
-                    story.story_text = decodeURIComponent(story.story_text);
-                })
-    
-                this.setState({stories: data});
-    
-                console.log(this.state.stories);
+            if (res.data.error) {
+                console.log(res.data);
+                window.location.href = "/login"
             }
-            // IF NOT
+
             else {
-                this.forceAddStory();
-                this.setState({stories: data});
+                console.log(res);
+                let data = res.data;
+
+                // IF WE HAVE DATA FROM THE DB
+                if (data.length > 0) {
+                    data.forEach(story => {
+                        story.title = decodeURIComponent(story.title)
+                        story.story_text = decodeURIComponent(story.story_text);
+                    })
+        
+                    this.setState({stories: data});
+        
+                    console.log(this.state.stories);
+                }
+                // IF NOT
+                else {
+                    this.forceAddStory();
+                    this.setState({stories: data});
+                }
             }
         })
     }
@@ -131,16 +138,16 @@ class Dashboard extends Component {
         document.getElementById("x-button").style.display = "inline";
         document.getElementById("close-button").style.display = "inline";
 
-        // GRAB USER ID FROM LOCAL STORAGE
-        let userId = sessionStorage.getItem("userId");
+        // // GRAB USER ID FROM LOCAL STORAGE
+        // let userId = sessionStorage.getItem("userId");
 
-        console.log(userId);
+        // console.log(userId);
         
         // PULL OUT THE STORY TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
         
         // PING THE DATABASE TO ADD A NEW WORLD
-        API.addNewStory(title, userId)
+        API.addNewStory(title)
         .then(newStoryRes => {
 
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST

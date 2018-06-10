@@ -65,13 +65,16 @@ export default {
         });
     },
 
-    addNewStory: function(title, userId) {
+    addNewStory: function(title) {
         let encodedTitle = encodeURIComponent(title);
 
         return axios.post('/api/new/story', {
             title: encodedTitle,
-            userId: userId
         })
+    },
+
+    getAllStories: function() {
+        return axios.get(`/api/stories/`);
     },
 
     registerUser: function(username, email, password) {

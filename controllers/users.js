@@ -91,6 +91,7 @@ let user = {
 
     login: function(req, res) {
         res.send(req.user)
+        console.log("user session id: " + req.session.passport.user)
     },
 
     logout: function(req, res) {

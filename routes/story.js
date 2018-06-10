@@ -5,10 +5,19 @@ const router = express.Router();
 // REQUIRED CONTROLLERS
 const storyController = require('../controllers/story.js');
 
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){
+        //req.isAuthenticated() will return true if user is logged in
+        next();
+    } else{
+        res.send({error: "Unauthorized"});
+    }
+}
+
 // ROUTES
 router.get('/api/story/:id', storyController.findOne);
 
-router.get('/api/stories/:userid', storyController.findAll);
+router.get('/api/stories/', checkAuthentication, storyController.findAll);
 
 router.post('/api/new/story', storyController.addOne);
 
