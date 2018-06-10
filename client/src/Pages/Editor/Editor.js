@@ -191,63 +191,89 @@ class EditorPage extends Component {
 
     // CODE TO RUN WHEN WE WANT TO RENDER THE CHARACTER SIDEBAR
     CharTab = () => {
-        // MAP THROUGH EACH CHARACTER IN THE STATE
-        return this.state.characters.map(character => {
-  
-            // CREATE CHARACTER CARD WITH ATTRIBUTES
-            return <CharacterCard 
-                id={character.id} 
-                title={character.name} 
-                preview={character.preview_text} 
-                key={character.id} 
-                image={character.character_image} 
-                profile={character.character_text}
-            />
-        })
+        if (this.state.characters.length < 1 ) {
+            return <h6 className="nothing-yet"> There's nothing here yet! Click the link above to start adding characters.</h6>
+        }
+
+        else {
+            // MAP THROUGH EACH CHARACTER IN THE STATE
+            return this.state.characters.map(character => {
+    
+                // CREATE CHARACTER CARD WITH ATTRIBUTES
+                return <CharacterCard 
+                    id={character.id} 
+                    title={character.name} 
+                    preview={character.preview_text} 
+                    key={character.id} 
+                    image={character.character_image} 
+                    profile={character.character_text}
+                />
+            })
+        }
     }
 
     // CODE TO RUN WHEN WE WANT TO RENDER THE PLOT SIDEBAR
     PlotTab = () => {
-        return this.state.plots.map(plot => {
+        if (this.state.plots.length < 1 ) {
+            return <h6 className="nothing-yet"> There's nothing here yet! Click the link above to start adding plot points to your story.</h6>
+        }
 
-            // CREATE PLOT CARDS WITH ATTRIBUTES
-            return <PlotCard
-                    id={plot.id}
-                    key={plot.id}
-                    title={plot.title}>
-                    {plot.plot_text}
-                    </PlotCard>
-        })
+        else {
+
+            return this.state.plots.map(plot => {
+
+                // CREATE PLOT CARDS WITH ATTRIBUTES
+                return <PlotCard
+                        id={plot.id}
+                        key={plot.id}
+                        title={plot.title}>
+                        {plot.plot_text}
+                        </PlotCard>
+            })
+        }
     }
 
     // CODE TO RUN WHEN WE WANT TO RENDER THE WORLD SIDEBAR
     WorldTab = () => {
-        // MAP THROUGH EACH OF THE WORLDS IN THE STATE
-        return this.state.worldbuilds.map(world => {
+        if (this.state.worldbuilds.length < 1 ) {
+            return <h6 className="nothing-yet"> There's nothing here yet! Click the link above to start adding worldbuilding elements to your story.</h6>
+        }
 
-            // CREATE WORLD CARD WITH ATTRIBUTES
-            return <WorldCard 
-                id={world.id} 
-                title={world.title} 
-                descr={world.world_text} 
-                key={world.id} 
-            />
-        })
+        else {
+
+            // MAP THROUGH EACH OF THE WORLDS IN THE STATE
+            return this.state.worldbuilds.map(world => {
+
+                // CREATE WORLD CARD WITH ATTRIBUTES
+                return <WorldCard 
+                    id={world.id} 
+                    title={world.title} 
+                    descr={world.world_text} 
+                    key={world.id} 
+                />
+            })
+        }
     }
 
     // CODE TO RUN WHEN WE WANT TO RENDER THE NOTES SIDEBAR
     NoteTab = () => {
-        // MAP THROUGH EACH OF THE WORLDS IN THE STATE
-        return this.state.notes.map(note => {
-  
-            // CREATE WORLD CARD WITH ATTRIBUTES
-            return <NoteCard 
-                id={note.id} 
-                title={note.title} 
-                text={note.note_text} 
-                key={note.id} 
-            />
-        })
+        if (this.state.notes.length < 1 ) {
+            return <h6 className="nothing-yet"> There's nothing here yet! Click the link above to start adding notes for yourself.</h6>
+        }
+
+        else {
+            // MAP THROUGH EACH OF THE WORLDS IN THE STATE
+            return this.state.notes.map(note => {
+    
+                // CREATE WORLD CARD WITH ATTRIBUTES
+                return <NoteCard 
+                    id={note.id} 
+                    title={note.title} 
+                    text={note.note_text} 
+                    key={note.id} 
+                />
+            })
+        }
     }
 
     // CONDITIONAL RENDER FOR THE LEFT SIDEBAR
@@ -301,7 +327,7 @@ class EditorPage extends Component {
                             {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
                                 {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
-                                <a href={this.state.leftTab === "char-tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right" ></i></a>
+                                <a href={this.state.leftTab === "char-tab" ? "/character-edit" : "/plot-edit"} className="edit-fullscreen">Edit or add to list <i className="fas fa-angle-right" ></i></a>
                             </p>
 
                             {/* CONDITIONAL RENDER FOR THE LEFT SIDEBAR */}
@@ -366,7 +392,7 @@ class EditorPage extends Component {
                             {/* P CLASS TO HOLD THE LINK BECAUSE IT WOULDN'T CENTER UGH */}
                             <p className="justify-content-center text-center mt-2 mb-2">
                                 {/* LINK TO EDIT IN FULLSCREEN WITH A TERNARY TO DETERMINE WHAT PAGE TO LINK TO */}
-                                <a href={this.state.rightTab === "world-tab" ? "/world-edit" : "/notes-edit"} className="edit-fullscreen">Edit fullscreen <i className="fas fa-angle-right"></i></a>
+                                <a href={this.state.rightTab === "world-tab" ? "/world-edit" : "/notes-edit"} className="edit-fullscreen">Edit or add to list <i className="fas fa-angle-right"></i></a>
                             </p>
 
                             {/* CONDITIONAL RENDER FOR THE RIGHT SIDEBAR */}

@@ -41,19 +41,32 @@ class CharacterPage extends Component {
             //PULL ARRAY FROM SERVER RESPONSE
             let data = res.data;
 
-            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-            data.forEach(character => {
-                character.name = decodeURIComponent(character.name)
-                character.character_text = decodeURIComponent(character.character_text);
-                character.preview_text = decodeURIComponent(character.preview_text);
-                character.image = decodeURIComponent(character.image);
-            })
+            // SEE IF WE HAVE ANY CHARACTERS FROM THE DATABASE. IF SO,
+            if (data.length > 0) {
+                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                data.forEach(character => {
+                    character.name = decodeURIComponent(character.name)
+                    character.character_text = decodeURIComponent(character.character_text);
+                    character.preview_text = decodeURIComponent(character.preview_text);
+                    character.image = decodeURIComponent(character.image);
+                })
 
-            //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
-            this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text});
+                //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
+                this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text});
 
-            // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-            this.changeClass("1", "active-char");
+                // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+                this.changeClass(data[0].id, "active-char");
+            }
+            // IF NOT, THE USER NEEDS TO ADD A CHARACTER
+            else {
+                // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD THEIR FIRST CHARACTER BEFORE THE PAGE "SHOWS"
+                document.getElementById("add-char-modal").setAttribute("data-backdrop","static");
+                document.getElementById("add-char-modal").setAttribute("data-keyboard","false");
+                document.getElementById("add-char-prompt").click();
+                document.getElementById("modal-title").innerHTML = "Add your first character!";
+                document.getElementById("x-button").style.display = "none";
+                document.getElementById("close-button").style.display = "none";
+            }
         });
     }
 
@@ -69,16 +82,18 @@ class CharacterPage extends Component {
             // PULL OUT THE CHARACTER DATA
             let data = res.data;
 
-            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-            data.forEach(character => {
-                character.name = decodeURIComponent(character.name)
-                character.character_text = decodeURIComponent(character.character_text);
-                character.preview_text = decodeURIComponent(character.preview_text);
-                character.image = decodeURIComponent(character.image)
-            })
+            if (data.length > 0) {
+                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                data.forEach(character => {
+                    character.name = decodeURIComponent(character.name)
+                    character.character_text = decodeURIComponent(character.character_text);
+                    character.preview_text = decodeURIComponent(character.preview_text);
+                    character.image = decodeURIComponent(character.image)
+                })
 
-            // UPDATE THE STATE WITH NEW CHARACTER DATA
-            this.setState({characters: data});
+                // UPDATE THE STATE WITH NEW CHARACTER DATA
+                this.setState({characters: data});
+            }
         })
     }
 
@@ -168,6 +183,13 @@ class CharacterPage extends Component {
 
     // FUNCTION TO HANDLE WHEN THE USER SAVES A NEW CHARACTER
     addNewChar = () => {
+
+        // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST CHARACTER, WE NEED TO FIX THE STUFF WE BROKE TO FORCE THEM TO ADD A CHARACTER
+        document.getElementById("add-char-modal").setAttribute("data-backdrop","true");
+        document.getElementById("add-char-modal").setAttribute("data-keyboard","true");;
+        document.getElementById("modal-title").innerHTML = "Add a character";
+        document.getElementById("x-button").style.display = "inline";
+        document.getElementById("close-button").style.display = "inline";
 
         // PULL OUT THE CHARACTER NAME FROM THE FORM
         let name = document.getElementById("add-name-input").value.trim();
@@ -344,10 +366,10 @@ class CharacterPage extends Component {
                         <div className="modal-content">
                             <div className="modal-header">
                                 {/* MODAL TITLE */}
-                                <h5 className="modal-title">Add a Character</h5>
+                                <h5 className="modal-title" id="modal-title">Add a Character</h5>
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true" id="x-button">&times;</span>
                                 </button>
                             </div>
                             <div className="modal-body">
@@ -370,7 +392,7 @@ class CharacterPage extends Component {
                             {/* BUTTONS AT MODAL BOTTOM */}
                             <div className="modal-footer">
                                 {/* CLOSE THE MODAL */}
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal" id="close-button">Close</button>
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
                                 <button type="button" className="btn btn-save-modal" id="add-new-char" onClick={this.addNewChar} data-dismiss="modal">Save</button>
                             </div>

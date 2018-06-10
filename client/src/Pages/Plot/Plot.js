@@ -62,25 +62,40 @@ class PlotPage extends Component {
         .then(res => {
             console.log(res);
 
-            // LOOP THROUGH PLOTS TO UPDATE EACH POSITION NUMBER SINCE WE JUST DELETED ONE AND THE POSITIONS NEED TO BE NUMERICALLY IN ORDER
-            this.state.plots.forEach(plot => {
-                // GRAB THE INDEX OF THE ITEM IN THE ARRAY AND ADD 1 SO WE DON'T START ON 0
-                let newPosition = this.state.plots.indexOf(plot) + 1;
-    
-                // PING THE DATABASE TO UPDATE THAT ITEM WITH THE NEW POSITION
-                API.updateOne("plots", plot.id, "position", newPosition)
-                .then(res => {
-                    console.log("updated position");
+            // GRAB THE STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
 
-                    // UPDATE THE PLOT LIST 
-                    this.updatePlotList();
+            // WE NEED TO UPDATE THE PLOT STATE LIST BUT ALSO DO SOME OTHER THINGS IN THE .THEN
+            API.getAll("plots", storyId)
+            .then(res => {
+                // PULL OUT THE RESPONSE DATA
+                let data = res.data;
+
+                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                data.forEach(plot => {
+                    plot.title = decodeURIComponent(plot.title)
+                    plot.plot_text = decodeURIComponent(plot.plot_text);
                 })
-            })
 
-            // UPDATE THE PLOT LIST AGAIN BECAUSE IDK 
-            this.updatePlotList();
-        })
+                // UPDATE THE STATE WITH THE DATA
+                this.setState({plots: data});
+
+                // LOOP THROUGH PLOTS TO UPDATE EACH POSITION NUMBER SINCE WE JUST DELETED ONE AND THE POSITIONS NEED TO BE NUMERICALLY IN ORDER
+                this.state.plots.forEach(plot => {
+                    // GRAB THE INDEX OF THE ITEM IN THE ARRAY AND ADD 1 SO WE DON'T START ON 0
+                    let newPosition = this.state.plots.indexOf(plot) + 1;
         
+                    // PING THE DATABASE TO UPDATE THAT ITEM WITH THE NEW POSITION
+                    API.updateOne("plots", plot.id, "position", newPosition)
+                    .then(res => {
+                        console.log("updated position");
+
+                        // UPDATE THE PLOT LIST FOR REAL THIS TIME 
+                        this.updatePlotList();
+                    })
+                })
+            })            
+        })
     }
 
     // FUNCTION TO ADD A NEW PLOT POINT

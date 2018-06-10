@@ -3,6 +3,25 @@ const db = require("./../models");
 const he = require('he');
 
 let story = {
+    findAll: function(req, res) {
+        let userId = req.params.userid;
+
+        db.Story.findAll({where: {UserId: userId}})
+        .then(stories => {
+            
+            stories.forEach(story => {
+                if (story.title !== null) {
+                    story.title = he.decode(story.title)
+                }
+                if (story.story_text !== null) {
+                    story.story_text = he.decode(story.story_text);
+                }
+            })
+
+            res.send(stories);            
+        })
+    },
+
     findOne: function(req, res) {
         let id = req.params.id;
 
@@ -10,28 +29,30 @@ let story = {
         .then(story => {
 
             // SERVER SIDE SANITIZATION
-            story.title = he.decode(story.title);
-            story.story_text = he.decode(story.story_text);
+            if (story.title !== null) {
+                story.title = he.decode(story.title);
+            }
 
+            if (story.story_text !== null) {
+                story.story_text = he.decode(story.story_text);
+            }
+            
             res.send(story);
         })
     },
 
     updateOne: function(req, res) {
-        let storyUpdate = req.body.content;
+        let content = req.body.content;
+        let column = req.body.column;
         let id = req.params.id;
 
-        let encodedStory = he.encode(storyUpdate);
+        let encodedContent = he.encode(content);
         
         db.Story.update(
-            {story_text: encodedStory}, 
+            {[column]: encodedContent}, 
             {where: {id: id}})
         .then(response => {
-            // res.send(story);
-            db.Story.findOne({where: {id: id}})
-            .then(story => {
-                res.send(story);
-            })
+            res.send("edited one story item!");
         })
     }
 }

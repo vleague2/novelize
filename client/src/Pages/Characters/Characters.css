@@ -22,9 +22,10 @@
     padding-left: 0px;
     padding-right: 0px;
     margin-right: 0px;
-    height: 100%;
     overflow: auto;
+    min-height: 85vh;
     max-height: 85vh;
+    border-left: 1px solid #dfdfdf;
 }
 #name_input, #preview_input {
     width: 100%;

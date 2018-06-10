@@ -5,8 +5,9 @@
 }
 
 #editor-row {
-    height: 100%;
     margin-right: 0px;
+    min-height: 85vh;
+    max-height: 85vh;
 }
 
 #char-tab, #world-tab {
@@ -25,13 +26,14 @@
 
 #editor-col {
     padding: 0px;
+    width: 99%;
 }
 
 #tabs-left {
     border-right: 1px solid #dfdfdf;
-    height: 100%;
     padding-right: 0px;
     overflow: auto;
+    min-height: 85vh;
     max-height: 85vh;
     max-width: 100vh;
     margin-bottom: 30px;
@@ -40,10 +42,10 @@
 
 #tabs-right {
     border-left: 1px solid #dfdfdf;
-    height: 100%;
     padding-left:0px;
     padding-right: 0px;
     overflow: auto;
+    min-height: 85vh;
     max-height: 85vh;
     max-width: 100vh;
     margin-bottom: 30px;
@@ -69,4 +71,14 @@
 
 .edit-fullscreen:hover {
     text-decoration: none;
+}
+
+.nothing-yet {
+    margin: 10px;
+    text-align: center;
+}
+
+#mceu_17 {
+    min-height: 85vh;
+    border: none;
 }

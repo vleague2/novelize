@@ -1,0 +1,31 @@
+#story-editor-col {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.story-card-title {
+    font-family: 'Open-Sans', sans-serif;
+    font-weight: 700
+}
+
+.edit-story {
+    background-color: #7e4464;
+    color: white;
+    font-family: 'Open-Sans', sans-serif;
+    font-weight: 700;
+}
+
+.edit-story-title {
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    color: rgb(86, 86, 253);
+}
+
+#edit-story-button-row2{
+    margin-top: 20px;
+}
+
+.quick-edit {
+    font-family: 'Open-Sans', sans-serif;
+}

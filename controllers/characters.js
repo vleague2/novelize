@@ -10,27 +10,32 @@ let character = {
         db.Character.findAll({
             where: {StoryId: storyId}
         }).then(characters => {
+            console.log(characters);
 
-             // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USE
-             characters.forEach(character => {
-                if (character.name !==null) {
-                    character.name = he.decode(character.name);
-                }
-                if ( character.character_text !== null) {
-                    character.character_text = he.decode(character.character_text);
-                }
+            if (characters.length > 0 ) {
+                 // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USE
+                characters.forEach(character => {
+                    if (character.name !==null) {
+                        character.name = he.decode(character.name);
+                    }
+                    if ( character.character_text !== null) {
+                        character.character_text = he.decode(character.character_text);
+                    }
+                    
+                    if (character.preview_text !== null) {
+                        character.preview_text = he.decode(character.preview_text)
+                    }
                 
-                if (character.preview_text !== null) {
-                    character.preview_text = he.decode(character.preview_text)
-                }
-               
-                if (character.character_image) {
-                    character.character_image = he.decode(character.character_image);
-                }
-                   
-            })
+                    if (character.character_image) {
+                        character.character_image = he.decode(character.character_image);
+                    }
+                })
 
-            res.send(characters);
+                res.send(characters);
+            }
+            else {
+                res.send([]);
+            }  
         })
     },
 

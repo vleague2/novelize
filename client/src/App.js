@@ -9,6 +9,7 @@ import Character from "./Pages/Characters/Characters";
 import World from "./Pages/Worlds/Worlds";
 import Note from "./Pages/Notes/Notes";
 import Plot from "./Pages/Plot/Plot";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 
 const App = () => (
   <Router>
@@ -17,6 +18,7 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
+        <Route exact path ="/dashboard" component={Dashboard} />
         <Route exact path = "/editor" component={Editor} />
         <Route exact path = "/character-edit" component={Character}/>
         <Route exact path = "/world-edit" component={World}/>
