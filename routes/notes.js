@@ -5,8 +5,17 @@ const router = express.Router();
 // REQUIRED CONTROLLERS
 const noteController = require('../controllers/notes.js');
 
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){
+        //req.isAuthenticated() will return true if user is logged in
+        next();
+    } else{
+        res.send({error: "Unauthorized"});
+    }
+}
+
 // ROUTES
-router.get('/api/notes/:storyid', noteController.findAll);
+router.get('/api/notes/:storyid', checkAuthentication, noteController.findAll);
 
 router.post('/api/notes/:id', noteController.updateOne);
 

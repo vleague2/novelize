@@ -5,8 +5,17 @@ const router = express.Router();
 // REQUIRED CONTROLLERS
 const plotController = require('../controllers/plot.js');
 
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){
+        //req.isAuthenticated() will return true if user is logged in
+        next();
+    } else{
+        res.send({error: "Unauthorized"});
+    }
+}
+
 // ROUTES
-router.get('/api/plots/:storyid', plotController.findAll);
+router.get('/api/plots/:storyid', checkAuthentication, plotController.findAll);
 
 router.post('/api/plots/:id', plotController.updateOne);
 

@@ -30,24 +30,29 @@ class PlotPage extends Component {
         // CALL THE API TO GET ALL PLOT POINTS FOR THE STORY ID
         API.getAll("plots", storyId)
         .then(res => {
-            // PULL OUT THE RESPONSE DATA
-            let data = res.data;
-
-            // IF THERE'S DATA COMING BACK FROM SERVER
-            if (data.length > 0) {
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(plot => {
-                    plot.title = decodeURIComponent(plot.title)
-                    plot.plot_text = decodeURIComponent(plot.plot_text);
-                })
-
-                // UPDATE THE STATE WITH THE DATA
-                this.setState({plots: data});
+            if (res.data.error) {
+                window.location.href = "/login";
             }
-
-            // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
             else {
-                this.forceAddPlot();
+                // PULL OUT THE RESPONSE DATA
+                let data = res.data;
+
+                // IF THERE'S DATA COMING BACK FROM SERVER
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(plot => {
+                        plot.title = decodeURIComponent(plot.title)
+                        plot.plot_text = decodeURIComponent(plot.plot_text);
+                    })
+
+                    // UPDATE THE STATE WITH THE DATA
+                    this.setState({plots: data});
+                }
+
+                // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
+                else {
+                    this.forceAddPlot();
+                }
             }
         })
     } 

@@ -37,29 +37,33 @@ class NotePage extends Component {
         //API CALL TO SERVER TO GET NOTE LIST
         API.getAll("notes", storyId)
         .then(res => {
-
-            //PULL ARRAY FROM SERVER RESPONSE
-            let data = res.data;
-
-            // IF WE ARE GETTING DATA FROM SERVER
-            if (data.length > 0 ) {
-                // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(note => {
-                    note.title = decodeURIComponent(note.title)
-                    note.note_text = decodeURIComponent(note.note_text);
-                })
-
-                console.log(data);
-
-                //UPDATE STATE WITH NOTE LIST, SET THE FIRST NOTE ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST NOTE'S TITLE
-                this.setState({notes: data, editor: data[0].note_text, title: data[0].title});
-
-                // SET THE FIRST NOTE CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-                this.changeClass(data[0].id, "active-world");
+            if (res.data.error) {
+                window.location.href="/login"
             }
-            // IF NOT, THE USER NEEDS TO ADD A NOTE
             else {
-                this.forceAddNote();
+                //PULL ARRAY FROM SERVER RESPONSE
+                let data = res.data;
+
+                // IF WE ARE GETTING DATA FROM SERVER
+                if (data.length > 0 ) {
+                    // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(note => {
+                        note.title = decodeURIComponent(note.title)
+                        note.note_text = decodeURIComponent(note.note_text);
+                    })
+
+                    console.log(data);
+
+                    //UPDATE STATE WITH NOTE LIST, SET THE FIRST NOTE ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST NOTE'S TITLE
+                    this.setState({notes: data, editor: data[0].note_text, title: data[0].title});
+
+                    // SET THE FIRST NOTE CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+                    this.changeClass(data[0].id, "active-world");
+                }
+                // IF NOT, THE USER NEEDS TO ADD A NOTE
+                else {
+                    this.forceAddNote();
+                }
             }
         });
     }

@@ -37,28 +37,34 @@ class WorldPage extends Component {
         API.getAll("worldbuilds", storyId)
         .then(res => {
 
-            //PULL ARRAY FROM SERVER RESPONSE
-            let data = res.data;
-
-            // IF WE ARE GETTING DATA BACK FROM SERVER
-            if (data.length > 0) {
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(world => {
-                    world.title = decodeURIComponent(world.title)
-                    world.world_text = decodeURIComponent(world.world_text);
-                })
-
-                //UPDATE STATE WITH WORLD LIST, SET THE FIRST WORLD ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST WORLD'S TITLE
-                this.setState({worlds: data, editor: data[0].world_text, title: data[0].title});
-
-                // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-                this.changeClass(data[0].id, "active-world");
+            if (res.data.error) {
+                window.location.href = "/login"
             }
-
-            //IF NOT, USER NEEDS TO ADD A WORLDBUILDING ELEMENT
+            
             else {
-                this.forceAddWorld();
-            } 
+            //PULL ARRAY FROM SERVER RESPONSE
+                let data = res.data;
+
+                // IF WE ARE GETTING DATA BACK FROM SERVER
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(world => {
+                        world.title = decodeURIComponent(world.title)
+                        world.world_text = decodeURIComponent(world.world_text);
+                    })
+
+                    //UPDATE STATE WITH WORLD LIST, SET THE FIRST WORLD ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST WORLD'S TITLE
+                    this.setState({worlds: data, editor: data[0].world_text, title: data[0].title});
+
+                    // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+                    this.changeClass(data[0].id, "active-world");
+                }
+
+                //IF NOT, USER NEEDS TO ADD A WORLDBUILDING ELEMENT
+                else {
+                    this.forceAddWorld();
+                }
+            }
         });
     }
 

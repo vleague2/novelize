@@ -37,30 +37,36 @@ class CharacterPage extends Component {
         // GET CHARACTER LIST FROM DB
         API.getAll("characters", storyId)
         .then(res => {
-
-            //PULL ARRAY FROM SERVER RESPONSE
-            let data = res.data;
-
-            // SEE IF WE HAVE ANY CHARACTERS FROM THE DATABASE. IF SO,
-            if (data.length > 0) {
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(character => {
-                    character.name = decodeURIComponent(character.name)
-                    character.character_text = decodeURIComponent(character.character_text);
-                    character.preview_text = decodeURIComponent(character.preview_text);
-                    character.image = decodeURIComponent(character.image);
-                })
-
-                //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
-                this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id});
-
-                // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-                this.changeClass(data[0].id, "active-char");
+            if (res.data.error) {
+                window.location.href = "/login";
             }
-            // IF NOT, THE USER NEEDS TO ADD A CHARACTER
+            
             else {
                 
-               this.forceAddCharacter();
+                //PULL ARRAY FROM SERVER RESPONSE
+                let data = res.data;
+
+                // SEE IF WE HAVE ANY CHARACTERS FROM THE DATABASE. IF SO,
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(character => {
+                        character.name = decodeURIComponent(character.name)
+                        character.character_text = decodeURIComponent(character.character_text);
+                        character.preview_text = decodeURIComponent(character.preview_text);
+                        character.image = decodeURIComponent(character.image);
+                    })
+
+                    //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
+                    this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id});
+
+                    // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+                    this.changeClass(data[0].id, "active-char");
+                }
+                // IF NOT, THE USER NEEDS TO ADD A CHARACTER
+                else {
+                    
+                this.forceAddCharacter();
+                }
             }
         });
     }
