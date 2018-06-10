@@ -70,8 +70,8 @@ let character = {
             {name: encodedName, preview_text: encodedPreview, character_image: encodedImage, StoryId: storyId}
         )
         .then(response => {
-            console.log(response);
-            res.send("Added one character!");
+            console.log(response.dataValues);
+            res.send(response.dataValues);
         })
     },
 

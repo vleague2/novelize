@@ -16,7 +16,7 @@ class CharacterPage extends Component {
         this.state = {
             characters: [],
             editor: "",
-            character_select: "1",
+            character_select: "",
             name: "",
             preview_text: ""
         }
@@ -52,22 +52,27 @@ class CharacterPage extends Component {
                 })
 
                 //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
-                this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text});
+                this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id});
 
                 // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
                 this.changeClass(data[0].id, "active-char");
             }
             // IF NOT, THE USER NEEDS TO ADD A CHARACTER
             else {
-                // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD THEIR FIRST CHARACTER BEFORE THE PAGE "SHOWS"
-                document.getElementById("add-char-modal").setAttribute("data-backdrop","static");
-                document.getElementById("add-char-modal").setAttribute("data-keyboard","false");
-                document.getElementById("add-char-prompt").click();
-                document.getElementById("modal-title").innerHTML = "Add your first character!";
-                document.getElementById("x-button").style.display = "none";
-                document.getElementById("close-button").style.display = "none";
+                
+               this.forceAddCharacter();
             }
         });
+    }
+
+    forceAddCharacter = () => {
+        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A CHARACTER IF THE ARRAY IS EMPTY
+        document.getElementById("add-char-modal").setAttribute("data-backdrop","static");
+        document.getElementById("add-char-modal").setAttribute("data-keyboard","false");
+        document.getElementById("add-char-prompt").click();
+        document.getElementById("modal-title").innerHTML = "Add a new character!";
+        document.getElementById("x-button").style.display = "none";
+        document.getElementById("close-button").style.display = "none";
     }
 
     // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
@@ -94,12 +99,17 @@ class CharacterPage extends Component {
                 // UPDATE THE STATE WITH NEW CHARACTER DATA
                 this.setState({characters: data});
             }
+
+            else {
+                this.setState({characters:data});
+                this.forceAddCharacter();
+            }
         })
     }
 
     // FUNCTION TO CHANGE THE CLASS OF THE CARDS
     changeClass(id, active) {
-        document.getElementById(id).setAttribute("class", `card rounded-0 ml-1 ${active}`);
+        document.getElementById(id).setAttribute("class", `card rounded-0 ${active}`);
     }
 
     // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY CHARACTER
@@ -164,6 +174,7 @@ class CharacterPage extends Component {
         .then(res => {
             // GET AN UPDATED CHARACTER LIST
             this.updateCharList();
+            
         }) 
     }
 
@@ -205,18 +216,45 @@ class CharacterPage extends Component {
         
         // PING THE DATABASE TO ADD A NEW CHARACTER
         API.addNewCharacter(name, preview, image, storyId)
-        .then(res => {
+        .then(newCharRes => {
 
             // CONSOLE LOG THAT WE'VE ADDED A NEW CHARACTER
-            console.log(res);
-            
-            //API CALL TO SERVER TO GET CHARACTER LIST
-            this.updateCharList();
+            console.log(newCharRes);
 
             // EMPTY MODAL
             document.getElementById("add-name-input").value = "";
             document.getElementById("add-preview-input").value = "";
             document.getElementById("add-image-input").value = "";
+
+            // VERY BAD CODE TO GET CHARACTER LIST
+            // GRAB STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
+
+            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+            API.getAll("characters", storyId)
+            .then(res => {
+                // PULL OUT THE CHARACTER DATA
+                let data = res.data;
+
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(character => {
+                        character.name = decodeURIComponent(character.name)
+                        character.character_text = decodeURIComponent(character.character_text);
+                        character.preview_text = decodeURIComponent(character.preview_text);
+                        character.image = decodeURIComponent(character.image)
+                    })
+
+                    // UPDATE THE STATE WITH NEW CHARACTER DATA
+                    this.setState({characters: data});
+                    this.updateEditor(newCharRes.data.id)
+                }
+
+                else {
+                    this.setState({characters:data});
+                    this.forceAddCharacter();
+                }
+            })
         })
     }
 
@@ -225,19 +263,48 @@ class CharacterPage extends Component {
         // GRAB ID OF CHARACTER FROM STATE
         let id = this.state.character_select;
 
+        console.log(id);
+
         // PING API TO DELETE A CHARACTER
         API.deleteOne("characters", id)
         .then(res => {
             console.log(res);
 
-            // CALL DB TO UPDATE CHARACTER LIST
-            this.updateCharList();
+            // VERY BAD CODE TO GET CHARACTER LIST
+            // GRAB STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
 
-            // PULL THE ID OF THE FIRST ITEM IN THE CHARACTERS ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
-            let newSelectId = this.state.characters[0].id;
+            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+            API.getAll("characters", storyId)
+            .then(res => {
+                // PULL OUT THE CHARACTER DATA
+                let data = res.data;
 
-            // UPDATE THE EDITOR
-            this.updateEditor(newSelectId);
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(character => {
+                        character.name = decodeURIComponent(character.name)
+                        character.character_text = decodeURIComponent(character.character_text);
+                        character.preview_text = decodeURIComponent(character.preview_text);
+                        character.image = decodeURIComponent(character.image)
+                    })
+
+                    // UPDATE THE STATE WITH NEW CHARACTER DATA
+                    this.setState({characters: data});
+                    // PULL THE ID OF THE FIRST ITEM IN THE CHARACTERS ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
+                    let newSelectId = this.state.characters[0].id;
+
+                    // UPDATE THE EDITOR
+                    this.updateEditor(newSelectId);
+                }
+
+                else {
+                    this.setState({characters:data});
+                    this.forceAddCharacter();
+                }
+            })
+
+            
         })
     }
 
