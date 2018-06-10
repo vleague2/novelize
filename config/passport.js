@@ -19,12 +19,14 @@ module.exports = function (passport) {
             }) 
             .then((user) => {
                 // This is where the user will be returned if there is one
-                let hashPassword = user.dataValues.password;
+                
                 if (!user) {
                     return done(null, false, {
                         message: "No user found"
                     })
                 }
+
+                let hashPassword = user.dataValues.password;
                 // Using bcrypt to compare the password to the hashed stored password
                 bcrypt.compare(password, hashPassword, (err, isMatch) => {
                     if (err) throw err;

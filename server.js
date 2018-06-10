@@ -7,6 +7,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 
 // require our database models folder
@@ -31,6 +32,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+app.use(flash());
 
 // passport setup
 app.use(passport.initialize());

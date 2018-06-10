@@ -7,15 +7,17 @@ const {check} = require('express-validator/check');
 // REQUIRED CONTROLLERS
 const userController = require('../controllers/users.js');
 
+const db = require('../models');
+
 // const passport = 
 
 /************************ LOCAL AUTH ROUTES********************************* */
 
 
-router.get("/logout", (req, res)=> {
-    req.logout();
-    res.redirect('/');
-})
+// router.get("/logout", (req, res)=> {
+//     req.logout();
+//     res.redirect('/');
+// })
 
 router.post('/register', 
 [
@@ -34,12 +36,9 @@ router.post('/register',
 ],
  userController.register);
 
-router.post('/auth/login', passport.authenticate('local'),
-function(req, res) {
-    console.log(req.user);
-    res.send(req.user)
-}
+router.post('/auth/login', passport.authenticate('local'), userController.login);
 
-/*userController.login*/);
+router.get('/auth/logout', userController.logout);
+;
 
 module.exports = router;

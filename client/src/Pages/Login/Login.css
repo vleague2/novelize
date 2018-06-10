@@ -3,7 +3,7 @@
     background-color: #dfdfdf;
 }
 
-#password-help, #email-help, #username-help {
+#password-help, #email-help, #username-help, #login-help {
     color: red;
     display: none;
 }

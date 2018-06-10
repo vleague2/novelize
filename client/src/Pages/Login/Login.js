@@ -88,12 +88,19 @@ class Login extends Component {
         API.loginUser(email, password)
         .then(res => {
             console.log(res);
-            if (res.statusCode == 401) {
-                console.log("401 unauthorized")
-            }
+            let userId = res.data.id;
+
+                sessionStorage.setItem("userId", userId);
+                window.location.href="/dashboard";
+                
         })
         .catch(error => {
             console.log(error);
+            console.log("Username or password is incorrect");
+            document.getElementById("login-help").innerHTML = "Incorrect email or password"
+            document.getElementById("login-help").style.display = "inline";
+            document.getElementById("email-login").value = "";
+            document.getElementById("password-login").value = "";
         })
     }
 
@@ -136,18 +143,20 @@ class Login extends Component {
                             <div className="card mt-4" id="login-card">
                                 <div className="card-body">
                                     <h3> Login </h3>
+                                    <small id="login-help" className="form-text mb-3 mt-3"></small>
 
                                     <form>
+                                        
                                         <div className="form-group">
+                                            
                                             <label htmlFor="email-login">Email address</label>
                                             <input type="email" className="form-control" id="email-login" placeholder="Enter email"/>
-                                            <small id="email-help" className="form-text"></small>
+                                            
                                         </div>
                 
                                         <div className="form-group">
                                             <label htmlFor="password-login">Password</label>
                                             <input type="password" className="form-control" id="password-login" placeholder="Password"/>
-                                            <small id="password-help" className="form-text"></small>
                                         </div>
                                         <button type="submit" className="btn submit-btns mb-3" id="login-btn" onClick={this.onLogin}>Submit</button>
                                     </form> 
