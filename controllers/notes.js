@@ -12,18 +12,25 @@ let note = {
             where: {StoryId: storyId}
         }).then(notes => {
             
-            // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
-            notes.forEach(note => {
-                if (note.title !== null ) {
-                    note.title = he.decode(note.title);
-                }
-                if (note.note_text !== null) {
-                    note.note_text = he.decode(note.note_text);
-                } 
-                
-            })
+            if (notes.length > 0) {
+                // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
+                notes.forEach(note => {
+                    if (note.title !== null ) {
+                        note.title = he.decode(note.title);
+                    }
+                    if (note.note_text !== null) {
+                        note.note_text = he.decode(note.note_text);
+                    } 
+                    
+                })
 
-            res.send(notes);
+                res.send(notes);
+            }
+
+            else {
+                res.send([]);
+            }
+            
         })
     },
 
@@ -57,7 +64,7 @@ let note = {
         )
         .then(response => {
             console.log(response);
-            res.send("Added one note item!");
+            res.send(response.dataValues);
         })
     },
 
