@@ -2,3 +2,8 @@
     text-align: center;
     background-color: #dfdfdf;
 }
+
+#password-help, #email-help, #username-help {
+    color: red;
+    display: none;
+}

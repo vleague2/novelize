@@ -41,6 +41,21 @@ let story = {
         })
     },
 
+    addOne: function(req, res) {
+        let title = req.body.title;
+        let userId = req.body.userId;
+
+        let encodedTitle = he.encode(title);
+
+        db.Story.create({
+            title: title,
+            UserId: userId
+        })
+        .then(response => {
+            res.send("Added a new story")
+        })
+    },
+
     updateOne: function(req, res) {
         let content = req.body.content;
         let column = req.body.column;

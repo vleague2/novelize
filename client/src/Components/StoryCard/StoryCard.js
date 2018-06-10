@@ -4,7 +4,7 @@ import {Row, Col} from "../../Components/Grid";
 
 const StoryCard = (props) => (
     <Col size="5" id="story-editor-col">
-        <div className="card story-card" id={props.id}>
+        <div className="card story-card mb-4" id={props.id}>
             <div className="card-body">
                 <h5 className="card-title story-card-title text-center">
                     {props.title} 

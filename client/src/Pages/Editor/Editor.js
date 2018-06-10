@@ -58,8 +58,16 @@ class EditorPage extends Component {
         //API CALL TO SERVER TO GET STORY FOR INITIAL VALUE OF EDITOR
         API.getOne("story", storyId)
         .then(res => {
+            let story;
+            
             //PULL STORY FROM SERVER RESPONSE
-            let story = res.data.story_text;
+            if (res.data.story_text == null) {
+                story = "";
+            }
+            else {
+                story = res.data.story_text;
+            }   
+
             let select_story = res.data.id;
 
             // FRONT END VALIDATION TO PULL OUT STORY
@@ -67,6 +75,8 @@ class EditorPage extends Component {
 
             // SET THE LOCAL STORAGE TO THE CURRENT STORY ID BECAUSE WE NEED IT FOR LIKE EVERYTHING
             localStorage.setItem("currentStoryId", select_story);
+
+            
 
             //UPDATE STATE WITH STORY TEXT
             this.setState({story: decodedStory, select_story: select_story})

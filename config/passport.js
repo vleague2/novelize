@@ -63,6 +63,7 @@ module.exports = function (passport) {
             proxy: true
         },
         function (accessToken, refreshToken, profile, done) {
+            // TAKE OUT THIS PART BECAUSE WE WILL BE SENDING IN THE USERNAME
             // took the gmail and just cut it off at the @ to make a username
             let userName = profile.emails[0].value.split('@')[0];
             console.log(userName);
