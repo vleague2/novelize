@@ -14,8 +14,13 @@ let note = {
             
             // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
             notes.forEach(note => {
-                note.title = he.decode(note.title);
-                note.note_text = he.decode(note.note_text);
+                if (note.title !== null ) {
+                    note.title = he.decode(note.title);
+                }
+                if (note.note_text !== null) {
+                    note.note_text = he.decode(note.note_text);
+                } 
+                
             })
 
             res.send(notes);

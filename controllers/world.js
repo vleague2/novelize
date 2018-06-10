@@ -12,8 +12,13 @@ let world = {
 
             // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
             worlds.forEach(world => {
-                world.title = he.decode(world.title);
-                world.world_text = he.decode(world.world_text);
+                if (world.title !== null) {
+                    world.title = he.decode(world.title);
+                }
+                if (world.world_text !== null) {
+                    world.world_text = he.decode(world.world_text);
+                }
+                
             })
 
             res.send(worlds);

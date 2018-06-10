@@ -17,8 +17,13 @@ let plot = {
         }).then(plots => {
              // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
              plots.forEach(plot => {
-                plot.title = he.decode(plot.title);
-                plot.plot_text = he.decode(plot.plot_text); 
+                if (plot.title !== null) {
+                    plot.title = he.decode(plot.title);
+                }
+                if (plot.plot_text !== null) {
+                    plot.plot_text = he.decode(plot.plot_text);
+                }
+                 
             })
 
             res.send(plots);
