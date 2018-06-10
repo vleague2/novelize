@@ -180,11 +180,9 @@ class EditorPage extends Component {
 
     //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
-        // FRONT END VALIDATION - ENCODE CONTENT SO NO HARMFUL SCRIPTS GO INTO DB
-        let encodedContent = encodeURIComponent(e.target.getContent());
-
+       
         //API POST CALL TO THE SERVER
-        API.updateOne("story", this.state.select_story, "story_text", encodedContent)
+        API.updateOne("story", this.state.select_story, "story_text", e.target.getContent())
         .then(res => {
             // CONSOLE LOG THAT WE'RE SAVING BECAUSE WE DON'T ACTUALLY HAVE TO DO ANYTHING ELSE
             console.log("Saved!");

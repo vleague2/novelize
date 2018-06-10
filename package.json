@@ -29,6 +29,7 @@
     "express": "^4.15.4",
     "express-session": "^1.15.6",
     "express-validator": "^5.2.0",
+    "he": "^1.1.1",
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",

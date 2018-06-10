@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require("./../models");
+const he = require("he");
 
 let character = {
     findAll: function(req, res) {
@@ -9,6 +10,15 @@ let character = {
         db.Character.findAll({
             where: {StoryId: storyId}
         }).then(characters => {
+
+             // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USE
+             characters.forEach(character => {
+                character.name = he.decode(character.name);
+                character.character_text = he.decode(character.character_text);
+                character.preview_text = he.decode(character.preview_text)
+                character.character_image = he.decode(character.character_image);   
+            })
+
             res.send(characters);
         })
     },
@@ -18,8 +28,10 @@ let character = {
         let column_name = req.body.column;
         let content_update = req.body.content;
 
+        let encodedContent = he.encode(content_update);
+
         db.Character.update(
-            {[column_name]: content_update},
+            {[column_name]: encodedContent},
             {where: {id:id}}
         )
         .then(response => {
@@ -34,8 +46,12 @@ let character = {
         let characterImage = req.body.image;
         let storyId = req.body.storyId
 
+        let encodedName = he.encode(characterName);
+        let encodedPreview = he.encode(characterPreview);
+        let encodedImage = he.encode(characterImage);
+
         db.Character.create(
-            {name: characterName, preview_text: characterPreview, character_image: characterImage, StoryId: storyId}
+            {name: encodedName, preview_text: encodedPreview, character_image: encodedImage, StoryId: storyId}
         )
         .then(response => {
             console.log(response);

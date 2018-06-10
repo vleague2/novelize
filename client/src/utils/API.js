@@ -11,6 +11,7 @@ export default {
 
     updateOne: function(URL, id, col, con) {
         let encodedCon = encodeURIComponent(con);
+
         return axios.post(`/api/${URL}/` + id, {
             column: col,
             content: encodedCon

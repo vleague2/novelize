@@ -153,7 +153,7 @@ class PlotPage extends Component {
         // API CALL TO UPDATE ONE ITEM, WITH THE DATA WE GOT. BUT WE HAVE TO DO 2 SEPARATE API CALLS BECAUSE THE API UTIL ONLY UPDATES ONE COLUMN LOL.
         API.updateOne("plots", id, "title", title)
         .then(res => {
-            API.updateOne("plots", id, "plot_text", plot)
+            API.updateOne("plots", id, "plot_text", plotText)
             .then(res => {
                 console.log(res);
                 // UPDATE THE PLOT LIST

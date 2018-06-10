@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require("./../models");
+const he = require("he");
 
 let plot = {
     findAll: function(req, res) {
@@ -14,6 +15,12 @@ let plot = {
                 ['position', 'ASC']
             ]
         }).then(plots => {
+             // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
+             plots.forEach(plot => {
+                plot.title = he.decode(plot.title);
+                plot.plot_text = he.decode(plot.plot_text); 
+            })
+
             res.send(plots);
         })
     },
@@ -22,9 +29,11 @@ let plot = {
         let id = req.params.id;
         let column_name = req.body.column;
         let content_update = req.body.content;
+        
+        let encodedContent = he.encode(content_update);
 
         db.Plot.update(
-            {[column_name]: content_update},
+            {[column_name]: encodedContent},
             {where: {id:id}}
         )
         .then(response => {
@@ -39,12 +48,11 @@ let plot = {
         let plotPosition = req.body.position;
         let storyId = req.body.storyId
 
-        console.log(plotTitle)
-        console.log(plotBody)
-        console.log(plotPosition)
+        let encodedTitle = he.encode(plotTitle);
+        let encodedBody = he.encode(plotBody);
 
         db.Plot.create(
-            {title: plotTitle, plot_text: plotBody, position: plotPosition, StoryId: storyId}
+            {title: encodedTitle, plot_text: encodedBody, position: plotPosition, StoryId: storyId}
         )
         .then(response => {
             console.log(response);

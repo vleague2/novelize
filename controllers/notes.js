@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require("./../models");
-const { body } = require('express-validator/check');
+const he = require("he");
 
 
 let note = {
@@ -12,6 +12,12 @@ let note = {
             where: {StoryId: storyId}
         }).then(notes => {
             
+            // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
+            notes.forEach(note => {
+                note.title = he.decode(note.title);
+                note.note_text = he.decode(note.note_text);
+            })
+
             res.send(notes);
         })
     },
@@ -21,22 +27,28 @@ let note = {
         let column_name = req.body.column;
         let content_update = req.body.content;
 
+        // SERVER SIDE SANITIZATION 
+        let encoded_content = he.encode(content_update);
+
         db.Note.update(
-            {[column_name]: content_update},
+            {[column_name]: encoded_content},
             {where: {id:id}}
         )
         .then(response => {
             console.log(response);
             res.send("updated one note item!");
         })
+        
     },
 
     addOne: function(req, res) {
         let noteTitle = req.body.title;
         let storyId = req.body.storyId;
 
+        let encodedTitle = he.encode(noteTitle);
+
         db.Note.create(
-            {title: noteTitle, StoryId: storyId}
+            {title: encodedTitle, StoryId: storyId}
         )
         .then(response => {
             console.log(response);
