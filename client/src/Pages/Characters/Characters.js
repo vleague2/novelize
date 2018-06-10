@@ -238,9 +238,17 @@ class CharacterPage extends Component {
                     // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
                     data.forEach(character => {
                         character.name = decodeURIComponent(character.name)
-                        character.character_text = decodeURIComponent(character.character_text);
                         character.preview_text = decodeURIComponent(character.preview_text);
                         character.image = decodeURIComponent(character.image)
+                        // IF THE TEXT ISN'T NULL, WHICH I'M PRETTY SURE IT WILL BE NULL BUT WHATEVER....
+                        if (character.character_text !== null) {
+                            // THEN GO AHEAD AND DECODE IT
+                            character.character_text = decodeURIComponent(character.character_text);
+                        }
+                        // OTHERWISE JUST SET IT TO EMPTY
+                        else {
+                            character.character_text = "";
+                        }
                     })
 
                     // UPDATE THE STATE WITH NEW CHARACTER DATA

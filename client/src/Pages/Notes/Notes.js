@@ -131,8 +131,13 @@ class NotePage extends Component {
             if (note.id == id) {
                 // PULL OUT VALUE AND REASSIGN TO NOTE VALUE
                 newNoteTitle = note.title;
-                newNoteText = note.note_text;
-
+                if (note.note_text !== null) {
+                    newNoteText = note.note_text;
+                }
+                else {
+                    newNoteText = "";
+                }
+                
                 // CHANGE CLASS OF THAT CARD TO ACTIVE
                 this.changeClass(note.id, "active-world");
             }
@@ -198,10 +203,10 @@ class NotePage extends Component {
         // GRAB STORY ID FROM LOCAL STORAGE
         let storyId = localStorage.getItem("currentStoryId");
 
-        // PULL OUT THE WORLD TITLE FROM THE FORM
+        // PULL OUT THE NOTE TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
         
-        // PING THE DATABASE TO ADD A NEW WORLD
+        // PING THE DATABASE TO ADD A NEW NOTE
         API.addNewNote(title, storyId)
         .then(newNoteRes => {
             
@@ -218,7 +223,16 @@ class NotePage extends Component {
                     // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
                     data.forEach(note => {
                         note.title = decodeURIComponent(note.title)
-                        note.note_text = decodeURIComponent(note.note_text);
+                        // IF THE TEXT ISN'T NULL, WHICH I'M PRETTY SURE IT WILL BE NULL BUT WHATEVER....
+                        if (note.note_text !== null) {
+                            // THEN GO AHEAD AND DECODE IT
+                            note.note_text = decodeURIComponent(note.note_text);
+                        }
+                        // OTHERWISE JUST SET IT BLANK
+                        else {
+                            note.note_text = "";
+                        }
+                        
                     })
 
                     // UPDATE THE STATE WITH NEW NOTE DATA
@@ -273,7 +287,6 @@ class NotePage extends Component {
                     this.setState({notes: data});
                     this.forceAddNote();
                 }
-                
             })
 
             // PULL THE ID OF THE FIRST ITEM IN THE NOTES ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION

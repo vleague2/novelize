@@ -212,7 +212,15 @@ class WorldPage extends Component {
                     // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
                     data.forEach(world => {
                         world.title = decodeURIComponent(world.title)
-                        world.world_text = decodeURIComponent(world.world_text);
+                        // IF THE TEXT ISN'T NULL, WHICH I'M PRETTY SURE IT WILL BE NULL BUT WHATEVER....
+                        if (world.world_text !== null) {
+                            // THEN DECODE IT
+                            world.world_text = decodeURIComponent(world.world_text);
+                        }
+                        // BUT OTHERWISE JUST SET IT BLANK
+                        else {
+                            world.world_text = ""
+                        }
                     })
 
                     // UPDATE THE STATE WITH NEW WORLD DATA
