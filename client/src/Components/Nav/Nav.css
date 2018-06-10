@@ -12,6 +12,7 @@
 .nav-item {
     color: white;
     font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
 }
 
 .nav-item:hover {

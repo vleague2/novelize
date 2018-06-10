@@ -22,12 +22,12 @@ const Nav = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
-      <a className="navbar-brand" href={sessionStorage.getItem("userId") == null ? "/" : "/dashboard"}>
+      <a className="navbar-brand" href={sessionStorage.getItem("user") == true ? "/dashboard" : "/"}>
         <img src={logo} id="logo"/>
       </a>
-      <a className="nav-item ml-auto" onClick={logout} id={sessionStorage.getItem("userId") == null ? "login" : "logout"}>
-        {sessionStorage.getItem("userId") == null ? "Login/Register" : "Logout"}
-      </a>
+      <p className="nav-item ml-auto mt-3" onClick={logout} id={sessionStorage.getItem("user") == true ? "logout" : "login"}>
+        {sessionStorage.getItem("user") == true ? "Logout" : "Login/Register"}
+      </p>
     </nav>
   )
 };

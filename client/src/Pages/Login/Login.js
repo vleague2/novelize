@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import "./Login.css";
 import {Container, Row, Col} from "../../Components/Grid";
-import API from "../../utils/API";;
+import API from "../../utils/API";
+import Button from "../../Components/Button"
 
 class Login extends Component {
 
@@ -59,6 +60,7 @@ class Login extends Component {
 
             // IF THERE ARE NO ERRORS, THEN THE USER IS GOOD TO GO!!
             else {
+
                 // SOME MAGIC TO SIMULATE A LOGIN AFTER THEY REGISTER, BECAUSE IT'S ANNOYING TO REGISTER THEN LOGIN. FILL IN THE LOGIN FORM WITH THE USER'S VALUES AND THEN SIMULATE A BUTTON CLICK
                 document.getElementById("email-login").value = email;
                 document.getElementById("password-login").value = password;
@@ -80,6 +82,10 @@ class Login extends Component {
         // PING THE SERVER TO LOG IN THE USER
         API.loginUser(email, password)
         .then(res => {
+
+            // THE NAVBAR USES THIS TO DO CONDITIONAL RENDER SO I GOTTA SET IT
+            sessionStorage.setItem("user", "true");
+
             // SEND THEM TO THE DASHBOARD
             window.location.href="/dashboard";
                 
@@ -117,7 +123,7 @@ class Login extends Component {
                                             <input type="password" className="form-control" id="password-register" placeholder="Password"/>
                                             <small id="password-help" className="form-text"></small>
                                         </div>
-                                        <button type="submit" className="btn submit-btns mb-3" onClick={this.onSubmit}>Create Account</button>
+                                        <Button onClick={this.onSubmit}>Create Account</Button>
                                     </form>
                                 </div>
                             </div>
@@ -142,7 +148,7 @@ class Login extends Component {
                                             <label htmlFor="password-login">Password</label>
                                             <input type="password" className="form-control" id="password-login" placeholder="Password"/>
                                         </div>
-                                        <button type="submit" className="btn submit-btns mb-3" id="login-btn" onClick={this.onLogin}>Submit</button>
+                                        <Button id="login-btn" onClick={this.onLogin}>Log In</Button>
                                     </form> 
                                 </div>
                             </div>
