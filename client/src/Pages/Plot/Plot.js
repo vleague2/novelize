@@ -33,18 +33,34 @@ class PlotPage extends Component {
             // PULL OUT THE RESPONSE DATA
             let data = res.data;
 
-            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-            data.forEach(plot => {
-                plot.title = decodeURIComponent(plot.title)
-                plot.plot_text = decodeURIComponent(plot.plot_text);
-            })
+            // IF THERE'S DATA COMING BACK FROM SERVER
+            if (data.length > 0) {
+                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                data.forEach(plot => {
+                    plot.title = decodeURIComponent(plot.title)
+                    plot.plot_text = decodeURIComponent(plot.plot_text);
+                })
 
-            // UPDATE THE STATE WITH THE DATA
-            this.setState({plots: data});
+                // UPDATE THE STATE WITH THE DATA
+                this.setState({plots: data});
+            }
 
-            console.log(this.state.plots);
+            // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
+            else {
+                this.forceAddPlot();
+            }
         })
     } 
+
+    forceAddPlot = () => {
+        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A PLOT POINT IF THE ARRAY IS EMPTY
+        document.getElementById("add-plot-modal").setAttribute("data-backdrop","static");
+        document.getElementById("add-plot-modal").setAttribute("data-keyboard","false");
+        document.getElementById("add-plot-prompt").click();
+        document.getElementById("modal-title").innerHTML = "Add a new plot point!";
+        document.getElementById("x-button").style.display = "none";
+        document.getElementById("close-button").style.display = "none";
+    }
 
     // AS SOON AS THE APP LOADS
     componentDidMount() {
@@ -71,35 +87,50 @@ class PlotPage extends Component {
                 // PULL OUT THE RESPONSE DATA
                 let data = res.data;
 
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(plot => {
-                    plot.title = decodeURIComponent(plot.title)
-                    plot.plot_text = decodeURIComponent(plot.plot_text);
-                })
-
-                // UPDATE THE STATE WITH THE DATA
-                this.setState({plots: data});
-
-                // LOOP THROUGH PLOTS TO UPDATE EACH POSITION NUMBER SINCE WE JUST DELETED ONE AND THE POSITIONS NEED TO BE NUMERICALLY IN ORDER
-                this.state.plots.forEach(plot => {
-                    // GRAB THE INDEX OF THE ITEM IN THE ARRAY AND ADD 1 SO WE DON'T START ON 0
-                    let newPosition = this.state.plots.indexOf(plot) + 1;
-        
-                    // PING THE DATABASE TO UPDATE THAT ITEM WITH THE NEW POSITION
-                    API.updateOne("plots", plot.id, "position", newPosition)
-                    .then(res => {
-                        console.log("updated position");
-
-                        // UPDATE THE PLOT LIST FOR REAL THIS TIME 
-                        this.updatePlotList();
+                // IF THERE IS DATA COMING BACK FROM SERVER
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(plot => {
+                        plot.title = decodeURIComponent(plot.title)
+                        plot.plot_text = decodeURIComponent(plot.plot_text);
                     })
-                })
+
+                    // UPDATE THE STATE WITH THE DATA
+                    this.setState({plots: data});
+
+                    // LOOP THROUGH PLOTS TO UPDATE EACH POSITION NUMBER SINCE WE JUST DELETED ONE AND THE POSITIONS NEED TO BE NUMERICALLY IN ORDER
+                    this.state.plots.forEach(plot => {
+                        // GRAB THE INDEX OF THE ITEM IN THE ARRAY AND ADD 1 SO WE DON'T START ON 0
+                        let newPosition = this.state.plots.indexOf(plot) + 1;
+            
+                        // PING THE DATABASE TO UPDATE THAT ITEM WITH THE NEW POSITION
+                        API.updateOne("plots", plot.id, "position", newPosition)
+                        .then(res => {
+                            console.log("updated position");
+
+                            // UPDATE THE PLOT LIST FOR REAL THIS TIME 
+                            this.updatePlotList();
+                        })
+                    })
+                }
+
+                else {
+                    this.setState({plots:data});
+                    this.forceAddPlot();
+                }
             })            
         })
     }
 
     // FUNCTION TO ADD A NEW PLOT POINT
     addNewPlot = () => {
+        // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST PLOT POINT, WE NEED TO FIX THE STUFF WE BROKE TO FORCE THEM TO ADD A PLOT POINT
+        document.getElementById("add-plot-modal").setAttribute("data-backdrop","true");
+        document.getElementById("add-plot-modal").setAttribute("data-keyboard","true");;
+        document.getElementById("modal-title").innerHTML = "Add a plot point";
+        document.getElementById("x-button").style.display = "inline";
+        document.getElementById("close-button").style.display = "inline";
+
         // GRAB THE TITLE FROM THE INPUT FIELD
         let title = document.getElementById("add-title-input").value.trim();
 
@@ -114,14 +145,41 @@ class PlotPage extends Component {
 
         // PING API TO ADD A NEW PLOT WITH THE DATA
         API.addNewPlot(title, plot, position, storyId)
-        .then(res => {
-            console.log(res);
-            // UPDATE THE PLOT LIST
-            this.updatePlotList();
+        .then(newPlotRes => {
 
             // EMPTY THE FORM FIELDS
             document.getElementById("add-title-input").value = "";
             document.getElementById("add-plot-input").value = "";
+
+            // GRAB THE STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
+
+            // CALL THE API TO GET ALL PLOT POINTS FOR THE STORY ID
+            API.getAll("plots", storyId)
+            .then(res => {
+                // PULL OUT THE RESPONSE DATA
+                let data = res.data;
+
+                console.log(data);
+
+                // IF THERE'S DATA COMING BACK FROM SERVER
+                if (data.length > 0) {
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                    data.forEach(plot => {
+                        plot.title = decodeURIComponent(plot.title)
+                        plot.plot_text = decodeURIComponent(plot.plot_text);
+                    })
+
+                    // UPDATE THE STATE WITH THE DATA
+                    this.setState({plots: data});
+                }
+
+                // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
+                else {
+                    this.setState({plots: data});
+                    this.forceAddPlot();
+                }
+            })
         })
     }
 
@@ -219,13 +277,13 @@ class PlotPage extends Component {
                                 <h5 className="modal-title">Add a Plot Point</h5>
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true" id="x-button">&times;</span>
                                 </button>
                             </div>
                             <div className="modal-body">
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
-                                    <label htmlFor="add-title-input" className="label-title">Title of Plot Point</label>
+                                    <label htmlFor="add-title-input" className="label-title" id="modal-title">Title of Plot Point</label>
                                     <FormFieldInput id="add-title-input" name="title"/>
                                 </div>
                                 <div className="form-group">
@@ -236,7 +294,7 @@ class PlotPage extends Component {
                             {/* BUTTONS AT MODAL BOTTOM */}
                             <div className="modal-footer">
                                 {/* CLOSE THE MODAL */}
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal" id="close-button">Close</button>
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
                                 <button type="button" className="btn btn-save-modal" id="add-new-plot" onClick={this.addNewPlot} data-dismiss="modal">Save</button>
                             </div>

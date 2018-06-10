@@ -15,18 +15,26 @@ let plot = {
                 ['position', 'ASC']
             ]
         }).then(plots => {
-             // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
-             plots.forEach(plot => {
-                if (plot.title !== null) {
-                    plot.title = he.decode(plot.title);
-                }
-                if (plot.plot_text !== null) {
-                    plot.plot_text = he.decode(plot.plot_text);
-                }
-                 
-            })
 
-            res.send(plots);
+            if (plots.length > 0) {
+                // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER
+                plots.forEach(plot => {
+                    if (plot.title !== null) {
+                        plot.title = he.decode(plot.title);
+                    }
+                    if (plot.plot_text !== null) {
+                        plot.plot_text = he.decode(plot.plot_text);
+                    }
+                    
+                })
+
+                res.send(plots);
+            }
+
+            else {
+                res.send([]);
+            }
+             
         })
     },
 
@@ -60,8 +68,8 @@ let plot = {
             {title: encodedTitle, plot_text: encodedBody, position: plotPosition, StoryId: storyId}
         )
         .then(response => {
-            console.log(response);
-            res.send("Added one plot item!");
+            console.log(response.dataValues);
+            res.send(response.dataValues);
         })
     },
 

@@ -303,8 +303,6 @@ class CharacterPage extends Component {
                     this.forceAddCharacter();
                 }
             })
-
-            
         })
     }
 
