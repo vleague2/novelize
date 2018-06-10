@@ -12,14 +12,6 @@ const userController = require('../controllers/users.js');
 /************************ LOCAL AUTH ROUTES********************************* */
 
 
-// router.post('/signup', passport.authenticate('local-signup', {
-//     successRedirect: "/"
-// }));
-
-// router.post('/register', (req, res) => {
-//     res.send({"yup": "wassup"})
-// })
-
 router.get("/logout", (req, res)=> {
     req.logout();
     res.redirect('/');
@@ -41,5 +33,13 @@ router.post('/register',
         .withMessage("Username must be 5 characters long") 
 ],
  userController.register);
+
+router.post('/auth/login', passport.authenticate('local'),
+function(req, res) {
+    console.log(req.user);
+    res.send(req.user)
+}
+
+/*userController.login*/);
 
 module.exports = router;

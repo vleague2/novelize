@@ -77,6 +77,26 @@ class Login extends Component {
         })
     }
 
+    onLogin = (e) => {
+        e.preventDefault();
+        let email = document.getElementById("email-login").value;
+        let password = document.getElementById("password-login").value;
+
+        // console.log(email)
+        // console.log(password)
+
+        API.loginUser(email, password)
+        .then(res => {
+            console.log(res);
+            if (res.statusCode == 401) {
+                console.log("401 unauthorized")
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
     // RENDER THINGS TO THE PAGE
     render() {
         return (
@@ -90,7 +110,6 @@ class Login extends Component {
                                     <button className="btn btn-info btn-block mb-4">Sign Up With Google</button>
                                     <h5 className="mb-4">Or create an account:</h5>
 
-                                   
                                     <form>
                                         <div className="form-group">
                                             <label htmlFor="email-register">Email address</label>
@@ -117,7 +136,21 @@ class Login extends Component {
                             <div className="card mt-4" id="login-card">
                                 <div className="card-body">
                                     <h3> Login </h3>
-                                    <button type="submit" className="btn submit-btns mb-3" id="login-btn" onClick={this.login}>Whatever just log in</button>
+
+                                    <form>
+                                        <div className="form-group">
+                                            <label htmlFor="email-login">Email address</label>
+                                            <input type="email" className="form-control" id="email-login" placeholder="Enter email"/>
+                                            <small id="email-help" className="form-text"></small>
+                                        </div>
+                
+                                        <div className="form-group">
+                                            <label htmlFor="password-login">Password</label>
+                                            <input type="password" className="form-control" id="password-login" placeholder="Password"/>
+                                            <small id="password-help" className="form-text"></small>
+                                        </div>
+                                        <button type="submit" className="btn submit-btns mb-3" id="login-btn" onClick={this.onLogin}>Submit</button>
+                                    </form> 
                                 </div>
                             </div>
                         </Col>  

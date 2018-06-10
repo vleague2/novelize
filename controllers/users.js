@@ -87,6 +87,41 @@ let user = {
                 }
             })
         }
+    },
+    login: function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) console.log(err);
+            if (!user) console.log("no");
+            console.log("um")
+            res.sendStatus(200)
+        })
+        // console.log("Success! maybe");
+        /*
+        // query the db to find if the user exists
+        console.log("querying db for user")
+        db.User.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+        .then(user => {
+            // grab the user's id from the db response
+            let userId = user.dataValues.id;
+            console.log(userId);
+
+            // if the user exists
+            if (user) {
+                console.log("user is in database, running passport authenticate");
+                // call passport's authentication method
+                passport.authenticate('local', {
+                    successRedirect: '/dashboard',
+                    failureRedirect: '/login' 
+                }) 
+                (req, res)
+            }
+        })
+        */
+
     }
 }
 /*
