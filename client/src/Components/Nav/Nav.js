@@ -7,8 +7,8 @@ const Nav = () => (
     <a className="navbar-brand" href="/">
       <img src={logo} id="logo"/>
     </a>
-    <a className="nav-item ml-auto" href="/login">
-      Login/Register
+    <a className="nav-item ml-auto" href={sessionStorage.getItem("userId") == null ? "/login" : "/dashboard"}>
+      {sessionStorage.getItem("userId") == null ? "Login/Register" : "Dashboard"}
     </a>
   </nav>
 );
