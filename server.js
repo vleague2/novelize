@@ -28,12 +28,11 @@ app.use(cookieParser());
 
 // session setup
 app.use(session({
-  secret:'secret',
+  secret:'victorias secret',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { maxAge: new Date(Date.now() + (60 * 1000 * 30)) }
 }))
-
-app.use(flash());
 
 // passport setup
 app.use(passport.initialize());

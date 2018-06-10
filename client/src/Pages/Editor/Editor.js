@@ -37,22 +37,29 @@ class EditorPage extends Component {
         //API CALL TO SERVER TO GET CHARACTER LIST
         API.getAll("characters", storyId)
         .then(res => {
-            //PULL ARRAY FROM SERVER RESPONSE
-            let data = res.data;
 
-            // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-            data.forEach(character => {
-                character.name = decodeURIComponent(character.name)
-                character.character_text = decodeURIComponent(character.character_text);
-                character.preview_text = decodeURIComponent(character.preview_text);
-                character.image = decodeURIComponent(character.image)
-            })
+            if (res.data.error) {
+                window.location.href = "/login";
+            }
 
-            //UPDATE STATE WITH CHARACTER LIST
-            this.setState({characters: data});
+            else {
+                //PULL ARRAY FROM SERVER RESPONSE
+                let data = res.data;
 
-            console.log(this.state.characters);
+                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                data.forEach(character => {
+                    character.name = decodeURIComponent(character.name)
+                    character.character_text = decodeURIComponent(character.character_text);
+                    character.preview_text = decodeURIComponent(character.preview_text);
+                    character.character_image = decodeURIComponent(character.character_image)
 
+                })
+
+                //UPDATE STATE WITH CHARACTER LIST
+                this.setState({characters: data});
+
+                console.log(this.state.characters);
+            }
         });
 
         //API CALL TO SERVER TO GET STORY FOR INITIAL VALUE OF EDITOR
@@ -71,12 +78,7 @@ class EditorPage extends Component {
             let select_story = res.data.id;
 
             // FRONT END VALIDATION TO PULL OUT STORY
-            let decodedStory = decodeURIComponent(story);
-
-            // SET THE LOCAL STORAGE TO THE CURRENT STORY ID BECAUSE WE NEED IT FOR LIKE EVERYTHING
-            localStorage.setItem("currentStoryId", select_story);
-
-            
+            let decodedStory = decodeURIComponent(story);          
 
             //UPDATE STATE WITH STORY TEXT
             this.setState({story: decodedStory, select_story: select_story})

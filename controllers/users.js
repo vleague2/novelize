@@ -93,7 +93,10 @@ let user = {
     logout: function(req, res) {
         console.log("logging out")
         req.logout();
+        res.clearCookie("connect-sid");
+        req.session.destroy();
         res.send("success");
+        
     }
 }  
 

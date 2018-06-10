@@ -40,7 +40,7 @@ class CharacterPage extends Component {
             if (res.data.error) {
                 window.location.href = "/login";
             }
-            
+
             else {
                 
                 //PULL ARRAY FROM SERVER RESPONSE
@@ -53,7 +53,7 @@ class CharacterPage extends Component {
                         character.name = decodeURIComponent(character.name)
                         character.character_text = decodeURIComponent(character.character_text);
                         character.preview_text = decodeURIComponent(character.preview_text);
-                        character.image = decodeURIComponent(character.image);
+                        character.character_image = decodeURIComponent(character.character_image);
                     })
 
                     //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT

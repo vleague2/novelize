@@ -17,45 +17,58 @@ class Dashboard extends Component {
         }
     }
 
+    // FUNCTION TO UPDATE THE STORY LIST
     updateStoriesList = () => {
-        API.getAllStories("stories")
+        // MAKE API CALL TO GET ALL STORIES (THE BACKEND WILL PULL OUT THE USER ID FROM THE SESSION)
+        API.getAllStories()
         .then(res => {
 
+            // IF THERE ARE ERRORS, THAT MEANS THE USER ISN'T LOGGED IN
             if (res.data.error) {
-                console.log(res.data);
+
+                // REDIRECT TO THE LOGIN PAGE SO THEY CAN GET THEMSELVES LOGGED IN
                 window.location.href = "/login"
             }
 
+            // IF THERE'S NO ERRORS, WE GOOD TO GO
             else {
-                console.log(res);
+                // GRAB THE DATA FROM THE RESPONSE
                 let data = res.data;
 
                 // IF WE HAVE DATA FROM THE DB
                 if (data.length > 0) {
+
+                    // LOOP THROUGH EACH ITEM IN THE DATA
                     data.forEach(story => {
+                        // DECODE THE TITLE AND TEXT SO IT SHOWS UP NORMAL
                         story.title = decodeURIComponent(story.title)
                         story.story_text = decodeURIComponent(story.story_text);
                     })
         
+                    // SET THE STATE WITH THE DATA ARRAY
                     this.setState({stories: data});
-        
-                    console.log(this.state.stories);
                 }
-                // IF NOT
+                // IF NO DATA COMES BACK FROM THE ARRAY, THE USER NEEDS TO ADD A STORY!
                 else {
+                    // CALL THE FUNCTION TO FORCE THEM TO ADD A STORY
                     this.forceAddStory();
+
+                    // SET THE STATE TO THE EMPTY ARRAY BECAUSE WHY NOT
                     this.setState({stories: data});
                 }
             }
         })
     }
 
+    // AS SOON AS THE APP LOADS
     componentDidMount() {
+        // UPDATE THE STORY LIST
         this.updateStoriesList();
     }
 
+    // FUNCTION TO FORCE THE USER TO ADD A STORY
     forceAddStory = () => {
-        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A STORY IF THE ARRAY IS EMPTY
+        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A STORY IF THE ARRAY IS EMPTY BY MAKING THE MODAL UN-CLOSEABLE
         document.getElementById("add-story-modal").setAttribute("data-backdrop","static");
         document.getElementById("add-story-modal").setAttribute("data-keyboard","false");
         document.getElementById("add-story-prompt").click();
@@ -64,27 +77,35 @@ class Dashboard extends Component {
         document.getElementById("close-button").style.display = "none";
     }
 
+    // WHEN THE USER CHOOSES A STORY TO EDIT OR ONE OF THE QUICK-EDITS
     onClick = (e) => {
-        console.log("clicked!");
+        // PULL THE NAME OF THE BUTTON AND THE ID OF THE BUTTON. NAME WILL TELL US WHAT THEY CLICKED AND ID WILL TELL US WHICH STORY IT'S ATTACHED TO
         let name = e.target.name;
         let id = e.target.id;
 
-        console.log(name);
-        // console.log(id);
-
+        // SET A LOCAL STORAGE ITEM TO THE STORY THEY CLICKED
         localStorage.setItem("currentStoryId", id);
 
+        // LOGIC TO DECIDE WHAT TO DO WITH THE CLICK BASED ON THE BUTTON NAME
         switch (name) {
+            // IF THEY CLICKED ON THE STORY EDIT BUTTON
             case "story":
+                // REDIRECT TO THE MAIN EDITOR
                 window.location.href = "/editor";
                 break;
+            // IF THEY CLICKED ON THE CHARACTER QUICK-EDIT
             case "characters":
+                // REDIRECT TO THE CHARACTER EDIT PAGE
                 window.location.href = "/character-edit";
                 break;
+            // IF THEY CLICKED ON THE PLOT QUICK-EDIT
             case "plot":
+                // REDIRECT TO THE PLOT EDIT PAGE
                 window.location.href = "/plot-edit";
                 break;
+            // IF THEY CLICKED ON THE WORLD QUICK-EDIT
             case "world":
+                // REDIRECT TO THE WORLD QUICK-EDIT
                 window.location.href = "/world-edit";
                 break;
             case "notes":
@@ -137,11 +158,6 @@ class Dashboard extends Component {
         document.getElementById("modal-title").innerHTML = "Add a story";
         document.getElementById("x-button").style.display = "inline";
         document.getElementById("close-button").style.display = "inline";
-
-        // // GRAB USER ID FROM LOCAL STORAGE
-        // let userId = sessionStorage.getItem("userId");
-
-        // console.log(userId);
         
         // PULL OUT THE STORY TITLE FROM THE FORM
         let title = document.getElementById("add-title-input").value.trim();
