@@ -109,9 +109,6 @@ class Login extends Component {
                             <div className="card mt-4" id="register-card">
                                 <div className="card-body">
                                     <h3 className=" mt-3 mb-4"> Register </h3>
-                                    <button className="btn btn-info btn-block mb-4">Sign Up With Google</button>
-                                    <h5 className="mb-4">Or create an account:</h5>
-
                                     <form>
                                         <div className="form-group">
                                             <label htmlFor="email-register">Email address</label>
@@ -132,7 +129,7 @@ class Login extends Component {
                         <Col size="6">
                             <div className="card mt-4" id="login-card">
                                 <div className="card-body">
-                                    <h3> Login </h3>
+                                    <h3 className="mt-3 mb-4"> Login </h3>
                                     <small id="login-help" className="form-text mb-3 mt-3"></small>
 
                                     <form>

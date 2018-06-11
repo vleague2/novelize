@@ -14,7 +14,6 @@ const TimelineItem = (props) => (
                     <p className="card-text timeline-text">{props.children}</p>
                     <div className="text-right">
                         <button className="btn btn-sm btn-secondary mr-3" id={props.id} data-target={props.target} onClick={props.onEdit} data-toggle="modal">Edit</button>
-                        <button className="btn btn-sm btn-info mr-3" id={props.id}>Reorder</button>
                         <button className="btn btn-sm btn-danger mr-3" id={props.id} onClick={props.onDelete}>Delete</button>
                     </div>
                 </div>

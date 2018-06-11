@@ -49,7 +49,15 @@ class EditorPage extends Component {
                 // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
                 data.forEach(character => {
                     character.name = decodeURIComponent(character.name)
-                    character.character_text = decodeURIComponent(character.character_text);
+                     // IF THE TEXT ISN'T NULL
+                     if (character.character_text !== null) {
+                        // THEN GO AHEAD AND DECODE IT
+                        character.character_text = decodeURIComponent(character.character_text);
+                    }
+                    // OTHERWISE JUST SET IT TO EMPTY
+                    else {
+                        character.character_text = "";
+                    }
                     character.preview_text = decodeURIComponent(character.preview_text);
                     character.character_image = decodeURIComponent(character.character_image)
 
@@ -93,7 +101,15 @@ class EditorPage extends Component {
             // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
             data.forEach(world => {
                 world.title = decodeURIComponent(world.title)
-                world.world_text = decodeURIComponent(world.world_text);
+                 // IF THE TEXT ISN'T NULL
+                 if (world.world_text !== null) {
+                    // THEN GO AHEAD AND DECODE IT
+                    world.world_text = decodeURIComponent(world.world_text);
+                }
+                // OTHERWISE JUST SET IT TO EMPTY
+                else {
+                    world.world_text = "";
+                }
             })
 
             // UPDATE STATE WITH WORLDBUILD DATA
@@ -109,7 +125,15 @@ class EditorPage extends Component {
             // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
             data.forEach(note => {
                 note.title = decodeURIComponent(note.title)
-                note.note_text = decodeURIComponent(note.note_text);
+                // IF THE TEXT ISN'T NULL
+                if (note.note_text !== null) {
+                    // THEN GO AHEAD AND DECODE IT
+                    note.note_text = decodeURIComponent(note.note_text);
+                }
+                // OTHERWISE JUST SET IT TO EMPTY
+                else {
+                    note.note_text = "";
+                }
             })
 
             // UPDATE STATE WITH NOTES DATA
@@ -125,7 +149,15 @@ class EditorPage extends Component {
             // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
             data.forEach(plot => {
                 plot.title = decodeURIComponent(plot.title)
-                plot.plot_text = decodeURIComponent(plot.plot_text);
+                // IF THE TEXT ISN'T NULL
+                if (plot.plot_text !== null) {
+                    // THEN GO AHEAD AND DECODE IT
+                    plot.plot_text = decodeURIComponent(plot.plot_text);
+                }
+                // OTHERWISE JUST SET IT TO EMPTY
+                else {
+                    plot.plot_text = "";
+                }
             })
 
             // UPDATE STATE WITH PLOT DATA
