@@ -1,3 +1,4 @@
+// REQUIRED IMPORTS
 import React, {Component} from "react";
 import "./Characters.css";
 import {Row, Col} from "../../Components/Grid";
@@ -8,11 +9,12 @@ import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
 
+// CREATING A STATEFUL COMPONENT
 class CharacterPage extends Component {
     constructor(props) {
         super(props);
 
-        // SET THE STATE
+        // INITIALIZE THE STATE
         this.state = {
             characters: [],
             editor: "",
@@ -29,7 +31,7 @@ class CharacterPage extends Component {
         this.addNewChar = this.addNewChar.bind(this);
     }
 
-    // AS SOON AS THE APP LOADS
+//************ AS SOON AS THE APP LOADS
     componentDidMount() {
 
         // GRAB STORY ID FROM LOCAL STORAGE
@@ -38,59 +40,84 @@ class CharacterPage extends Component {
         // GET CHARACTER LIST FROM DB
         API.getAll("characters", storyId)
         .then(res => {
+
+            // IF WE GET AN ERROR FROM THE SERVER, IT'S BECAUSE THE USER ISN'T AUTHENTICATED
             if (res.data.error) {
+
+                // SO REDIRECT THEM TO LOG IN
                 window.location.href = "/login";
             }
 
+            // IF WE GET NO ERRORS, THEN WE GOOD!
             else {
-                
+
                 //PULL ARRAY FROM SERVER RESPONSE
                 let data = res.data;
 
                 // SEE IF WE HAVE ANY CHARACTERS FROM THE DATABASE. IF SO,
                 if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY FOR THE USER
                     data.forEach(character => {
                         character.name = decodeURIComponent(character.name)
-                         // IF THE TEXT ISN'T NULL
+
+                         // IF THE CHARACTER TEXT ISN'T NULL
                          if (character.character_text !== null) {
+
                             // THEN GO AHEAD AND DECODE IT
                             character.character_text = decodeURIComponent(character.character_text);
                         }
-                        // OTHERWISE JUST SET IT TO EMPTY
+
+                        // OTHERWISE JUST SET IT TO EMPTY SO IT DOESN'T SAY "NULL" ON THE FRONT END
                         else {
                             character.character_text = "";
                         }
+
                         character.preview_text = decodeURIComponent(character.preview_text);
                         character.character_image = decodeURIComponent(character.character_image);
                     })
 
-                    //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
+                    //UPDATE STATE WITH CHARACTER LIST, TEXT OF FIRST CHARACTER (FOR THE EDITOR), NAME OF FIRST CHARACTER, PREVIEW TEXT OF FIRST CHARACTER, AND IMAGE OF FIRST CHARACTER (FOR THE FORM FIELDS THAT DISPLAY FIRST)
                     this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id, character_image: data[0].character_image});
 
                     // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
                     this.changeClass(data[0].id, "active-char");
                 }
-                // IF NOT, THE USER NEEDS TO ADD A CHARACTER
+
+                // IF NO ERRORS FROM DATABASE, THE USER NEEDS TO ADD A CHARACTER
                 else {
                     
-                this.forceAddCharacter();
+                    // CALL THE FUNCTION TO FORCE THEM TO ADD A CHARACTER
+                    this.forceAddCharacter();
                 }
             }
         });
     }
 
+//*************** FUNCTION THAT FORCES THE USER TO ADD A CHARACTER
     forceAddCharacter = () => {
-        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A CHARACTER IF THE ARRAY IS EMPTY
+        // ALL OF THESE CHANGES WILL FORCE THE USER TO INTERACT WITH THE MODAL TO ADD A CHARACTER
+
+        // DISABLE CLICK AWAY FROM MODAL TO CLOSE
         document.getElementById("add-char-modal").setAttribute("data-backdrop","static");
+
+        // DISABLE HIT ESCAPE KEY TO CLOSE
         document.getElementById("add-char-modal").setAttribute("data-keyboard","false");
+
+        // SIMULATE A CLICK ON THE BUTTON THAT OPENS THE MODAL
         document.getElementById("add-char-prompt").click();
+
+        // CHANGE THE MODAL TITLE SO IT MAKES MORE SENSE FOR A FIRST-TIME USER
         document.getElementById("modal-title").innerHTML = "Add a new character!";
+
+        // REMOVE THE X BUTTON
         document.getElementById("x-button").style.display = "none";
+
+        // REMOVE THE CLOSE BUTTON
         document.getElementById("close-button").style.display = "none";
     }
 
-    // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
+// **************** FUNCTION THAT CALLS THE API AND UPDATES THE STATE
     updateCharList = () => {
 
         // GRAB STORY ID FROM LOCAL STORAGE
@@ -99,19 +126,25 @@ class CharacterPage extends Component {
         // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
         API.getAll("characters", storyId)
         .then(res => {
+
             // PULL OUT THE CHARACTER DATA
             let data = res.data;
 
+            // IF WE DO GET DATA BACK FROM THE SERVER
             if (data.length > 0) {
+
                 // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
                 data.forEach(character => {
                     character.name = decodeURIComponent(character.name)
                     character.preview_text = decodeURIComponent(character.preview_text);
+
                      // IF THE TEXT ISN'T NULL
                      if (character.character_text !== null) {
+
                         // THEN GO AHEAD AND DECODE IT
                         character.character_text = decodeURIComponent(character.character_text);
                     }
+
                     // OTHERWISE JUST SET IT TO EMPTY
                     else {
                         character.character_text = "";
@@ -123,33 +156,39 @@ class CharacterPage extends Component {
                 this.setState({characters: data});
             }
 
+            // IF WE DON'T GET DATA, THEN THE USER NEEDS TO CREATE A NEW CHARACTER
             else {
+
+                // WE STILL NEED TO UPDATE THE CHARACTERS STATE
                 this.setState({characters:data});
+
+                // AND TRIGGER THE MODAL TO OPEN SO THEY HAVE TO ADD A CHARACTER
                 this.forceAddCharacter();
             }
         })
     }
 
-    // FUNCTION TO CHANGE THE CLASS OF THE CARDS
+//*************** FUNCTION TO CHANGE THE CLASS OF THE CARDS
     changeClass(id, active) {
+
+        // WE'LL PASS IN THE ACTIVE CLASS
         document.getElementById(id).setAttribute("class", `card rounded-0 ${active}`);
     }
 
-    // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY CHARACTER
+// ************* FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY CHARACTER
     handleClick(e) {
        
         // SET THE DATABASE ID OF THE CHARACTER
         let id = e.target.id;
-        console.log("id: " + id);
 
         // PASS IN PARAMETER TO UPDATE EDITOR
         this.updateEditor(id);
     }
 
-    // FUNCTION TO UPDATE THE EDITOR
+// ************** FUNCTION TO UPDATE THE EDITOR
     updateEditor = (id) => {
 
-        // INIT NEW CHARACTER VALUES
+        // INIT NEW CHARACTER VALUES THAT WE WILL PUSH TO THE STATE TO UPDATE THE EDITING FIELDS
         let newCharName = "";
         let newCharPreview = "";
         let newCharText = "";
@@ -157,9 +196,11 @@ class CharacterPage extends Component {
 
         // LOOP THROUGH CHARACTERS 
         this.state.characters.forEach(character => {
+
             // IF THE CHARACTER ID MATCHES THE SELECTED ID
             if (character.id == id) {
-                // PULL OUT VALUES AND REASSIGN TO CHARACTER VALUES
+
+                // PULL OUT VALUES FROM STATE ITEMS AND ASSIGN TO NEW CHARACTER VALUES
                 newCharName = character.name;
                 newCharPreview = character.preview_text;
                 newCharText = character.character_text;
@@ -169,22 +210,30 @@ class CharacterPage extends Component {
                 this.changeClass(character.id, "active-char");
             }
 
-            // IF NOT
+            // IF IT'S NOT THE RIGHT CHARACTER
             else {
+
                 // REMOVE ACTIVE CLASS
                 this.changeClass(character.id);
             }
         })
 
-        // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
-        this.setState({character_select: id, name: newCharName, preview_text: newCharPreview, character_image: newCharImage});
+        // SET THE ID, SET THE NAME, SET THE PREVIEW, SET THE IMAGE
+        this.setState(
+            {
+                character_select: id, 
+                name: newCharName,
+                preview_text: newCharPreview, 
+                character_image: newCharImage
+            });
 
         // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
         window.frames['text-editor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML = newCharText;
     }
 
-    // FUNCTION TO HANDLE WHEN THE CHARACTER NAME OR PREVIEW IS UPDATED
+//  ************** FUNCTION TO HANDLE WHEN THE CHARACTER NAME OR PREVIEW IS UPDATED BY THE USER
     handleInputChange = (e) => {
+
         // THIS WILL BE THE COLUMN NAME, SO WE ARE PULLING OUT THE NAME ATTRIBUTE OF THE INPUT FIELD
         let name = e.target.name;
 
@@ -194,38 +243,46 @@ class CharacterPage extends Component {
         // UPDATE THE STATE -- WHATEVER THE COLUMN NAME IS AND ITS NEW VALUE
         this.setState({[name]: value});
 
-        // PING THE DATABASE TO UPDATE THE CHARACTER, AND CONCATENATE THE ID OF THE SELECTED CHAR
+        // PING THE DATABASE TO UPDATE THE CHARACTER
         API.updateOne("characters", this.state.character_select, name, value)
         .then(res => {
+
             // GET AN UPDATED CHARACTER LIST
             this.updateCharList();
-            
         }) 
     }
 
-    //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
+// ****************** EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
         
         //API POST CALL TO THE SERVER, SENDING IN URL, ID, COLUMN NAME, AND CONTENT OF EDITOR
         API.updateOne("characters", this.state.character_select, "character_text", e.target.getContent())
         .then(res => {
-            // CONSOLE LOG THAT WE'RE SAVING
-            console.log(res);
 
-            //GET UPDATED CHARACTER LIST
+            //GET UPDATED CHARACTER LIST TO RENDER THE CHANGES
             this.updateCharList();
         })
     }
 
-    // FUNCTION TO HANDLE WHEN THE USER SAVES A NEW CHARACTER
+// **************** FUNCTION TO HANDLE WHEN THE USER SAVES A NEW CHARACTER
     addNewChar = () => {
 
-        // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST CHARACTER, WE NEED TO FIX THE STUFF WE BROKE TO FORCE THEM TO ADD A CHARACTER
-        document.getElementById("add-char-modal").setAttribute("data-backdrop","true");
-        document.getElementById("add-char-modal").setAttribute("data-keyboard","true");;
-        document.getElementById("modal-title").innerHTML = "Add a character";
-        document.getElementById("x-button").style.display = "inline";
-        document.getElementById("close-button").style.display = "inline";
+        // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST CHARACTER, WE NEED TO FIX THE MODAL STUFF WE BROKE TO FORCE THEM TO ADD A CHARACTER
+
+            // LET THE USER CLICK AWAY TO CLOSE THE MODAL
+            document.getElementById("add-char-modal").setAttribute("data-backdrop","true");
+
+            // LET THEM USE THE ESCAPE KEY TO CLOSE THE MODAL
+            document.getElementById("add-char-modal").setAttribute("data-keyboard","true");
+
+            // RESET THE TITLE TEXT
+            document.getElementById("modal-title").innerHTML = "Add a character";
+
+            // SHOW THE X BUTTON
+            document.getElementById("x-button").style.display = "inline";
+
+            // SHOW THE CLOSE BUTTON
+            document.getElementById("close-button").style.display = "inline";
 
         // PULL OUT THE CHARACTER NAME FROM THE FORM
         let name = document.getElementById("add-name-input").value.trim();
@@ -243,34 +300,36 @@ class CharacterPage extends Component {
         API.addNewCharacter(name, preview, image, storyId)
         .then(newCharRes => {
 
-            // CONSOLE LOG THAT WE'VE ADDED A NEW CHARACTER
-            console.log(newCharRes);
-
             // EMPTY MODAL
             document.getElementById("add-name-input").value = "";
             document.getElementById("add-preview-input").value = "";
             document.getElementById("add-image-input").value = "";
 
-            // VERY BAD CODE TO GET CHARACTER LIST
-
-            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST (NOT USING OUR PREBUILT FUNCTION BECAUSE SOME OTHER STUFF HAS TO HAPPEN, WHICH NEEDS TO BE FIXED)
             API.getAll("characters", storyId)
             .then(res => {
+
                 // PULL OUT THE CHARACTER DATA
                 let data = res.data;
 
+                // IF WE DO GET DATA BACK FROM THE SERVER
                 if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY TO THE USER
                     data.forEach(character => {
+        
                         character.name = decodeURIComponent(character.name)
                         character.preview_text = decodeURIComponent(character.preview_text);
                         character.character_image = decodeURIComponent(character.character_image)
-                        // IF THE TEXT ISN'T NULL, WHICH I'M PRETTY SURE IT WILL BE NULL BUT WHATEVER....
+
+                        // IF THE CHARACTER TEXT ISN'T NULL (IT WILL BE NULL BECAUSE WE ARE ADDING A NEW CHARACTER)
                         if (character.character_text !== null) {
+
                             // THEN GO AHEAD AND DECODE IT
                             character.character_text = decodeURIComponent(character.character_text);
                         }
-                        // OTHERWISE JUST SET IT TO EMPTY
+
+                        // OTHERWISE JUST SET IT TO EMPTY SO IT RENDERS WITHOUT "NULL"
                         else {
                             character.character_text = "";
                         }
@@ -278,78 +337,97 @@ class CharacterPage extends Component {
 
                     // UPDATE THE STATE WITH NEW CHARACTER DATA
                     this.setState({characters: data});
+
+                    // UPDATE THE EDITOR WITH THE NEW CHARACTER DATA
                     this.updateEditor(newCharRes.data.id)
                 }
 
+                // IF WE DON'T GET DATA BACK FROM THE SERVER
                 else {
+
+                    // SET THE STATE WITH THE CURRENT CHARACTER DATA
                     this.setState({characters:data});
+
+                    // FORCE OPEN THE MODAL AND HAVE THE USER ADD A CHARACTER
                     this.forceAddCharacter();
                 }
             })
         })
     }
 
-    // FUNCTION TO DELETE A CHARACTER FROM THE DB
+// ************* FUNCTION TO DELETE A CHARACTER FROM THE DB
     deleteChar = () => {
+
         // GRAB ID OF CHARACTER FROM STATE
         let id = this.state.character_select;
-
-        console.log(id);
 
         // PING API TO DELETE A CHARACTER
         API.deleteOne("characters", id)
         .then(res => {
             console.log(res);
 
-            // VERY BAD CODE TO GET CHARACTER LIST
             // GRAB STORY ID FROM LOCAL STORAGE
             let storyId = localStorage.getItem("currentStoryId");
 
-            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST (USING THIS INSTEAD OF UPDATE FUNCTION BECAUSE OTHER STUFF HAS TO HAPPEN)
             API.getAll("characters", storyId)
             .then(res => {
+
                 // PULL OUT THE CHARACTER DATA
                 let data = res.data;
 
+                // IF WE DO GET DATA BACK FROM THE SERVER
                 if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+
+                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY FOR THE USER
                     data.forEach(character => {
                         character.name = decodeURIComponent(character.name)
                         character.preview_text = decodeURIComponent(character.preview_text);
-                        // IF THE TEXT ISN'T NULL
+
+                        // IF THE CHARACTER TEXT ISN'T NULL
                         if (character.character_text !== null) {
+
                             // THEN GO AHEAD AND DECODE IT
                             character.character_text = decodeURIComponent(character.character_text);
                         }
-                        // OTHERWISE JUST SET IT TO EMPTY
+
+                        // OTHERWISE JUST SET IT TO EMPTY SO IT DOESN'T SHOW "NULL"
                         else {
                             character.character_text = "";
                         }
+
                         character.character_image = decodeURIComponent(character.character_image)
                     })
 
                     // UPDATE THE STATE WITH NEW CHARACTER DATA
                     this.setState({characters: data});
-                    // PULL THE ID OF THE FIRST ITEM IN THE CHARACTERS ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
+
+                    // PULL THE ID OF THE FIRST ITEM IN THE CHARACTERS ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION (WE NEED TO DISPLAY SOMETHING ELSE TO EDIT WHEN THE CHARACTER IS DELETED)
                     let newSelectId = this.state.characters[0].id;
 
                     // UPDATE THE EDITOR
                     this.updateEditor(newSelectId);
                 }
 
+                // IF WE DON'T GET DATA BACK FROM THE SERVER
                 else {
+
+                    // UPDATE THE STATE WITH CURRENT DATA
                     this.setState({characters:data});
+
+                    // FORCE USER TO ADD A CHARACTER
                     this.forceAddCharacter();
                 }
             })
         })
     }
 
-    // RENDER THINGS TO THE PAGE
+// ************** RENDER THINGS TO THE PAGE
     render() {
         return (
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div id="char-edit">
+
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
                 <Row id="editor-char-row">
 
@@ -358,33 +436,44 @@ class CharacterPage extends Component {
 
                         {/* SUB-ROW TO HOLD THE BACK BUTTON, CHAR NAME EDIT, AND CHAR PREVIEW EDIT */}
                         <Row>
+
                             {/* A TINY COLUMN TO HOLD THE BACK ARROW */}
                             <Col size="1">
+
                                 {/* IT TAKES YOU BACK TO THE EDITOR */}
                                 <BackButton/>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM LABEL */}
                             <Col size="1">
+
+                                {/* LABEL FOR THE NAME FIELD */}
                                 <p className="mt-3 form-text text-right">Name</p>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
                             <Col size="4">
+
+                                {/* INPUT FIELD FOR UPDATING THE CHARACTER NAME */}
                                 <FormFieldInput 
                                     id="name-input" 
                                     value={this.state.name} 
                                     name="name" 
                                     onChange={this.handleInputChange}
                                 />
-                                
                             </Col>
+
+                            {/* COLUMN TO HOLD THE FORM LABEL FOR IMAGE */}
                             <Col size="1">
+
+                                {/* IMAGE LABEL */}
                                 <p className="mt-3 form-text text-right">Image</p>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR IMAGE */}
                             <Col size="4">
+
+                                {/* FORM INPUT FOR THE IMAGE */}
                                 <FormFieldInput 
                                     id="image-input" 
                                     value={this.state.character_image} 
@@ -394,14 +483,20 @@ class CharacterPage extends Component {
                             </Col>
                         </Row>
 
-                        {/* ANOTHER ROW FOR THE NEXT FORM PIECE */}
+                        {/* ANOTHER ROW FOR THE NEXT FORM ROW */}
                         <Row>
-                            {/* COLUMN TO HOLD THE FORM LABEL */}
+
+                            {/* COLUMN TO HOLD THE FORM LABEL FOR BIO */}
                             <Col size="2">
+
+                                {/* FORM LABEL FOR BIO */}
                                 <p className="text-right mt-3 form-text">One-line Bio</p>
                             </Col>
+
                             {/* COLUMN TO HOLD THE FORM INPUT FOR PREVIEW TEXT */}
                             <Col size="7">
+
+                                {/* FORM INPUT FIELD FOR PREVIEW */}
                                 <FormFieldInput
                                     id="preview-input" 
                                     value={this.state.preview_text} 
@@ -409,35 +504,46 @@ class CharacterPage extends Component {
                                     onChange={this.handleInputChange}
                                 />
                             </Col>
+
+                            {/* COLUMN TO HOLD THE DELETE BUTTON */}
                             <Col size="2">
+
+                                {/* DELETE BUTTON */}
                                 <button className="btn btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </button>
                             </Col>
                         </Row>
+
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
                             cloudChannel='dev'
+
                             // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.editor}</p>`}
                             id="text-editor-char"
                             
                             // INITIALIZE A BUNCH OF THINGS
                             init={{
+
                                 // FUNCTIONALITY PLUGINS
                                 plugins: [
                                     'advlist autolink lists link image charmap print preview anchor textcolor',
                                     'searchreplace visualblocks code fullscreen',
                                     'insertdatetime media table contextmenu paste code help wordcount'
                                 ],
+
                                 // EDITING OPTIONS
                                 toolbar: 'insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                                // HIDE THE MENU BAR FOR FILE STUFF
+
+                                // HIDE THE MENU BAR SO THE USER CAN'T CREATE NEW FILES AND SUCH
                                 menubar: false,
+
                                 // ADD IN SOME CSS FOR FONTS AND SUCH
                                 content_css: [
                                     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
                                     '//www.tinymce.com/css/codepen.min.css'],
                                 height: 386,
+
                                 // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
                                 setup: function(ed) {
                                     ed.on('keydown', function(event) {
@@ -455,10 +561,11 @@ class CharacterPage extends Component {
 
                     {/* THE RIGHT-HAND COLUMN, WHICH HOLDS OUR CHARACTER LIST */}
                     <Col size="4" id="char-list-col">
+
                         {/* MAP THROUGH OUR CHARACTERS FROM THE STATE */}
                         {this.state.characters.map(character => {
 
-                            // CREATE CHARACTER CARD WITH ATTRIBUTES
+                            // CREATE CHARACTER CARD WITH ATTRIBUTES FOR EACH
                             return <CharacterCardEdit 
                                 id={character.id} 
                                 title={character.name} 
@@ -482,34 +589,44 @@ class CharacterPage extends Component {
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
+
                                 {/* MODAL TITLE */}
                                 <h5 className="modal-title" id="modal-title">Add a Character</h5>
+
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" id="x-button">&times;</span>
+                                    <span aria-hidden="true" id="x-button">&times;</span>
                                 </button>
                             </div>
+
+                            {/* BODY OF THE MODAL */}
                             <div className="modal-body">
+
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-name-input" className="label-title">Character Name</label>
                                     <FormFieldInput id="add-name-input"  name="name" placeholder="Jane Doe" />
                                 </div>
+
                                 {/* FORM FIELD TO ADD PREVIEW */}
                                 <div className="form-group">
                                     <label htmlFor="add-preview-input" className="label-title">One-line bio</label>
                                     <FormFieldInput id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
                                 </div>
+
                                 {/* FORM FIELD TO ADD IMAGE LINK */}
                                 <div className="form-group">
                                     <label htmlFor="add-image-input" className="label-title">Image Link</label>
                                     <FormFieldInput id="add-image-input" name="image" placeholder="Square images look best!"/>
                                 </div>
                             </div>
+
                             {/* BUTTONS AT MODAL BOTTOM */}
                             <div className="modal-footer">
+
                                 {/* CLOSE THE MODAL */}
                                 <button type="button" className="btn btn-secondary" data-dismiss="modal" id="close-button">Close</button>
+                                
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
                                 <button type="button" className="btn btn-save-modal" id="add-new-char" onClick={this.addNewChar} data-dismiss="modal">Save</button>
                             </div>
