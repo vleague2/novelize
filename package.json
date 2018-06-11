@@ -1,7 +1,7 @@
 {
-  "name": "mern",
+  "name": "novelize",
   "version": "1.0.0",
-  "description": "Mern Demo",
+  "description": "Novelize",
   "main": "server.js",
   "scripts": {
     "server": "node server.js",
