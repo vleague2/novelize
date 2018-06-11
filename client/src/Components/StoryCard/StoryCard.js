@@ -35,19 +35,21 @@ const StoryCard = (props) => (
                 </Row>  
                 <Row>
                     <Col size="12" id="delete-btn-story">
-                        <a className="btn mt-4 mb-1 trash" 
+                        <button className="btn mt-4 mb-1 trash" 
                             id={props.id} 
+                            onClick={props.onDelete}
+                            data-target={props.onDeleteTarget}
+                            data-toggle="modal"
+                            /*
                             data-container="body" 
                             data-toggle="popover" 
                             data-placement="right" 
                             data-html="true" 
-                            data-content="<button type='button' class='btn btn-danger btn-sm' id='delete-story' >Yes</button>"
-                            title="Are you sure?">
+                            data-content="<button type='button' class='btn btn-danger btn-sm' id='delete-story' onClick={props.onDelete} >Yes</button>"
+                            title="Are you sure?"
+                            */>
                             <i className="far fa-trash-alt"></i>
-                            </a>
-                        
-
-{/**/}
+                        </button>
                     </Col>
                 </Row>
             </div>

@@ -79,7 +79,7 @@ let story = {
     deleteOne: function(req, res) {
         let id = req.params.id;
 
-        db.Story.delete(
+        db.Story.destroy(
             {where: {id: id}}
         )
         .then(response => {

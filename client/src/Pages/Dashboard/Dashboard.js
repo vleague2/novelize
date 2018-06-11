@@ -13,7 +13,8 @@ class Dashboard extends Component {
         // SET THE STATE
         this.state = {
             user: "",
-            stories: []
+            stories: [],
+            delete: ""
         }
     }
 
@@ -174,13 +175,23 @@ class Dashboard extends Component {
         })
     }
 
-    // FUNCTION TO DELETE A STORY
+    // FUNCTION TO PROMPT TO DELETE A STORY
     onDelete = (e) => {
         // GRAB ID FROM BUTTON CLICK SO WE KNOW WHAT STORY TO DELETE
         let id = e.target.id;
         console.log(id);
-        
 
+        // PUSH IT INTO STATE SO WE CAN GRAB IT IN THE CONFIRM DELETE
+        this.setState({delete: id});
+    }
+
+    confirmDelete = () => {
+        console.log("delete it: " + this.state.delete)
+
+        API.deleteOne("story", this.state.delete)
+        .then(res => {
+            this.updateStoriesList();
+        })
     }
 
     render() {
@@ -193,7 +204,7 @@ class Dashboard extends Component {
                     
                         <Row id="stories-row">
                         {this.state.stories.map(story => {
-                            return <StoryCard title={story.title} id={story.id} key={story.id} onClick={this.onClick} datatarget="#update-title-modal" modalClick={this.editTitle} onDelete={this.onDelete}/>
+                            return <StoryCard title={story.title} id={story.id} key={story.id} onClick={this.onClick} datatarget="#update-title-modal" modalClick={this.editTitle} onDelete={this.onDelete} onDeleteTarget="#delete-story-modal"/>
                         })}
                         </Row>
                     </Col>
@@ -254,6 +265,29 @@ class Dashboard extends Component {
                                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
                                 <button type="button" className="btn btn-save-modal" id="update-title-save" onClick={this.updateTitle} data-dismiss="modal">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* MODAL FOR CONFIRMING DELETE */}
+                <div className="modal fade" tabIndex="-1" role="dialog" id="delete-story-modal">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                {/* MODAL TITLE */}
+                                <h5 className="modal-title">Are you sure?</h5>
+                                {/* X BUTTON SO YOU CAN CLOSE IT */}
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {/* BUTTONS AT MODAL BOTTOM */}
+                            <div className="modal-footer">
+                                {/* CLOSE THE MODAL */}
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">No</button>
+                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
+                                <button type="button" className="btn btn-save-modal" id="delete-story-yes" onClick={this.confirmDelete} data-dismiss="modal">Yes</button>
                             </div>
                         </div>
                     </div>
