@@ -7,8 +7,6 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const flash = require('connect-flash');
-
 
 // require our database models folder
 const db = require("./models");
@@ -28,7 +26,7 @@ app.use(cookieParser());
 
 // session setup
 app.use(session({
-  secret:'victorias secret',
+  secret: process.env.COOKIE_SECRET || 'victorias secret',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: new Date(Date.now() + (60 * 1000 * 30)) }
@@ -38,10 +36,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // routes
 app.use(require("./routes"));
 
+// Send every other request to the React app
+app.get("*", function(req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 // sync db
 db.sequelize.sync().then(function() {

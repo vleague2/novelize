@@ -4,7 +4,6 @@ const path = require('path');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const keys = require('../config/keys');
 const {validationResult} = require('express-validator/check');
 const { matchedData } = require('express-validator/filter');
 

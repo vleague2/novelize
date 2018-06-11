@@ -2,10 +2,6 @@ const bcrypt = require('bcryptjs');
 
 module.exports = function (sequelize, DataTypes) {
   var User = sequelize.define("User", {
-    googleId: {
-      type: DataTypes.STRING
-    },
-    
     password: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -22,6 +18,10 @@ module.exports = function (sequelize, DataTypes) {
       }
     }
   });
+
+  User.associate = function(models) {
+    User.hasMany(models.Story);
+  }
 
   return User;
 };
