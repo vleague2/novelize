@@ -5,6 +5,7 @@ import {Row, Col} from "../../Components/Grid";
 import CharacterCardEdit from "../../Components/CharacterCardEdit";
 import { Editor } from '@tinymce/tinymce-react';
 import BackButton from "../../Components/BackButton";
+import Button from "../../Components/Button";
 import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
@@ -509,7 +510,7 @@ class CharacterPage extends Component {
                             <Col size="2">
 
                                 {/* DELETE BUTTON */}
-                                <button className="btn btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </button>
+                                <Button className="btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </Button>
                             </Col>
                         </Row>
 
@@ -594,9 +595,9 @@ class CharacterPage extends Component {
                                 <h5 className="modal-title" id="modal-title">Add a Character</h5>
 
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
                                     <span aria-hidden="true" id="x-button">&times;</span>
-                                </button>
+                                </Button>
                             </div>
 
                             {/* BODY OF THE MODAL */}
@@ -605,7 +606,7 @@ class CharacterPage extends Component {
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-name-input" className="label-title">Character Name</label>
-                                    <FormFieldInput id="add-name-input"  name="name" placeholder="Jane Doe" />
+                                    <FormFieldInput id="add-name-input" name="name" placeholder="Jane Doe" />
                                 </div>
 
                                 {/* FORM FIELD TO ADD PREVIEW */}
@@ -625,10 +626,10 @@ class CharacterPage extends Component {
                             <div className="modal-footer">
 
                                 {/* CLOSE THE MODAL */}
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal" id="close-button">Close</button>
-                                
+                                <Button className="btn btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
+
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <button type="button" className="btn btn-save-modal" id="add-new-char" onClick={this.addNewChar} data-dismiss="modal">Save</button>
+                                <Button className="btn btn-save-modal" id="add-new-char" onClick={this.addNewChar} dataDismiss="modal">Save</Button>
                             </div>
                         </div>
                     </div>

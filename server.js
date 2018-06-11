@@ -8,46 +8,48 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-// require our database models folder
+// REQUIRE DATABASE MODELS FOLDER
 const db = require("./models");
 
-// set up passport
+// SET UP PASSPORT
 require('./config/passport')(passport);
 
-// Serve up static assets (usually on heroku)
+// SERVE STATIC ASSETS WHEN DEPLOYED
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-//BodyParser Middleware
+//BODY PARSER AND COOKIE PARSER MIDDLEWARE
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(cookieParser());
 
-// session setup
+// SESSION SETUP
 app.use(session({
+  // ACCESS ENV COOKIE VARIABLE WHEN DEPLOYED
   secret: process.env.COOKIE_SECRET || 'victorias secret',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: new Date(Date.now() + (60 * 1000 * 30)) }
 }))
 
-// passport setup
+// PASSPORT SETUP
 app.use(passport.initialize());
 app.use(passport.session());
 
-// routes
+// USE API ROUTES
 app.use(require("./routes"));
 
-// Send every other request to the React app
+// EVERY OTHER ROUTE WILL GO THROUGH THE REACT ROUTER
 app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-// sync db
+// SYNC DATABASE
 db.sequelize.sync().then(function() {
+  // START THE PORT
   app.listen(PORT)
-  // Log port number
+  // LOG PORT NUMBER
   console.log(`🌎 ==> Server now on port ${PORT}!`);
 });
 

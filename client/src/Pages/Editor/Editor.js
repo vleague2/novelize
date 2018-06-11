@@ -8,7 +8,7 @@ import PlotCard from "../../Components/PlotCards";
 import { Editor } from '@tinymce/tinymce-react';
 import API from "../../utils/API";
 
-
+// CREATE STATEFUL COMPONENT
 class EditorPage extends Component {
     constructor(props) {
         super(props);
@@ -29,31 +29,40 @@ class EditorPage extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    // AS SOON AS PAGE LOADS
+// ***************** AS SOON AS PAGE LOADS
     componentDidMount() {
 
+        // PULL STORYID FROM LOCAL STORAGE
         let storyId = localStorage.getItem("currentStoryId");
 
         //API CALL TO SERVER TO GET CHARACTER LIST
         API.getAll("characters", storyId)
         .then(res => {
 
+            // IF WE GET AN ERROR IT'S BECAUSE THE USER ISN'T LOGGED IN
             if (res.data.error) {
+
+                //  SO REDIRECT THEM TO LOG IN
                 window.location.href = "/login";
             }
 
+            // IF WE DON'T HAVE ANY ERRORS, LET'S CONTINUE
             else {
+
                 //PULL ARRAY FROM SERVER RESPONSE
                 let data = res.data;
 
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY for the user
                 data.forEach(character => {
                     character.name = decodeURIComponent(character.name)
-                     // IF THE TEXT ISN'T NULL
+
+                     // IF THE character TEXT ISN'T NULL
                      if (character.character_text !== null) {
+
                         // THEN GO AHEAD AND DECODE IT
                         character.character_text = decodeURIComponent(character.character_text);
                     }
+
                     // OTHERWISE JUST SET IT TO EMPTY
                     else {
                         character.character_text = "";
@@ -65,36 +74,41 @@ class EditorPage extends Component {
 
                 //UPDATE STATE WITH CHARACTER LIST
                 this.setState({characters: data});
-
-                console.log(this.state.characters);
             }
         });
 
         //API CALL TO SERVER TO GET STORY FOR INITIAL VALUE OF EDITOR
         API.getOne("story", storyId)
         .then(res => {
+
+            // INITIALIZE STORY VARIABLE
             let story;
             
-            //PULL STORY FROM SERVER RESPONSE
+            //IF WE DON'T HAVE ANY STORY TEXT FROM THE SERVER
             if (res.data.story_text == null) {
+
+                // SET THE VARIABLE TO AN EMPTY STRING TO AVOID RENDERING "NULL" TO THE PAGE
                 story = "";
             }
+
+            // IF THERE IS TEXT FROM THE SERVER
             else {
+
+                // SET THE STORY TO THE STORY TEXT
                 story = res.data.story_text;
             }   
-
-            let select_story = res.data.id;
 
             // FRONT END VALIDATION TO PULL OUT STORY
             let decodedStory = decodeURIComponent(story);          
 
-            //UPDATE STATE WITH STORY TEXT
-            this.setState({story: decodedStory, select_story: select_story})
+            //UPDATE STATE WITH STORY TEXT AND THE ID OF THE SELECTED STORY
+            this.setState({story: decodedStory, select_story: res.data.id})
         })
 
         // API CALL TO GET THE WORLDBUILD INFO
         API.getAll("worldbuilds", storyId)
         .then(res => {
+            
             // PULL DATA FROM SERVER RESPONSE
             let data = res.data;
 
@@ -424,6 +438,7 @@ class EditorPage extends Component {
                     {/* COLUMN FOR RIGHT SIDEBAR */}
                     <Col size="3" id="tabs-right">
                         {/* TABS FOR WORLD AND NOTES */}
+
                         <button className="btn rounded-0 tab-btn" id="world-tab" onClick={this.handleClick}>
                             Worldbuild
                         </button>
