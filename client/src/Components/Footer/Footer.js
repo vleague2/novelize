@@ -9,7 +9,7 @@ const Footer = () => (
             <p id="footer-text" className="text-center"> © Novelize 2018 | <a className="footer-links" data-toggle="modal" data-target="#about-modal">About</a> </p>
         </footer> 
 
-        <div className="modal fade" tabindex="-1" role="dialog" id="about-modal">
+        <div className="modal fade" tabIndex="-1" role="dialog" id="about-modal">
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">

@@ -19,7 +19,7 @@ class Home extends Component {
         this.state = {
             tab: "env",
             title: "An Integrated Writing Environment",
-            content: "some content here"
+            content: "Novelize eliminates the age-old struggle of flipping through multiple documents to find that secondary character's life history while you're in the middle of writing a scene. Draft your story in an editing space that pulls in your character data, your worldbuilding data, your plot points, and any notes you've created. With everything you need in one spot, your drafting process will be seamless."
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -60,7 +60,7 @@ class Home extends Component {
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO ENV
                 this.setState(
                     {title: "An Integrated Writing Environment",
-                    content: "some things about the writing environment"}
+                    content: "Novelize eliminates the age-old struggle of flipping through multiple documents to find that secondary character's life history while you're in the middle of writing a scene. Draft your story in an editing space that pulls in your character data, your worldbuilding data, your plot points, and any notes you've created. With everything you need in one spot, your drafting process will be seamless."}
                 );
                 
                 // MAKE THE ENV TAB GRAY
@@ -74,7 +74,7 @@ class Home extends Component {
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO CHAR
                 this.setState(
                     {title: "Separate Profiles for Each Character",
-                    content: "some things about the character profiles"}
+                    content: "Novelize gives you the ability to set up a character profile with the character's name, a one-line bio for a quick overview, a document to hold the character's profile, and an image link to set the character's appearance. Each character's information is stored separately and edited separately so that it's easy to keep track of your data."}
                 );
 
                 // MAKE THE CHAR TAB GRAY
@@ -88,7 +88,7 @@ class Home extends Component {
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO WORLD
                 this.setState(
                     {title: "Build the Components of Your World",
-                    content: "some things about the worldbuilding process"}
+                    content: "Worldbuilding in a regular document editor can be a tedious and unorganized process. Novelize gives you the ability to custom-set any worldbuilding elements you need to build out -- set a title of your choice, and then build out as much information about the element as you need. Each worldbuilding component is stored separately so you can easily organize the building blocks of your story."}
                 );
 
                 // MAKE THE WORLD TAB GRAY
@@ -102,7 +102,7 @@ class Home extends Component {
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO PLOT
                 this.setState(
                     {title: "Chart the Plot on a Timeline",
-                    content: "some things about the plot timeline view"}
+                    content: "Novelize's plot-builder visually displays your plot points in a timeline format so you can see the progression of the story clearly. Add a label for your plot point and a description of what happens, and the timeline will build itself. Edit and rearrange the events of your story so you always know what's coming next."}
                 );
 
                 // MAKE THE PLOT TAB GRAY
@@ -116,7 +116,7 @@ class Home extends Component {
                 //UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO NOTE
                 this.setState(
                     {title: "Store Research and Notes",
-                    content: "some things about the note system"}
+                    content: "Rather than storing your notes and reminders in haphazard spots across your computer, keep everything together in the notes section of your story. Drop in research data, drafting reminders, to-dos, and anything else you need access to while writing. The data is pulled into your writing environment so that nothing is left behind."}
                 );
 
                 // MAKE THE NOTE TAB GRAY
@@ -133,6 +133,10 @@ class Home extends Component {
         }
     }
 
+    login = () => {
+        window.location.href = "/login";
+    }
+
     // RENDER FUNCTION FOR WHAT WILL DISPLAY TO THE CLIENT
     render() {
 
@@ -146,7 +150,7 @@ class Home extends Component {
                 <Jumbotron> 
                     <h1 id="site-h1">Novelize</h1> 
                     <p className="jumbotron-subtext">An integrated drafting environment for novelists.</p>
-                    <Button>Get Started</Button>
+                    
                 </Jumbotron>
 
                 {/* CALL THE CONTAINER COMPONENT TO HOLD SITE TITLE AND TAGLINE*/}
@@ -183,7 +187,7 @@ class Home extends Component {
                         <Col size="12" id="button-row">
 
                             {/* CALL THE BUTTON COMPONENT AND GIVE IT TEXT */}
-                            <Button>Get Started</Button>
+                            <Button onClick={this.login}>Get Started</Button>
                         </Col>
                     </Row>
                 </Container>

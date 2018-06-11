@@ -1,7 +1,9 @@
 .jumbotron {
     clear: "both";
-    padding-top: 100px;
-    padding-bottom: 120px;
+    padding-top: 200px;
+    padding-bottom: 220px;
     text-align: center; 
-    background-color: #ececec;
+    background: url("../../book_bg.jpg");
+    background-size: cover;
+    background-repeat: no repeat;
 }
