@@ -430,7 +430,7 @@ class CharacterPage extends Component {
                                     'insertdatetime media table contextmenu paste code help wordcount'
                                 ],
                                 // EDITING OPTIONS
-                                toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                                toolbar: 'insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
                                 // HIDE THE MENU BAR FOR FILE STUFF
                                 menubar: false,
                                 // ADD IN SOME CSS FOR FONTS AND SUCH
