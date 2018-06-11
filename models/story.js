@@ -12,19 +12,19 @@ module.exports = function (sequelize, DataTypes) {
     });
   
     Story.associate = function(models) {
-        Story.hasMany(models.Character);
-    };
-
-    // Story.associate = function(models) {
-    //     Story.hasMany(models.Plot);
-    // };
-
-    Story.associate = function(models) {
-        Story.hasMany(models.World);
+        Story.hasMany(models.Character, { onDelete: 'cascade'});
     };
 
     Story.associate = function(models) {
-        Story.hasMany(models.Note);
+        Story.hasMany(models.Plot, { onDelete: 'cascade'});
+    };
+
+    Story.associate = function(models) {
+        Story.hasMany(models.World, { onDelete: 'cascade'});
+    };
+
+    Story.associate = function(models) {
+        Story.hasMany(models.Note, { onDelete: 'cascade'});
     };
 
     Story.associate = function(models) {

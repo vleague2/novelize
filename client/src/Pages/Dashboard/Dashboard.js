@@ -174,6 +174,15 @@ class Dashboard extends Component {
         })
     }
 
+    // FUNCTION TO DELETE A STORY
+    onDelete = (e) => {
+        // GRAB ID FROM BUTTON CLICK SO WE KNOW WHAT STORY TO DELETE
+        let id = e.target.id;
+        console.log(id);
+        
+
+    }
+
     render() {
         return (
             <div>
@@ -184,7 +193,7 @@ class Dashboard extends Component {
                     
                         <Row id="stories-row">
                         {this.state.stories.map(story => {
-                            return <StoryCard title={story.title} id={story.id} key={story.id} onClick={this.onClick} datatarget="#update-title-modal" modalClick={this.editTitle}/>
+                            return <StoryCard title={story.title} id={story.id} key={story.id} onClick={this.onClick} datatarget="#update-title-modal" modalClick={this.editTitle} onDelete={this.onDelete}/>
                         })}
                         </Row>
                     </Col>

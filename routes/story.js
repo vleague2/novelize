@@ -23,5 +23,7 @@ router.post('/api/new/story', storyController.addOne);
 
 router.post('/api/story/:id', storyController.updateOne);
 
+router.delete('/api/story/:id', storyController.deleteOne);
+
 // EXPORT
 module.exports = router;

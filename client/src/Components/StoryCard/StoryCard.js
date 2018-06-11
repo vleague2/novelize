@@ -27,12 +27,29 @@ const StoryCard = (props) => (
                 </Row>
                 <Row id="edit-story-button-row2">
                     <Col size="6">
-                    <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="world"> Worldbuilding </button>
+                        <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="world"> Worldbuilding </button>
                     </Col>
                     <Col size="6">
-                    <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="notes"> Notes </button>
+                        <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="notes"> Notes </button>
                     </Col>
                 </Row>  
+                <Row>
+                    <Col size="12" id="delete-btn-story">
+                        <a className="btn mt-4 mb-1 trash" 
+                            id={props.id} 
+                            data-container="body" 
+                            data-toggle="popover" 
+                            data-placement="right" 
+                            data-html="true" 
+                            data-content="<button type='button' class='btn btn-danger btn-sm' id='delete-story' >Yes</button>"
+                            title="Are you sure?">
+                            <i className="far fa-trash-alt"></i>
+                            </a>
+                        
+
+{/**/}
+                    </Col>
+                </Row>
             </div>
         </div>
     </Col>

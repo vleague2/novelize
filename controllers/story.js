@@ -74,6 +74,17 @@ let story = {
         .then(response => {
             res.send("edited one story item!");
         })
+    },
+
+    deleteOne: function(req, res) {
+        let id = req.params.id;
+
+        db.Story.delete(
+            {where: {id: id}}
+        )
+        .then(response => {
+            res.send("Deleted one story item");
+        })
     }
 }
 
