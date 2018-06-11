@@ -18,7 +18,8 @@ class CharacterPage extends Component {
             editor: "",
             character_select: "",
             name: "",
-            preview_text: ""
+            preview_text: "",
+            character_image: ""
         }
 
         // BIND THIS FOR HANDLECLICK
@@ -57,7 +58,7 @@ class CharacterPage extends Component {
                     })
 
                     //UPDATE STATE WITH CHARACTER LIST, SET THE FIRST CHARACTER INTO THE EDITOR, SET THE NAME TO THE FIRST CHARACTER'S NAME, AND SET THE PREVIEW TEXT TO THE FIRST CHARACTER'S PREVIEW TEXT
-                    this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id});
+                    this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id, character_image: data[0].character_image});
 
                     // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
                     this.changeClass(data[0].id, "active-char");
@@ -99,7 +100,7 @@ class CharacterPage extends Component {
                     character.name = decodeURIComponent(character.name)
                     character.character_text = decodeURIComponent(character.character_text);
                     character.preview_text = decodeURIComponent(character.preview_text);
-                    character.image = decodeURIComponent(character.image)
+                    character.character_image = decodeURIComponent(character.character_image)
                 })
 
                 // UPDATE THE STATE WITH NEW CHARACTER DATA
@@ -136,6 +137,7 @@ class CharacterPage extends Component {
         let newCharName = "";
         let newCharPreview = "";
         let newCharText = "";
+        let newCharImage = "";
 
         // LOOP THROUGH CHARACTERS 
         this.state.characters.forEach(character => {
@@ -145,6 +147,7 @@ class CharacterPage extends Component {
                 newCharName = character.name;
                 newCharPreview = character.preview_text;
                 newCharText = character.character_text;
+                newCharImage = character.character_image;
 
                 // CHANGE CLASS OF THAT CARD TO ACTIVE
                 this.changeClass(character.id, "active-char");
@@ -158,7 +161,7 @@ class CharacterPage extends Component {
         })
 
         // SET THE STATE TO THE DATABASE ID BECAUSE WE WILL SEND IT TO THE DB LATER, AND THEN SET THE NAME AND PREVIEW
-        this.setState({character_select: id, name: newCharName, preview_text: newCharPreview});
+        this.setState({character_select: id, name: newCharName, preview_text: newCharPreview, character_image: newCharImage});
 
         // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW CHARACTER TEXT
         window.frames['text-editor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML = newCharText;
@@ -245,7 +248,7 @@ class CharacterPage extends Component {
                     data.forEach(character => {
                         character.name = decodeURIComponent(character.name)
                         character.preview_text = decodeURIComponent(character.preview_text);
-                        character.image = decodeURIComponent(character.image)
+                        character.character_image = decodeURIComponent(character.character_image)
                         // IF THE TEXT ISN'T NULL, WHICH I'M PRETTY SURE IT WILL BE NULL BUT WHATEVER....
                         if (character.character_text !== null) {
                             // THEN GO AHEAD AND DECODE IT
@@ -298,7 +301,7 @@ class CharacterPage extends Component {
                         character.name = decodeURIComponent(character.name)
                         character.character_text = decodeURIComponent(character.character_text);
                         character.preview_text = decodeURIComponent(character.preview_text);
-                        character.image = decodeURIComponent(character.image)
+                        character.character_image = decodeURIComponent(character.character_image)
                     })
 
                     // UPDATE THE STATE WITH NEW CHARACTER DATA
@@ -338,12 +341,12 @@ class CharacterPage extends Component {
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM LABEL */}
-                            <Col size="2">
+                            <Col size="1">
                                 <p className="mt-3 form-text text-right">Name</p>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
-                            <Col size="6">
+                            <Col size="4">
                                 <FormFieldInput 
                                     id="name-input" 
                                     value={this.state.name} 
@@ -352,15 +355,25 @@ class CharacterPage extends Component {
                                 />
                                 
                             </Col>
-                            <Col size="3">
-                                <button className="btn btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </button>
+                            <Col size="1">
+                                <p className="mt-3 form-text text-right">Image</p>
+                            </Col>
+
+                            {/* COLUMN TO HOLD THE FORM INPUT FOR IMAGE */}
+                            <Col size="4">
+                                <FormFieldInput 
+                                    id="image-input" 
+                                    value={this.state.character_image} 
+                                    name="character_image" 
+                                    onChange={this.handleInputChange}
+                                />
                             </Col>
                         </Row>
 
                         {/* ANOTHER ROW FOR THE NEXT FORM PIECE */}
                         <Row>
                             {/* COLUMN TO HOLD THE FORM LABEL */}
-                            <Col size="3">
+                            <Col size="2">
                                 <p className="text-right mt-3 form-text">One-line Bio</p>
                             </Col>
                             {/* COLUMN TO HOLD THE FORM INPUT FOR PREVIEW TEXT */}
@@ -371,6 +384,9 @@ class CharacterPage extends Component {
                                     name="preview_text" 
                                     onChange={this.handleInputChange}
                                 />
+                            </Col>
+                            <Col size="2">
+                                <button className="btn btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </button>
                             </Col>
                         </Row>
                         {/*SET UP THE TEXT EDITOR*/}
