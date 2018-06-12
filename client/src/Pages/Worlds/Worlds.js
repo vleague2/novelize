@@ -6,6 +6,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import BackButton from "../../Components/BackButton";
 import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
+import Button from "../../Components/Button";
 import API from "../../utils/API";
 
 class WorldPage extends Component {
@@ -16,7 +17,7 @@ class WorldPage extends Component {
         this.state = {
             worlds: [],
             editor: "",
-            world_select: "1",
+            world_select: "",
             title: ""
         }
 
@@ -27,92 +28,144 @@ class WorldPage extends Component {
         this.addNewWorld = this.addNewWorld.bind(this);
     }
 
-    // AS SOON AS THE APP LOADS
+// *************** AS SOON AS THE APP LOADS
     componentDidMount() {
 
-        // GRAB STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
+        // CALL THE FUNCTION TO UPDATE THE NOTE LIST
+        this.updateWorldList()
+        .then(data => {
 
-        //API CALL TO SERVER TO GET WORLD LIST
-        API.getAll("worldbuilds", storyId)
-        .then(res => {
+            // WE ALSO HAVE TO UPDATE THE EDITOR AND TITLE STATE AND CURRENT SELECT SO THAT THE EDITING COMPONENTS ARE POPULATED 
+            this.setState({editor: data[0].world_text, title: data[0].title, world_select: data[0].id});
 
-            if (res.data.error) {
-                window.location.href = "/login"
-            }
-            
-            else {
-            //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
-
-                // IF WE ARE GETTING DATA BACK FROM SERVER
-                if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                    data.forEach(world => {
-                        world.title = decodeURIComponent(world.title)
-                        world.world_text = decodeURIComponent(world.world_text);
-                    })
-
-                    //UPDATE STATE WITH WORLD LIST, SET THE FIRST WORLD ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST WORLD'S TITLE
-                    this.setState({worlds: data, editor: data[0].world_text, title: data[0].title});
-
-                    // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-                    this.changeClass(data[0].id, "active-world");
-                }
-
-                //IF NOT, USER NEEDS TO ADD A WORLDBUILDING ELEMENT
-                else {
-                    this.forceAddWorld();
-                }
-            }
-        });
-    }
-
-    forceAddWorld = () => {
-        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A WORLD ELEMENT IF THE ARRAY IS EMPTY
-        document.getElementById("add-world-modal").setAttribute("data-backdrop","static");
-        document.getElementById("add-world-modal").setAttribute("data-keyboard","false");
-        document.getElementById("add-world-prompt").click();
-        document.getElementById("modal-title").innerHTML = "Add a new worldbuilding element!";
-        document.getElementById("x-button").style.display = "none";
-        document.getElementById("close-button").style.display = "none";
-    }
-
-    // FUNCTION THAT CALLS THE API AND UPDATES THE STATE
-    updateWorldList = () => {
-
-        // GRAB STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
-
-        // PING THE DATABASE TO GET AN UPDATED WORLD LIST
-        API.getAll("worldbuilds", storyId)
-        .then(res => {
-            // PULL OUT THE WORLD DATA
-            let data = res.data;
-
-            if (data.length > 0) {
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(world => {
-                    world.title = decodeURIComponent(world.title)
-                    world.world_text = decodeURIComponent(world.world_text);
-                })
-
-                // UPDATE THE STATE WITH NEW WORLD DATA
-                this.setState({worlds: data});
-            }
-            else {
-                this.forceAddWorld();
-                this.setState({worlds: data});
-            }
+            // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+            this.changeClass(data[0].id, "active-world");
         })
     }
 
-    // FUNCTION TO CHANGE THE CLASS OF THE CARDS
+// ********** FUNCTION THAT CALLS THE API AND UPDATES THE STATE
+    updateWorldList = () => {
+
+        // THIS FUNCTION WILL RETURN A PROMISE
+        return new Promise((resolve, reject) => {
+
+            // GRAB STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
+
+            // PING THE DATABASE TO GET AN UPDATED WORLD LIST
+            API.getAll("worldbuilds", storyId)
+            .then(res => {
+
+                // IF THERE'S AN ERROR, IT MEANS THE USER ISN'T AUTHENTICATED
+                if (res.data.error) {
+
+                    // SEND THEM TO THE LOGIN PAGE
+                    window.location.href="/login"
+                }
+
+                // IF THERE'S NO ERRORS, THEN PROCEED
+                else {
+                    // PULL OUT THE WORLD DATA
+                    let data = res.data;
+
+                    // IF WE ARE GETTING DATA FROM THE SERVER
+                    if (data.length > 0) {
+
+                        // DECODE THE DATA
+                        this.decode(data);
+
+                        // UPDATE THE STATE WITH NEW WORLD DATA
+                        this.setState({worlds: data});
+
+                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
+                        resolve(data);
+                    }
+
+                    // IF WE AREN'T GETTING DATA FROM THE SERVER, THE USER NEEDS TO ADD A WORLD
+                    else {
+                        // CALL THE FUNCTION TO FORCE USER TO ADD A WORLD
+                        this.forceAddWorld();
+
+                        // UPDATE THE STATE WITH THE CURRENT DATA
+                        this.setState({worlds: data});
+
+                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
+                        resolve(data);
+                    }
+                }
+            })
+            
+            // IF THERE'S AN ERROR
+            .catch(err => {
+
+                // IT MAY READ THE LOGIN ERROR AS AN ERROR SO.... SEND THEM TO THE LOGIN PAGE
+                window.location.href="/login"
+
+                // REJECT THE PROMISE
+                reject(err);
+            })
+        })
+    }
+
+// ************* FUNCTION TO DECODE THE DATA COMING FROM THE DB
+    decode = (data) => {
+
+        // FRONT END VALIDATION FOR THE NOTE TEXT -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY TO THE USER
+        data.forEach(world => {
+            world.title = decodeURIComponent(world.title)
+
+            // IF THE NOTE TEXT IS NOT EMPTY
+            if (world.world_text !== null) {
+
+                // THEN GO AHEAD AND DECODE IT
+                world.world_text = decodeURIComponent(world.world_text);
+            }
+
+            // IF IT IS EMPTY
+            else {
+
+                // REPLACE WITH AN EMPTY STRING SO IT DOESN'T RENDER "NULL"
+                world.world_text = ""
+            }
+        })
+
+        // RETURN FOR REST OF FUNCTION TO USE
+        return data;
+    }
+
+// *************** FUNCTION TO FORCE THE USER TO ADD A WORLD
+    forceAddWorld = () => {
+
+        // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A WORLD ELEMENT IF THE ARRAY IS EMPTY
+
+        // DISABLE USER ABILITY TO CLICK AWAY FROM MODAL
+        document.getElementById("add-world-modal").setAttribute("data-backdrop","static");
+
+        // DISABLE MODAL CLOSE WITH THE ESCAPE KEY
+        document.getElementById("add-world-modal").setAttribute("data-keyboard","false");
+
+        // SIMULATE A CLICK ON THE ADD NOTE PROMPT
+        document.getElementById("add-world-prompt").click();
+
+        // CHANGE THE MODAL TITLE TO BE A LITTLE FRIENDLIER FOR A FIRST TIME USER
+        document.getElementById("modal-title").innerHTML = "Add a new worldbuilding element!";
+
+        // REMOVE THE X BUTTON
+        document.getElementById("x-button").style.display = "none";
+
+        // REMOVE THE CLOSE BUTTON
+        document.getElementById("close-button").style.display = "none";
+    }
+
+
+// ************* FUNCTION TO CHANGE THE CLASS OF THE CARDS
     changeClass(id, active) {
+
+        // PASS IN THE ACTIVE CLASS TO THE CARD
         document.getElementById(id).setAttribute("class", `card rounded-0 ${active}`);
     }
 
-    // FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY WORLD ITEM
+// ************ FUNCTION TO HANDLE WHEN USER CLICKS ON EDIT FOR ANY WORLD ITEM
     handleClick(e) {
        
         // SET THE DATABASE ID OF THE WORLD
@@ -122,7 +175,7 @@ class WorldPage extends Component {
         this.updateEditor(id);
     }
 
-    // FUNCTION TO UPDATE THE EDITOR
+// ********** FUNCTION TO UPDATE THE EDITOR
     updateEditor = (id) => {
 
         // INIT NEW WORLD VALUES
@@ -131,8 +184,10 @@ class WorldPage extends Component {
 
         // LOOP THROUGH WORLDS 
         this.state.worlds.forEach(world => {
+
             // IF THE WORLD ID MATCHES THE SELECTED ID
             if (world.id == id) {
+
                 // PULL OUT VALUE AND REASSIGN TO WORLD VALUE
                 newWorldTitle = world.title;
                 newWorldText = world.world_text;
@@ -155,7 +210,7 @@ class WorldPage extends Component {
         window.frames['text-editor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML = newWorldText;
     }
 
-    // FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
+// *********** FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
     handleInputChange = (e) => {
         // THIS WILL BE THE COLUMN NAME, SO WE ARE PULLING OUT THE NAME ATTRIBUTE OF THE INPUT FIELD
         let name = e.target.name;
@@ -169,34 +224,42 @@ class WorldPage extends Component {
         // PING THE DATABASE TO UPDATE THE WORLD ITEM, AND CONCATENATE THE ID OF THE SELECTED WORLD ITEM
         API.updateOne("worlds", this.state.world_select, name, value)
         .then(res => {
+
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
             this.updateWorldList();
         }) 
     }
 
-    //EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
+//*********** EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
     handleEditorChange = (e) => {
         
         //API POST CALL TO THE SERVER 
         API.updateOne("worlds", this.state.world_select, "world_text", e.target.getContent())
         .then(res => {
-            // CONSOLE LOG THAT WE'RE SAVING
-            console.log(res);
 
             //API CALL TO SERVER TO GET WORLD LIST
             this.updateWorldList();
         })
     }
 
-    // FUNCTION TO HANDLE WHEN THE USER SAVES A NEW WORLD ITEM
+//************* FUNCTION TO HANDLE WHEN THE USER SAVES A NEW WORLD ITEM
     addNewWorld = () => {
 
         // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST WORLD ITEM, WE NEED TO FIX THE STUFF WE BROKE TO FORCE THEM TO ADD A WORLD ITEM
-        document.getElementById("add-world-modal").setAttribute("data-backdrop","true");
-        document.getElementById("add-world-modal").setAttribute("data-keyboard","true");;
-        document.getElementById("modal-title").innerHTML = "Add a worldbuilding element";
-        document.getElementById("x-button").style.display = "inline";
-        document.getElementById("close-button").style.display = "inline";
+            // ALLOW THE USER TO CLICK AWAY FROM THE MODAL
+            document.getElementById("add-world-modal").setAttribute("data-backdrop","true");
+
+            // ALLOW THE USER TO USE THE ESC KEY TO CLOSE IT
+            document.getElementById("add-world-modal").setAttribute("data-keyboard","true");
+
+            // SET MODAL TITLE BACK TO NORMAL
+            document.getElementById("modal-title").innerHTML = "Add a worldbuilding element";
+
+            // SHOW THE X BUTTON
+            document.getElementById("x-button").style.display = "inline";
+
+            // SHOW THE CLOSE BUTTON
+            document.getElementById("close-button").style.display = "inline";
 
         // GRAB STORY ID FROM LOCAL STORAGE
         let storyId = localStorage.getItem("currentStoryId");
@@ -208,92 +271,49 @@ class WorldPage extends Component {
         API.addNewWorld(title, storyId)
         .then(newWorldRes => {
 
-            // PING THE DATABASE TO GET AN UPDATED WORLD LIST
-            API.getAll("worldbuilds", storyId)
-            .then(res => {
-                // PULL OUT THE WORLD DATA
-                let data = res.data;
-
-                if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                    data.forEach(world => {
-                        world.title = decodeURIComponent(world.title)
-                        // IF THE TEXT ISN'T NULL, WHICH I'M PRETTY SURE IT WILL BE NULL BUT WHATEVER....
-                        if (world.world_text !== null) {
-                            // THEN DECODE IT
-                            world.world_text = decodeURIComponent(world.world_text);
-                        }
-                        // BUT OTHERWISE JUST SET IT BLANK
-                        else {
-                            world.world_text = ""
-                        }
-                    })
-
-                    // UPDATE THE STATE WITH NEW WORLD DATA
-                    this.setState({worlds: data});
-                    this.updateEditor(newWorldRes.data.id)
-                }
-                else {
-                    this.forceAddWorld();
-                    this.setState({worlds: data});
-                }
-            })
-            
             // EMPTY MODAL
             document.getElementById("add-title-input").value = "";
+
+            // PING THE DATABASE TO GET AN UPDATED NOTE LIST
+            this.updateWorldList()
+            .then(res => {
+
+                // UPDATE THE EDITOR WITH NEW WORLD DATA
+                this.updateEditor(newWorldRes.data.id)
+            })
         })
     }
     
-    // FUNCTION TO DELETE A WORLD ITEM FROM THE DB
+// *********** FUNCTION TO DELETE A WORLD ITEM FROM THE DB
     deleteWorld = () => {
+
         // GRAB ID OF WORLD FROM STATE
         let id = this.state.world_select;
 
         // PING API TO DELETE A WORLD
         API.deleteOne("worlds", id)
         .then(res => {
-            console.log(res);
-
-            // GRAB STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");
 
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
-            API.getAll("worldbuilds", storyId)
+            this.updateWorldList()
             .then(res => {
-                // PULL OUT THE WORLD DATA
-                let data = res.data;
 
-                if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                    data.forEach(world => {
-                        world.title = decodeURIComponent(world.title)
-                        world.world_text = decodeURIComponent(world.world_text);
-                    })
+                // PULL THE ID OF THE FIRST ITEM IN THE WORLD ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
+                let newSelectId = this.state.worlds[0].id;
 
-                    // UPDATE THE STATE WITH NEW WORLD DATA
-                    this.setState({worlds: data});
-
-                     // PULL THE ID OF THE FIRST ITEM IN THE WORLD ARRAY SO WE CAN SEND IT TO THE UPDATE EDITOR FUNCTION
-                    let newSelectId = this.state.worlds[0].id;
-
-                    // UPDATE THE EDITOR
-                    this.updateEditor(newSelectId);
-                }
-                else {
-                    this.forceAddWorld();
-                    this.setState({worlds: data});
-                }
-            })
-
-           
+                // UPDATE THE EDITOR
+                this.updateEditor(newSelectId);
+            })           
         })
     }
 
-    // RENDER THINGS TO THE PAGE
+// ************* RENDER THINGS TO THE PAGE
     render() {
         return (
+
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div id="world-edit">
+
                 {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
                 <Row id="editor-world-row">
 
@@ -302,24 +322,33 @@ class WorldPage extends Component {
 
                         {/* SUB-ROW TO HOLD THE BACK BUTTON, WORLD TITLE EDIT*/}
                         <Row>
+
                             {/* A TINY COLUMN TO HOLD THE BACK ARROW */}
                             <Col size="1">
+
                                 {/* IT TAKES YOU BACK TO THE EDITOR */}
                                 <BackButton/>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM LABEL */}
                             <Col size="2">
+
+                                {/* FORM LABEL FOR TITLE */}
                                 <p className="mt-3 form-text text-right">Title</p>
                             </Col>
 
                             {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
                             <Col size="6">
+
+                                {/* FORM FIELD INPUT FOR TITLE */}
                                 <FormFieldInput id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
                             </Col>
 
+                            {/* COLUMN TO HOLD THE DELETE BUTTON */}
                             <Col size="3">
-                                <button className="btn btn-danger delete-btn" onClick={this.deleteWorld}>Delete Item </button>
+
+                                {/* DELETE BUTTON */}
+                                <Button className="btn-danger delete-btn" onClick={this.deleteWorld}>Delete Item </Button>
                             </Col>
                         </Row>
 
@@ -327,27 +356,33 @@ class WorldPage extends Component {
                         <Editor
                             apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
                             cloudChannel='dev'
+
                             // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
                             initialValue={`<p>${this.state.editor}</p>`}
                             id="text-editor-world"
                             
                             // INITIALIZE A BUNCH OF THINGS
                             init={{
+
                                 // FUNCTIONALITY PLUGINS
                                 plugins: [
                                     'advlist autolink lists link image charmap print preview anchor textcolor',
                                     'searchreplace visualblocks code fullscreen',
                                     'insertdatetime media table contextmenu paste code help wordcount'
                                 ],
+
                                 // EDITING OPTIONS
                                 toolbar: 'insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+
                                 // HIDE THE MENU BAR FOR FILE STUFF
                                 menubar: false,
+
                                 // ADD IN SOME CSS FOR FONTS AND SUCH
                                 content_css: [
                                     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
                                     '//www.tinymce.com/css/codepen.min.css'],
                                 height: 446,
+
                                 // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
                                 setup: function(ed) {
                                     ed.on('keydown', function(event) {
@@ -365,10 +400,11 @@ class WorldPage extends Component {
 
                     {/* THE RIGHT-HAND COLUMN, WHICH HOLDS OUR WORLD LIST */}
                     <Col size="4" id="world-list-col">
-                        {/* MAP THROUGH OUR CHARACTERS FROM THE STATE */}
+
+                        {/* MAP THROUGH OUR WORLD ITEMS FROM THE STATE */}
                         {this.state.worlds.map(world => {
 
-                            // CREATE CHARACTER CARD WITH ATTRIBUTES
+                            // CREATE WORLD CARD WITH ATTRIBUTES
                             return <WorldCardEdit 
                                 id={world.id} 
                                 title={world.title} 
@@ -390,26 +426,34 @@ class WorldPage extends Component {
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
+
                                 {/* MODAL TITLE */}
                                 <h5 className="modal-title" id="modal-title">Add a Worldbuilding Item</h5>
+
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" id="x-button">&times;</span>
-                                </button>
+                                <Button  className="close" dataDismiss="modal" ariaLabel="Close">
+                                    <span aria-hidden="true" id="x-button">&times;</span>
+                                </Button>
                             </div>
+
+                            {/* MODAL BODY */}
                             <div className="modal-body">
+
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-title-input" className="label-title" >Title of Worldbuilding Item</label>
                                     <FormFieldInput id="add-title-input" name="title" placeholder="i.e. setting"/>
                                 </div>
                             </div>
+
                             {/* BUTTONS AT MODAL BOTTOM */}
                             <div className="modal-footer">
+
                                 {/* CLOSE THE MODAL */}
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal" id="close-button">Close</button>
+                                <Button className="btn btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
+
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <button type="button" className="btn btn-save-modal" id="add-new-world" onClick={this.addNewWorld} data-dismiss="modal">Save</button>
+                                <Button className="btn btn-save-modal" id="add-new-world" onClick={this.addNewWorld} dataDismiss="modal">Save</Button>
                             </div>
                         </div>
                     </div>

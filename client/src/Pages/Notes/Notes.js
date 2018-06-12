@@ -294,15 +294,12 @@ class NotePage extends Component {
             // EMPTY THE MODAL
             document.getElementById("add-title-input").value = "";
 
-            let id = newNoteRes.data.id;
-            console.log(id);
-
             // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList()
             .then(res => {
 
                 // UPDATE THE EDITOR WITH NEW NOTE DATA
-                this.updateEditor(id)
+                this.updateEditor(newNoteRes.data.id)
             })
         })
     }
@@ -316,10 +313,7 @@ class NotePage extends Component {
         // PING API TO DELETE A NOTE
         API.deleteOne("notes", id)
         .then(res => {
-
-            // GRAB STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");
-
+            
             // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList()
             .then(res => {
