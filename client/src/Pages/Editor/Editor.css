@@ -11,8 +11,8 @@
 }
 
 #char-tab, #world-tab {
-    background-color: #343a40;
-    color: white;
+    background-color: white;
+    color: #343a40;
 }
 
 #notes-tab:focus, #plot-tab:focus, #char-tab:focus, #world-tab:focus {  
@@ -20,8 +20,8 @@
 }
 
 #plot-tab, #notes-tab {
-    background-color: #f8f9fa;
-    color: #343a40;
+    background-color: gray;
+    color: lightgray;
 }
 
 #editor-col {

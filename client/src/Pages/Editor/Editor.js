@@ -190,6 +190,17 @@ class EditorPage extends Component {
         })
     }
 
+// **************** UPDATE TAB COLORS
+    tabColor = (tab1, tab2) => {
+        //UPDATE COLORS OF ACTIVE TAB TO SELECT
+        document.getElementById(tab1).style.backgroundColor = "#f8f9fa";
+        document.getElementById(tab1).style.color = "#343a40";
+
+        //UPDATE COLORS OF INACTIVE TAB TO UNSELECT
+        document.getElementById(tab2).style.backgroundColor = "gray";
+        document.getElementById(tab2).style.color = "lightgray";
+    }
+
 // ************** HANDLE CLICKS FOR TABS
     handleClick(e) {
 
@@ -202,14 +213,9 @@ class EditorPage extends Component {
             //IF IT'S CHARACTER TAB
             case "char-tab": 
 
-                //UPDATE COLORS OF CHARACTER TAB TO SELECT
-                document.getElementById("char-tab").style.backgroundColor = "#343a40";
-                document.getElementById("char-tab").style.color = "#f8f9fa";
-
-                //UPDATE COLORS OF PLOT TAB TO UNSELECT
-                document.getElementById("plot-tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("plot-tab").style.color = "#343a40";
-
+                // UPDATE TAB COLORS
+                this.tabColor("char-tab", "plot-tab");
+            
                 // UPDATE STATE
                 this.setState({leftTab: "char-tab"});
                 break;
@@ -217,14 +223,9 @@ class EditorPage extends Component {
             //IF IT'S PLOT TAB
             case "plot-tab":
 
-                // UPDATE COLORS OF CHARACTER TAB TO SELECT
-                document.getElementById("char-tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("char-tab").style.color = "#343a40";
-                
-                //UPDATE COLORS OF PLOT TAB TO UNSELECT
-                document.getElementById("plot-tab").style.backgroundColor = "#343a40";
-                document.getElementById("plot-tab").style.color = "#f8f9fa";
-
+                // UPDATE TAB COLORS
+                this.tabColor("plot-tab", "char-tab");
+               
                 // UPDATE STATE
                 this.setState({leftTab: "plot-tab"});
                 break;
@@ -232,13 +233,8 @@ class EditorPage extends Component {
             // IF IT'S THE WORLD TAB
             case "world-tab":
 
-                // UPDATE COLORS OF WORLD TAB TO SELECT
-                document.getElementById("world-tab").style.backgroundColor = "#343a40";
-                document.getElementById("world-tab").style.color = "#f8f9fa";
-
-                //UPDATE COLORS OF NOTES TAB TO DESELECT
-                document.getElementById("notes-tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("notes-tab").style.color = "#343a40";
+                // UPDATE TAB COLORS
+                this.tabColor("world-tab", "notes-tab");
 
                 // UPDATE STATE
                 this.setState({rightTab: "world-tab"});
@@ -247,13 +243,8 @@ class EditorPage extends Component {
             // IF IT'S THE NOTES TAB
             case "notes-tab":
 
-                // UPDATE COLORS OF WORLD TAB TO SELECT
-                document.getElementById("world-tab").style.backgroundColor = "#f8f9fa";
-                document.getElementById("world-tab").style.color = "#343a40";
-
-                //UPDATE COLORS OF NOTES TAB TO DESELECT
-                document.getElementById("notes-tab").style.backgroundColor = "#343a40";
-                document.getElementById("notes-tab").style.color = "#f8f9fa";
+                // UPDATE TAB COLORS
+                this.tabColor("notes-tab", "world-tab");
 
                 // UPDATE STATE
                 this.setState({rightTab: "notes-tab"});
