@@ -94,8 +94,8 @@ class NotePage extends Component {
                         // CALL THE FUNCTION TO FORCE USER TO ADD A NOTE
                         this.forceAddNote();
 
-                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
-                        resolve(data);
+                        // REJECT THE PROMISE SO NO OTHER CODE RUNS
+                        reject(data);
                     }  
                 }
             })
@@ -313,7 +313,7 @@ class NotePage extends Component {
         // PING API TO DELETE A NOTE
         API.deleteOne("notes", id)
         .then(res => {
-            
+
             // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList()
             .then(res => {

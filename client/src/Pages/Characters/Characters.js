@@ -35,65 +35,108 @@ class CharacterPage extends Component {
 //************ AS SOON AS THE APP LOADS
     componentDidMount() {
 
-        // GRAB STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
+        // CALL THE FUNCTION TO UPDATE THE CHARACTER LIST
+        this.updateCharList()
+        .then(data => {    
 
-        // GET CHARACTER LIST FROM DB
-        API.getAll("characters", storyId)
-        .then(res => {
+            //UPDATE STATE WITH TEXT OF FIRST CHARACTER (FOR THE EDITOR), NAME OF FIRST CHARACTER, PREVIEW TEXT OF FIRST CHARACTER, AND IMAGE OF FIRST CHARACTER (FOR THE FORM FIELDS THAT DISPLAY FIRST)
+            this.setState({editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id, character_image: data[0].character_image});
 
-            // IF WE GET AN ERROR FROM THE SERVER, IT'S BECAUSE THE USER ISN'T AUTHENTICATED
-            if (res.data.error) {
-
-                // SO REDIRECT THEM TO LOG IN
-                window.location.href = "/login";
-            }
-
-            // IF WE GET NO ERRORS, THEN WE GOOD!
-            else {
-
-                //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
-
-                // SEE IF WE HAVE ANY CHARACTERS FROM THE DATABASE. IF SO,
-                if (data.length > 0) {
-
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY FOR THE USER
-                    data.forEach(character => {
-                        character.name = decodeURIComponent(character.name)
-
-                         // IF THE CHARACTER TEXT ISN'T NULL
-                         if (character.character_text !== null) {
-
-                            // THEN GO AHEAD AND DECODE IT
-                            character.character_text = decodeURIComponent(character.character_text);
-                        }
-
-                        // OTHERWISE JUST SET IT TO EMPTY SO IT DOESN'T SAY "NULL" ON THE FRONT END
-                        else {
-                            character.character_text = "";
-                        }
-
-                        character.preview_text = decodeURIComponent(character.preview_text);
-                        character.character_image = decodeURIComponent(character.character_image);
-                    })
-
-                    //UPDATE STATE WITH CHARACTER LIST, TEXT OF FIRST CHARACTER (FOR THE EDITOR), NAME OF FIRST CHARACTER, PREVIEW TEXT OF FIRST CHARACTER, AND IMAGE OF FIRST CHARACTER (FOR THE FORM FIELDS THAT DISPLAY FIRST)
-                    this.setState({characters: data, editor: data[0].character_text, name: data[0].name, preview_text: data[0].preview_text, character_select: data[0].id, character_image: data[0].character_image});
-
-                    // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-                    this.changeClass(data[0].id, "active-char");
-                }
-
-                // IF NO ERRORS FROM DATABASE, THE USER NEEDS TO ADD A CHARACTER
-                else {
-                    
-                    // CALL THE FUNCTION TO FORCE THEM TO ADD A CHARACTER
-                    this.forceAddCharacter();
-                }
-            }
+            // SET THE FIRST CHARACTER CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+            this.changeClass(data[0].id, "active-char");
         });
     }
+
+// **************** FUNCTION THAT CALLS THE API AND UPDATES THE STATE
+    updateCharList = () => {
+
+        // THIS FUNCTION WILL RETURN A PROMISE
+        return new Promise((resolve, reject) => {
+
+            // GRAB STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
+
+            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+            API.getAll("characters", storyId)
+            .then(res => {
+
+                // IF THERE'S AN ERROR, IT MEANS THE USER ISN'T AUTHENTICATED
+                if (res.data.error) {
+
+                    // SEND THEM TO THE LOGIN PAGE
+                    window.location.href="/login"
+                }
+
+                // IF THERE'S NO ERRORS, THEN PROCEED
+                else {
+
+                    // PULL OUT THE CHARACTER DATA
+                    let data = res.data;
+
+                    // IF WE DO GET DATA BACK FROM THE SERVER
+                    if (data.length > 0) {
+
+                        // DECODE THE DATA COMING IN
+                        this.decode(data);
+
+                        // UPDATE THE STATE WITH NEW CHARACTER DATA
+                        this.setState({characters: data});
+
+                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
+                        resolve(data);
+                    }
+
+                    // IF WE DON'T GET DATA, THEN THE USER NEEDS TO CREATE A NEW CHARACTER
+                    else {
+
+                        // WE STILL NEED TO UPDATE THE CHARACTERS STATE
+                        this.setState({characters:data});
+
+                        // AND TRIGGER THE MODAL TO OPEN SO THEY HAVE TO ADD A CHARACTER
+                        this.forceAddCharacter();
+
+                        // REJECT THE PROMISE SO NO OTHER CODE RUNS
+                        reject(data);
+                    }
+                }
+            })
+
+            // IF THERE'S AN ERROR
+            .catch(err => {
+
+                // IT MAY READ THE LOGIN ERROR AS AN ERROR SO.... SEND THEM TO THE LOGIN PAGE
+                window.location.href="/login"
+
+                // REJECT THE PROMISE
+                reject(err);
+            })
+        })
+    }
+
+// ************* FUNCTION TO DECODE THE DATA COMING FROM THE DB
+decode = (data) => {
+
+    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY FOR THE USER
+    data.forEach(character => {
+        character.name = decodeURIComponent(character.name)
+
+         // IF THE CHARACTER TEXT ISN'T NULL
+         if (character.character_text !== null) {
+
+            // THEN GO AHEAD AND DECODE IT
+            character.character_text = decodeURIComponent(character.character_text);
+        }
+
+        // OTHERWISE JUST SET IT TO EMPTY SO IT DOESN'T SAY "NULL" ON THE FRONT END
+        else {
+            character.character_text = "";
+        }
+
+        character.preview_text = decodeURIComponent(character.preview_text);
+        character.character_image = decodeURIComponent(character.character_image);
+    })
+}
+
 
 //*************** FUNCTION THAT FORCES THE USER TO ADD A CHARACTER
     forceAddCharacter = () => {
@@ -116,57 +159,6 @@ class CharacterPage extends Component {
 
         // REMOVE THE CLOSE BUTTON
         document.getElementById("close-button").style.display = "none";
-    }
-
-// **************** FUNCTION THAT CALLS THE API AND UPDATES THE STATE
-    updateCharList = () => {
-
-        // GRAB STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
-
-        // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
-        API.getAll("characters", storyId)
-        .then(res => {
-
-            // PULL OUT THE CHARACTER DATA
-            let data = res.data;
-
-            // IF WE DO GET DATA BACK FROM THE SERVER
-            if (data.length > 0) {
-
-                // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                data.forEach(character => {
-                    character.name = decodeURIComponent(character.name)
-                    character.preview_text = decodeURIComponent(character.preview_text);
-
-                     // IF THE TEXT ISN'T NULL
-                     if (character.character_text !== null) {
-
-                        // THEN GO AHEAD AND DECODE IT
-                        character.character_text = decodeURIComponent(character.character_text);
-                    }
-
-                    // OTHERWISE JUST SET IT TO EMPTY
-                    else {
-                        character.character_text = "";
-                    }
-                    character.character_image = decodeURIComponent(character.character_image)
-                })
-
-                // UPDATE THE STATE WITH NEW CHARACTER DATA
-                this.setState({characters: data});
-            }
-
-            // IF WE DON'T GET DATA, THEN THE USER NEEDS TO CREATE A NEW CHARACTER
-            else {
-
-                // WE STILL NEED TO UPDATE THE CHARACTERS STATE
-                this.setState({characters:data});
-
-                // AND TRIGGER THE MODAL TO OPEN SO THEY HAVE TO ADD A CHARACTER
-                this.forceAddCharacter();
-            }
-        })
     }
 
 //*************** FUNCTION TO CHANGE THE CLASS OF THE CARDS
@@ -306,52 +298,12 @@ class CharacterPage extends Component {
             document.getElementById("add-preview-input").value = "";
             document.getElementById("add-image-input").value = "";
 
-            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST (NOT USING OUR PREBUILT FUNCTION BECAUSE SOME OTHER STUFF HAS TO HAPPEN, WHICH NEEDS TO BE FIXED)
-            API.getAll("characters", storyId)
+            // PING THE DATABASE TO GET AN UPDATED CHARACTER LIST
+            this.updateCharList()
             .then(res => {
 
-                // PULL OUT THE CHARACTER DATA
-                let data = res.data;
-
-                // IF WE DO GET DATA BACK FROM THE SERVER
-                if (data.length > 0) {
-
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY TO THE USER
-                    data.forEach(character => {
-        
-                        character.name = decodeURIComponent(character.name)
-                        character.preview_text = decodeURIComponent(character.preview_text);
-                        character.character_image = decodeURIComponent(character.character_image)
-
-                        // IF THE CHARACTER TEXT ISN'T NULL (IT WILL BE NULL BECAUSE WE ARE ADDING A NEW CHARACTER)
-                        if (character.character_text !== null) {
-
-                            // THEN GO AHEAD AND DECODE IT
-                            character.character_text = decodeURIComponent(character.character_text);
-                        }
-
-                        // OTHERWISE JUST SET IT TO EMPTY SO IT RENDERS WITHOUT "NULL"
-                        else {
-                            character.character_text = "";
-                        }
-                    })
-
-                    // UPDATE THE STATE WITH NEW CHARACTER DATA
-                    this.setState({characters: data});
-
-                    // UPDATE THE EDITOR WITH THE NEW CHARACTER DATA
-                    this.updateEditor(newCharRes.data.id)
-                }
-
-                // IF WE DON'T GET DATA BACK FROM THE SERVER
-                else {
-
-                    // SET THE STATE WITH THE CURRENT CHARACTER DATA
-                    this.setState({characters:data});
-
-                    // FORCE OPEN THE MODAL AND HAVE THE USER ADD A CHARACTER
-                    this.forceAddCharacter();
-                }
+                // UPDATE THE EDITOR WITH THE NEW CHARACTER DATA
+                this.updateEditor(newCharRes.data.id)
             })
         })
     }

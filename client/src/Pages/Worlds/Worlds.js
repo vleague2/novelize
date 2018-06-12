@@ -89,8 +89,8 @@ class WorldPage extends Component {
                         // UPDATE THE STATE WITH THE CURRENT DATA
                         this.setState({worlds: data});
 
-                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
-                        resolve(data);
+                        // REJECT THE PROMISE SO NO OTHER CODE RUNS
+                        reject(data);
                     }
                 }
             })
