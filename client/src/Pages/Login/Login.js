@@ -120,7 +120,7 @@ class Login extends Component {
                                             <input type="password" className="form-control" id="password-register" placeholder="Password"/>
                                             <small id="password-help" className="form-text"></small>
                                         </div>
-                                        <Button onClick={this.onSubmit} className="submit-btns">Create Account</Button>
+                                        <Button onClick={this.onSubmit} className="submit-btns mb-3">Create Account</Button>
                                     </form>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@ class Login extends Component {
                                             <label htmlFor="password-login">Password</label>
                                             <input type="password" className="form-control" id="password-login" placeholder="Password"/>
                                         </div>
-                                        <Button id="login-btn" onClick={this.onLogin} className="submit-btns">Log In</Button>
+                                        <Button id="login-btn mb-3" onClick={this.onLogin} className="submit-btns">Log In</Button>
                                     </form> 
                                 </div>
                             </div>
