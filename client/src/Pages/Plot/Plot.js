@@ -4,9 +4,11 @@ import {Row, Col} from "../../Components/Grid";
 import BackButton from "../../Components/BackButton";
 import TimelineItem from "../../Components/TimelineItem";
 import AddAnItem from "../../Components/AddAnItem";
+import Button from "../../Components/Button";
 import API from "../../utils/API";
 import {FormFieldInput} from "../../Components/Form"
 
+// CREATE A STATEFUL COMPONENT
 class PlotPage extends Component {
     constructor(props) {
         super(props);
@@ -21,120 +23,174 @@ class PlotPage extends Component {
         this.onEdit = this.onEdit.bind(this);
     }
 
-    // FUNCTION TO PING THE API AND UPDATE THE PLOT ARRAY STATE
+// *********** FUNCTION TO PING THE API AND UPDATE THE PLOT ARRAY STATE
     updatePlotList = () => {
 
-        // GRAB THE STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
+        // THIS FUNCTION WILL RETURN A PROMISE
+        return new Promise((resolve, reject) => {
 
-        // CALL THE API TO GET ALL PLOT POINTS FOR THE STORY ID
-        API.getAll("plots", storyId)
-        .then(res => {
-            if (res.data.error) {
-                window.location.href = "/login";
-            }
-            else {
-                // PULL OUT THE RESPONSE DATA
-                let data = res.data;
+            // GRAB THE STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");
 
-                // IF THERE'S DATA COMING BACK FROM SERVER
-                if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                    data.forEach(plot => {
-                        plot.title = decodeURIComponent(plot.title)
-                        plot.plot_text = decodeURIComponent(plot.plot_text);
-                    })
+            // CALL THE API TO GET ALL PLOT POINTS FOR THE STORY ID
+            API.getAll("plots", storyId)
+            .then(res => {
 
-                    // UPDATE THE STATE WITH THE DATA
-                    this.setState({plots: data});
+                // IF WE GET ERRORS FROM THE SERVER, THAT MEANS THE USER ISN'T AUTHENTICATED
+                if (res.data.error) {
+
+                    // SO SEND THEM TO THE LOGIN PAGE
+                    window.location.href = "/login";
                 }
 
-                // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
+                // IF WE HAVE NO ERRORS, PROCEED
                 else {
-                    this.forceAddPlot();
+                    // PULL OUT THE RESPONSE DATA
+                    let data = res.data;
+
+                    // IF THERE'S DATA COMING BACK FROM SERVER
+                    if (data.length > 0) {
+
+                        this.decode(data);  
+
+                        // UPDATE THE STATE WITH THE DATA
+                        this.setState({plots: data});
+
+                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
+                        resolve(data);
+                    }
+
+                    // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
+                    else {
+
+                        // UPDATE THE CURRENT STATE WITH DATA
+                        this.setState({plots: data})
+
+                        // FORCE THE USER TO ADD A PLOT
+                        this.forceAddPlot();
+
+                        // REJECT THE PROMISE SO NO OTHER CODE RUNS
+                        reject(data);
+                    }
                 }
-            }
+            })
+
+            // IF THERE'S AN ERROR
+            .catch(err => {
+                // IT MAY READ THE LOGIN ERROR AS AN ERROR SO.... SEND THEM TO THE LOGIN PAGE
+                window.location.href="/login"
+
+                // REJECT THE PROMISE
+                reject(err);
+            })
         })
     } 
 
+// ************** FUNCTION TO DECODE FROM THE SERVER
+    decode = (data) => {
+
+        // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
+        data.forEach(plot => {
+            plot.title = decodeURIComponent(plot.title)
+
+            // IF THE PLOT TEXT IS NOT NULL
+            if (plot.plot_text !== null) {
+                //DECODE IT
+                plot.plot_text = decodeURIComponent(plot.plot_text);
+            }
+
+            // IF IT IS NULL,
+            else {
+
+                // JUST SET IT TO AN EMPTY STRING SO IT DOESN'T RENDER "NULL"
+                plot.plot_text = "";
+            }   
+        })
+
+        // RETURN FOR REST OF FUNCTION TO USE
+        return data;
+    }
+
+// ************* FUNCTION TO FORCE A USER TO ADD A PLOT POINT
     forceAddPlot = () => {
         // ALL OF THESE CHANGES WILL FORCE THE USER TO ADD A PLOT POINT IF THE ARRAY IS EMPTY
+
+        // DISABLE USER ABILITY TO CLICK AWAY FROM MODAL
         document.getElementById("add-plot-modal").setAttribute("data-backdrop","static");
+
+        // DISABLE MODAL CLOSE WITH THE ESCAPE KEY
         document.getElementById("add-plot-modal").setAttribute("data-keyboard","false");
+
+        // SIMULATE A CLICK ON THE ADD NOTE PROMPT
         document.getElementById("add-plot-prompt").click();
+
+        // CHANGE THE MODAL TITLE TO BE A LITTLE FRIENDLIER FOR A FIRST TIME USER
         document.getElementById("modal-title").innerHTML = "Add a new plot point!";
+
+        // REMOVE THE X BUTTON
         document.getElementById("x-button").style.display = "none";
+
+        // REMOVE THE CLOSE BUTTON
         document.getElementById("close-button").style.display = "none";
     }
 
-    // AS SOON AS THE APP LOADS
+// ************* AS SOON AS THE APP LOADS
     componentDidMount() {
         // CALL THE UPDATE PLOT FUNCTION
         this.updatePlotList();
     }
 
-    // WHEN THE USER HITS THE DELETE BUTTON ON ANY PLOT POINT
+// ************ WHEN THE USER HITS THE DELETE BUTTON ON ANY PLOT POINT
     onDelete = (e) => {
+
         // GRAB THE ID OF THE BUTTON FROM THE CLICK EVENT
         let id = e.target.id;
     
         // CALL THE API TO DELETE THE PLOT ITEM WITH THE ID
         API.deleteOne("plots", id)
         .then(res => {
-            console.log(res);
 
-            // GRAB THE STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");
+            // PING API TO GET AN UDPATED PLOT LIST
+           this.updatePlotList()
+           .then(data => {
 
-            // WE NEED TO UPDATE THE PLOT STATE LIST BUT ALSO DO SOME OTHER THINGS IN THE .THEN
-            API.getAll("plots", storyId)
-            .then(res => {
-                // PULL OUT THE RESPONSE DATA
-                let data = res.data;
+                // LOOP THROUGH PLOTS TO UPDATE EACH POSITION NUMBER SINCE WE JUST DELETED ONE AND THE POSITIONS NEED TO BE NUMERICALLY IN ORDER
+                this.state.plots.forEach(plot => {
 
-                // IF THERE IS DATA COMING BACK FROM SERVER
-                if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                    data.forEach(plot => {
-                        plot.title = decodeURIComponent(plot.title)
-                        plot.plot_text = decodeURIComponent(plot.plot_text);
+                    // GRAB THE INDEX OF THE ITEM IN THE ARRAY AND ADD 1 SO WE DON'T START ON 0
+                    let newPosition = this.state.plots.indexOf(plot) + 1;
+        
+                    // PING THE DATABASE TO UPDATE THAT ITEM WITH THE NEW POSITION
+                    API.updateOne("plots", plot.id, "position", newPosition)
+                    .then(res => {
+
+                        // UPDATE THE PLOT LIST ONE LAST TIME 
+                        this.updatePlotList();
                     })
-
-                    // UPDATE THE STATE WITH THE DATA
-                    this.setState({plots: data});
-
-                    // LOOP THROUGH PLOTS TO UPDATE EACH POSITION NUMBER SINCE WE JUST DELETED ONE AND THE POSITIONS NEED TO BE NUMERICALLY IN ORDER
-                    this.state.plots.forEach(plot => {
-                        // GRAB THE INDEX OF THE ITEM IN THE ARRAY AND ADD 1 SO WE DON'T START ON 0
-                        let newPosition = this.state.plots.indexOf(plot) + 1;
-            
-                        // PING THE DATABASE TO UPDATE THAT ITEM WITH THE NEW POSITION
-                        API.updateOne("plots", plot.id, "position", newPosition)
-                        .then(res => {
-                            console.log("updated position");
-
-                            // UPDATE THE PLOT LIST FOR REAL THIS TIME 
-                            this.updatePlotList();
-                        })
-                    })
-                }
-
-                else {
-                    this.setState({plots:data});
-                    this.forceAddPlot();
-                }
-            })            
+                })
+           })
         })
     }
 
-    // FUNCTION TO ADD A NEW PLOT POINT
+// *************** FUNCTION TO ADD A NEW PLOT POINT
     addNewPlot = () => {
+
         // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST PLOT POINT, WE NEED TO FIX THE STUFF WE BROKE TO FORCE THEM TO ADD A PLOT POINT
-        document.getElementById("add-plot-modal").setAttribute("data-backdrop","true");
-        document.getElementById("add-plot-modal").setAttribute("data-keyboard","true");;
-        document.getElementById("modal-title").innerHTML = "Add a plot point";
-        document.getElementById("x-button").style.display = "inline";
-        document.getElementById("close-button").style.display = "inline";
+
+            // ALLOW THE USER TO CLICK AWAY FROM THE MODAL
+            document.getElementById("add-plot-modal").setAttribute("data-backdrop","true");
+
+            // ALLOW THE USER TO USE THE ESC KEY TO CLOSE IT
+            document.getElementById("add-plot-modal").setAttribute("data-keyboard","true");
+
+            // SET MODAL TITLE BACK TO NORMAL
+            document.getElementById("modal-title").innerHTML = "Add a plot point";
+
+            // SHOW THE X BUTTON
+            document.getElementById("x-button").style.display = "inline";
+
+            // SHOW THE CLOSE BUTTON
+            document.getElementById("close-button").style.display = "inline";
 
         // GRAB THE TITLE FROM THE INPUT FIELD
         let title = document.getElementById("add-title-input").value.trim();
@@ -156,39 +212,12 @@ class PlotPage extends Component {
             document.getElementById("add-title-input").value = "";
             document.getElementById("add-plot-input").value = "";
 
-            // GRAB THE STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");
-
-            // CALL THE API TO GET ALL PLOT POINTS FOR THE STORY ID
-            API.getAll("plots", storyId)
-            .then(res => {
-                // PULL OUT THE RESPONSE DATA
-                let data = res.data;
-
-                console.log(data);
-
-                // IF THERE'S DATA COMING BACK FROM SERVER
-                if (data.length > 0) {
-                    // FRONT END VALIDATION -- WE ARE DECODING THE TEXT ON THE WAY OUT SO IT RENDERS PROPERLY
-                    data.forEach(plot => {
-                        plot.title = decodeURIComponent(plot.title)
-                        plot.plot_text = decodeURIComponent(plot.plot_text);
-                    })
-
-                    // UPDATE THE STATE WITH THE DATA
-                    this.setState({plots: data});
-                }
-
-                // IF NOT, THE USER NEEDS TO ADD A PLOT POINT
-                else {
-                    this.setState({plots: data});
-                    this.forceAddPlot();
-                }
-            })
+            // UPDATE THE PLOT LIST
+            this.updatePlotList();
         })
     }
 
-    // WHEN THE USER EDITS A PLOT ITEM, WE NEED TO POPULATE THE MODAL WITH THE CORRECT ITEM'S INFO
+// ************ WHEN THE USER EDITS A PLOT ITEM, WE NEED TO POPULATE THE MODAL WITH THE CORRECT ITEM'S INFO
     onEdit = (e) => {
         // GRAB THE ID OF THE BUTTON THEY CLICKED
         let id = e.target.id;
@@ -199,8 +228,10 @@ class PlotPage extends Component {
 
         // LOOP THROUGH THE STATE LIST OF PLOTS
         this.state.plots.forEach(plot => {
+
             // IF THE ID OF THE PLOT ITEM MATCHES THE ID WE PULLED
             if (plot.id == id) {
+
                 // SET THE TITLE AND PLOT TEXT TO THAT ITEM'S INFO
                 title = plot.title;
                 plotText = plot.plot_text;
@@ -217,8 +248,9 @@ class PlotPage extends Component {
         document.getElementById("update-plot-save").setAttribute('data-id', id);
     }
 
-    // FUNCTION THAT RUNS WHEN THE USER SAVES THE PLOT INFO THEY'VE EDITED
+// ************ FUNCTION THAT RUNS WHEN THE USER SAVES THE PLOT INFO THEY'VE EDITED
     updatePlot = () => {
+
         // GRAB THE DATA ID OF THE MODAL
         let id = document.getElementById("update-plot-save").getAttribute('data-id');
 
@@ -233,7 +265,7 @@ class PlotPage extends Component {
         .then(res => {
             API.updateOne("plots", id, "plot_text", plotText)
             .then(res => {
-                console.log(res);
+
                 // UPDATE THE PLOT LIST
                 this.updatePlotList();
 
@@ -244,22 +276,38 @@ class PlotPage extends Component {
         })
     }
 
+// RENDER THINGS TO THE PAGE
     render() {
         return (
+
+            // CONTAINER DIV BECAUSE REACT CAN ONLY RETURN ONE CONTAINER
             <div id="entire-page">
+
+                {/* THIS ROW HOLDS THE WHOLE PAGE */}
                 <Row id="plot-editor-row">
+
+                    {/* THIS ROW HOLDS THE BACK BUTTON AND THE PROMPT TO ADD A NEW PLOT POINT */}
                     <Row id="back-button-row">
+
+                        {/* COLUMN FOR THE BACK BUTTON */}
                         <Col size="3">
+
+                            {/* AND THERE'S THE BACK BUTTON */}
                             <BackButton />
                         </Col>
 
+                        {/* COLUMN FOR THE ADD A PLOT PROMPT */}
                         <Col size="6">
+
+                            {/* PROMPT TO ADD A PLOT POINT */}
                             <AddAnItem id="add-plot-prompt" target="#add-plot-modal">Add a Plot Point </AddAnItem>
                         </Col>
                     </Row>
 
-                    {/* MAP THROUGH THE PLOT STATE AND RETURN A TIMELINE ITEM */}
+                    {/* MAP THROUGH THE PLOT STATE */}
                     {this.state.plots.map(plot => {
+
+                        //  RETURN A TIMELINE ITEM
                         return <TimelineItem 
                                 id={plot.id} 
                                 key={plot.id}
@@ -270,7 +318,6 @@ class PlotPage extends Component {
                                     {plot.plot_text}
                                 </TimelineItem>
                     })}
-                   
                 </Row>
 
                 {/* MODAL FOR ADDING A NEW PLOT ITEM */}
@@ -278,30 +325,40 @@ class PlotPage extends Component {
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
+
                                 {/* MODAL TITLE */}
                                 <h5 className="modal-title">Add a Plot Point</h5>
+
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" id="x-button">&times;</span>
-                                </button>
+                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
+                                    <span aria-hidden="true" id="x-button">&times;</span>
+                                </Button>
                             </div>
+
+                            {/* MODAL BODY */}
                             <div className="modal-body">
+
                                 {/* FORM FIELD TO ADD A NAME */}
                                 <div className="form-group">
                                     <label htmlFor="add-title-input" className="label-title" id="modal-title">Title of Plot Point</label>
                                     <FormFieldInput id="add-title-input" name="title"/>
                                 </div>
+
+                                {/* FORM FIELD TO ADD A PLOT POINT */}
                                 <div className="form-group">
                                     <label htmlFor="add-plot-input" className="label-title">Plot Point</label>
                                     <textarea className="form-control" id="add-plot-input" rows="5"/>
                                 </div>
                             </div>
+
                             {/* BUTTONS AT MODAL BOTTOM */}
                             <div className="modal-footer">
+
                                 {/* CLOSE THE MODAL */}
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal" id="close-button">Close</button>
+                                <Button className="btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
+
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <button type="button" className="btn btn-save-modal" id="add-new-plot" onClick={this.addNewPlot} data-dismiss="modal">Save</button>
+                                <Button className="btn-save-modal" id="add-new-plot" onClick={this.addNewPlot} dataDismiss="modal">Save</Button>
                             </div>
                         </div>
                     </div>
@@ -312,30 +369,40 @@ class PlotPage extends Component {
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
+
                                 {/* MODAL TITLE */}
                                 <h5 className="modal-title">Edit a Plot Point</h5>
+
                                 {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
+                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </Button>
                             </div>
+
+                            {/* MODAL BODY */}
                             <div className="modal-body">
-                                {/* FORM FIELD TO ADD A NAME */}
+
+                                {/* FORM FIELD TO UPDATE THE NAME */}
                                 <div className="form-group">
                                     <label htmlFor="update-title-input" className="label-title">Title of Plot Point</label>
                                     <FormFieldInput id="update-title-input" name="title"/>
                                 </div>
+
+                                {/* FORM FIELD OT UPDATE THE PLOT */}
                                 <div className="form-group">
                                     <label htmlFor="update-plot-input" className="label-title">Plot Point</label>
                                     <textarea className="form-control" id="update-plot-input" rows="7"/>
                                 </div>
                             </div>
+
                             {/* BUTTONS AT MODAL BOTTOM */}
                             <div className="modal-footer">
+
                                 {/* CLOSE THE MODAL */}
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <Button className="btn-secondary" dataDismiss="modal">Close</Button>
+
                                 {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <button type="button" className="btn btn-save-modal" id="update-plot-save" onClick={this.updatePlot} data-dismiss="modal">Save</button>
+                                <Button className="btn-save-modal" id="update-plot-save" onClick={this.updatePlot} dataDismiss="modal">Save</Button>
                             </div>
                         </div>
                     </div>
