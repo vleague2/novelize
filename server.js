@@ -30,7 +30,7 @@ app.use(session({
   secret: process.env.COOKIE_SECRET || 'victorias secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: new Date(Date.now() + (60 * 1000 * 30)) }
+  cookie: { maxAge: new Date(Date.now() + (60 * 3000 * 30)) }
 }))
 
 // PASSPORT SETUP
