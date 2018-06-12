@@ -15,23 +15,23 @@ class Home extends Component {
     constructor(props) {
         super(props);
 
-        // SET THE STATE
+        // SET THE STATE WITH SOME INITIAL VALUE FOR THE FEATURES DISPLAY
         this.state = {
             tab: "env",
-            title: "An Integrated Writing Environment",
-            content: "Novelize eliminates the age-old struggle of flipping through multiple documents to find that secondary character's life history while you're in the middle of writing a scene. Draft your story in an editing space that pulls in your character data, your worldbuilding data, your plot points, and any notes you've created. With everything you need in one spot, your drafting process will be seamless."
+            title: "",
+            content: ""
         }
 
         // BIND THIS FOR HANDLECLICK
         this.handleClick = this.handleClick.bind(this);
     }
 
-    // WHEN THE APP STARTS, RUN THE DISPLAY FUNCTION AND PASS IN CURRENT TAB
+// ********** WHEN THE APP STARTS, RUN THE DISPLAY FUNCTION AND PASS IN CURRENT TAB
     componentDidMount() {
         this.chooseDisplay(this.state.tab);
     }
 
-    // FUNCTION TO HANDLE A CLICK, AND PASS IN THE EVENT
+// ********** FUNCTION TO HANDLE A CLICK, AND PASS IN THE EVENT
     handleClick(e) {
 
         // RESET ALL TAB COLORS TO WHITE
@@ -49,7 +49,7 @@ class Home extends Component {
         this.chooseDisplay(e.target.id);
     }
 
-    // FUNCTION TO CHOOSE WHICH TAB TO DISPLAY
+// ************** FUNCTION TO CHOOSE WHICH TAB TO DISPLAY
     chooseDisplay(tab) {
         
         // SWITCH FOR DECISION LOGIC BASED ON THE TAB SELECTED
@@ -57,6 +57,7 @@ class Home extends Component {
 
             // IF THEY SELECT THE ENV TAB
             case "env":
+
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO ENV
                 this.setState(
                     {title: "An Integrated Writing Environment",
@@ -71,6 +72,7 @@ class Home extends Component {
 
             // IF THEY SELECT THE CHAR TAB
             case "char":
+
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO CHAR
                 this.setState(
                     {title: "Separate Profiles for Each Character",
@@ -85,6 +87,7 @@ class Home extends Component {
 
             // IF THEY SELECT THE WORLD TAB
             case "world":
+
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO WORLD
                 this.setState(
                     {title: "Build the Components of Your World",
@@ -99,6 +102,7 @@ class Home extends Component {
             
             // IF THEY SELECT THE PLOT TAB
             case "plot":
+
                 // UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO PLOT
                 this.setState(
                     {title: "Chart the Plot on a Timeline",
@@ -113,6 +117,7 @@ class Home extends Component {
 
             // IF THEY SELECT THE NOTE TAB
             case "note":
+
                 //UPDATE THE STATE WITH THE TITLE AND CONTENT RELATED TO NOTE
                 this.setState(
                     {title: "Store Research and Notes",
@@ -127,17 +132,21 @@ class Home extends Component {
 
             // IF NONE OF THE ABOVE APPLY
             default:
+
                 // THEN IT'S DEFINITELY BROKEN
                 console.log("broken");
                 break;
         }
     }
 
+// ************* FUNCTION THAT RUNS WHEN THEY CLICK THE GET STARTED BUTTON
     login = () => {
+
+        // REDIRECTS TO THE LOGIN PAGE
         window.location.href = "/login";
     }
 
-    // RENDER FUNCTION FOR WHAT WILL DISPLAY TO THE CLIENT
+// ************ RENDER FUNCTION FOR WHAT WILL DISPLAY TO THE CLIENT
     render() {
 
         // RETURN THE FOLLOWING
@@ -150,7 +159,6 @@ class Home extends Component {
                 <Jumbotron> 
                     <h1 id="site-h1">Novelize</h1> 
                     <p className="jumbotron-subtext">An integrated drafting environment for novelists.</p>
-                    
                 </Jumbotron>
 
                 {/* CALL THE CONTAINER COMPONENT TO HOLD SITE TITLE AND TAGLINE*/}
@@ -165,7 +173,7 @@ class Home extends Component {
                         {/* FEATURES TABS: CALL THE COLUMN COMPONENT AND GIVE IT A SIZE OF 4 */}
                         <Col size="4" id="left-col">
 
-                            {/* ADD IN 5 CARDBODY COMPONENTS, WITH UNIQUE ID'S AND FEED IT THE HANDLECLICK FUNCTION SO THAT THE FUNCTIONS ABOVE RUN WHEN THE TAB IS CLICKED */}
+                            {/* ADD IN 5 CARDBODY COMPONENTS, WITH UNIQUE IDS AND FEED IT THE HANDLECLICK FUNCTION SO THAT THE FUNCTIONS ABOVE RUN WHEN THE TAB IS CLICKED */}
                             <CardBody id="env" onClick={this.handleClick}>Writing Environment <i className="fas fa-angle-right"></i></CardBody>
                             <CardBody id="char" onClick={this.handleClick}>Character Profiles <i className="fas fa-angle-right"></i></CardBody>
                             <CardBody id="world" onClick={this.handleClick}>World Building <i className="fas fa-angle-right"></i></CardBody>
@@ -187,7 +195,7 @@ class Home extends Component {
                         <Col size="12" id="button-row">
 
                             {/* CALL THE BUTTON COMPONENT AND GIVE IT TEXT */}
-                            <Button onClick={this.login}>Get Started</Button>
+                            <Button id="get-started" className="mt-3" onClick={this.login}>Get Started</Button>
                         </Col>
                     </Row>
                 </Container>
