@@ -9,6 +9,7 @@ import {FormFieldInput} from "../../Components/Form";
 import Button from "../../Components/Button";
 import API from "../../utils/API";
 
+// CREATE A STATEFUL COMPONENT
 class WorldPage extends Component {
     constructor(props) {
         super(props);
