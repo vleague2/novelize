@@ -79,7 +79,8 @@
     font-family: 'Open-Sans', sans-serif;
 }
 
-#mceu_17 {
+.mce-panel {
     /* min-height: 85vh; */
     border: none;
+    border-width: 0px !important;
 }

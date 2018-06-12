@@ -145,7 +145,7 @@ class Login extends Component {
                                             <label htmlFor="password-login">Password</label>
                                             <input type="password" className="form-control" id="password-login" placeholder="Password"/>
                                         </div>
-                                        <Button id="login-btn mb-3" onClick={this.onLogin} className="submit-btns">Log In</Button>
+                                        <Button id="login-btn" onClick={this.onLogin} className="submit-btns  mb-3">Log In</Button>
                                     </form> 
                                 </div>
                             </div>
