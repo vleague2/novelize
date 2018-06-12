@@ -89,12 +89,9 @@ export default {
     loginUser: function(email, password) {
         let encodedPassword = encodeURIComponent(password);
 
-        console.log(email)
-        console.log(password)
-
         return axios.post('/auth/login', {
             email: email,
-            password: password
+            password: encodedPassword
         })
     }
 }
