@@ -18,7 +18,7 @@ class NotePage extends Component {
         this.state = {
             notes: [],
             editor: "",
-            note_select: "1",
+            note_select: "",
             title: ""
         }
 
@@ -31,47 +31,85 @@ class NotePage extends Component {
 
 //************** AS SOON AS THE APP LOADS
     componentDidMount() {
-        
-        // GRAB STORY ID FROM LOCAL STORAGE
-        let storyId = localStorage.getItem("currentStoryId");
 
-        //API CALL TO SERVER TO GET NOTE LIST
-        API.getAll("notes", storyId)
-        .then(res => {
+        // CALL THE FUNCTION TO UPDATE THE NOTE LIST
+        this.updateNoteList()
+        .then(data => {
 
-            // IF THERE'S AN ERROR, IT MEANS THE USER ISN'T AUTHENTICATED
-            if (res.data.error) {
+            // WE ALSO HAVE TO UPDATE THE EDITOR AND TITLE STATE SO THAT THE EDITING COMPONENTS ARE POPULATED 
+            this.setState({editor: data[0].note_text, title: data[0].title, note_select: data[0].id});
 
-                // SEND THEM TO THE LOGIN PAGE
-                window.location.href="/login"
-            }
+            // SET THE FIRST NOTE CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
+            this.changeClass(data[0].id, "active-world");
+        }) 
+    }
 
-            // IF THERE'S NO ERRORS, THEN PROCEED
-            else {
+// ************ FUNCTION THAT CALLS THE API AND UPDATES THE STATE OF THE NOTE LIST
+    updateNoteList = () => {
 
-                //PULL ARRAY FROM SERVER RESPONSE
-                let data = res.data;
+        // THIS FUNCTION WILL RETURN A PROMISE
+        return new Promise((resolve, reject) => {
 
-                // IF WE ARE GETTING DATA FROM SERVER
-                if (data.length > 0 ) {
+            // GRAB STORY ID FROM LOCAL STORAGE
+            let storyId = localStorage.getItem("currentStoryId");                                                
 
-                    this.decode(data);
+            // PING THE DATABASE TO GET AN UPDATED NOTE LIST
+            API.getAll("notes", storyId)
+            .then(res => {
 
-                    //UPDATE STATE WITH NOTE LIST, SET THE FIRST NOTE ITEM INTO THE EDITOR, SET THE TITLE TO THE FIRST NOTE'S TITLE
-                    this.setState({notes: data, editor: data[0].note_text, title: data[0].title});
+                // IF THERE'S AN ERROR, IT MEANS THE USER ISN'T AUTHENTICATED
+                if (res.data.error) {
 
-                    // SET THE FIRST NOTE CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-                    this.changeClass(data[0].id, "active-world");
+                    // SEND THEM TO THE LOGIN PAGE
+                    window.location.href="/login"
                 }
 
-                // IF THERE'S NO DATA FROM THE SERVER, THE USER NEEDS TO ADD A NOTE
+                // IF THERE'S NO ERRORS, THEN PROCEED
                 else {
 
-                    // CALL FUNCTION TO FORCE THEM TO ADD DATA
-                    this.forceAddNote();
+                    // PULL OUT THE NOTE DATA
+                    let data = res.data;
+
+                    // IF WE ARE GETTING DATA FROM THE SERVER
+                    if (data.length > 0) {
+
+                        // DECODE THE DATA COMING IN
+                        this.decode(data);
+
+                        console.log("updating state")
+                        // UPDATE THE STATE WITH NEW NOTE DATA
+                        this.setState({notes: data});
+
+                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
+                        resolve(data);
+                    }
+
+                    // IF WE AREN'T GETTING DATA FROM THE SERVER, THE USER NEEDS TO ADD A NOTE
+                    else {
+
+                        console.log("updating state")
+                        // UPDATE THE STATE WITH THE CURRENT DATA
+                        this.setState({notes: data});
+
+                        // CALL THE FUNCTION TO FORCE USER TO ADD A NOTE
+                        this.forceAddNote();
+
+                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
+                        resolve(data);
+                    }  
                 }
-            }
-        });
+            })
+
+            // IF THERE'S AN ERROR
+            .catch(err => {
+
+                // IT MAY READ THE LOGIN ERROR AS AN ERROR SO.... SEND THEM TO THE LOGIN PAGE
+                window.location.href="/login"
+
+                // REJECT THE PROMISE
+                reject(err);
+            })
+        })
     }
 
 // ************* FUNCTION TO DECODE THE DATA COMING FROM THE DB
@@ -122,60 +160,6 @@ class NotePage extends Component {
 
         // REMOVE THE CLOSE BUTTON
         document.getElementById("close-button").style.display = "none";
-    }
-
-// ************ FUNCTION THAT CALLS THE API AND UPDATES THE STATE OF THE NOTE LIST
-    updateNoteList = () => {
-
-        // THIS FUNCTION WILL RETURN A PROMISE
-        return new Promise((resolve, reject) => {
-
-            // GRAB STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");                                                
-
-            // PING THE DATABASE TO GET AN UPDATED NOTE LIST
-            API.getAll("notes", storyId)
-            .then(res => {
-
-                // PULL OUT THE NOTE DATA
-                let data = res.data;
-
-                // IF WE ARE GETTING DATA FROM THE SERVER
-                if (data.length > 0) {
-
-                    // DECODE THE DATA COMING IN
-                    this.decode(data);
-
-                    console.log("updating state")
-                    // UPDATE THE STATE WITH NEW NOTE DATA
-                    this.setState({notes: data});
-
-                    // RESOLVE THE PROMISE BECAUSE THINGS WORKED! WE DON'T NEED TO SEND ANY ACTUAL DATA SO THIS WORKS.
-                    resolve("Yay");
-                }
-
-                // IF WE AREN'T GETTING DATA FROM THE SERVER, THE USER NEEDS TO ADD A NOTE
-                else {
-
-                    console.log("updating state")
-                    // UPDATE THE STATE WITH THE CURRENT DATA
-                    this.setState({notes: data});
-
-                    // CALL THE FUNCTION TO FORCE USER TO ADD A NOTE
-                    this.forceAddNote();
-
-                    // RESOLVE THE PROMISE BECAUSE THINGS WORKED! WE DON'T NEED TO SEND ANY ACTUAL DATA SO THIS WORKS.
-                    resolve("Yay");
-                }  
-            })
-
-            // IF THERE'S AN ERROR
-            .catch(err => {
-
-                // REJECT THE PROMISE
-                reject(err);
-            })
-        })
     }
 
 // ************** FUNCTION TO CHANGE THE CLASS OF THE CARDS
