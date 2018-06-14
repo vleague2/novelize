@@ -4,6 +4,8 @@ Novelize is a full-stack application created for writers in the process of draft
 
 Novelize is a free, easy-to-use program with a clean and modern UI.
 
+https://novel-ize.herokuapp.com/
+
 ## Tech Stack
 Novelize uses the following technologies:
 
