@@ -10,6 +10,7 @@ import World from "./Pages/Worlds/Worlds";
 import Note from "./Pages/Notes/Notes";
 import Plot from "./Pages/Plot/Plot";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import NoMatch from "./Pages/404/404";
 
 const App = () => (
   <Router>
@@ -24,6 +25,7 @@ const App = () => (
         <Route exact path = "/world-edit" component={World}/>
         <Route exact path = "/notes-edit" component={Note}/>
         <Route exact path = "/plot-edit" component={Plot}/>
+        <Route component={NoMatch}/>
       </Switch>
        {/* ADD IN THE FOOTER */}
       <Footer/>
