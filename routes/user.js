@@ -9,22 +9,17 @@ const userController = require('../controllers/users.js');
 
 const db = require('../models');
 
-// const passport = 
-
-/************************ LOCAL AUTH ROUTES********************************* */
-
-
-// router.get("/logout", (req, res)=> {
-//     req.logout();
-//     res.redirect('/');
-// })
-
+// ROUTE TO REGISTER A USER
 router.post('/register', 
+// VALIDATE THE DATA
 [
+    // CHECK IF EMAIL IS AN EMAIL, INSERT FEEDBACK MESSAGE, TRIM EMAIL, NORMALIZE EMAIL
     check('email')
         .isEmail()
         .withMessage("Must input valid email").trim()
         .normalizeEmail(),
+
+    // CHECK IF PASSWORD IS MIN LENGTH, TRIM IT, ADD FEEDBACK MESSAGE
     check('password')
         .trim()
         .isLength({min: 5})
@@ -32,8 +27,10 @@ router.post('/register',
 ],
  userController.register);
 
+//  ROUTE FOR USER TO LOGIN, WHICH UTILIZES PASSPORT LOCAL STRATEGY
 router.post('/auth/login', passport.authenticate('local'), userController.login);
 
+// ROUTE FOR USER TO LOGOUT
 router.get('/auth/logout', userController.logout);
 ;
 
