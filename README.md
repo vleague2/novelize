@@ -4,6 +4,12 @@ Novelize is a full-stack application created for writers in the process of draft
 
 Novelize is a free, easy-to-use program with a clean and modern UI.
 
+To test out the application, visit the link below. You can create your own account or use the test demo account:
+* Email: user@test.com
+* Password: password
+
+If you choose to use the test demo account, please be respectful about the data that is preloaded.
+
 https://novel-ize.herokuapp.com/
 
 ## Tech Stack
