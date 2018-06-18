@@ -7,6 +7,7 @@ import AddAnItem from "../../Components/AddAnItem";
 import Button from "../../Components/Button";
 import API from "../../utils/API";
 import {FormFieldInput} from "../../Components/Form"
+import Modal from "../../Components/Modal";
 
 // CREATE A STATEFUL COMPONENT
 class PlotPage extends Component {
@@ -320,93 +321,49 @@ class PlotPage extends Component {
                     })}
                 </Row>
 
+
+
                 {/* MODAL FOR ADDING A NEW PLOT ITEM */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="add-plot-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title">Add a Plot Point</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true" id="x-button">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* MODAL BODY */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO ADD A NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="add-title-input" className="label-title" id="modal-title">Title of Plot Point</label>
-                                    <FormFieldInput id="add-title-input" name="title"/>
-                                </div>
-
-                                {/* FORM FIELD TO ADD A PLOT POINT */}
-                                <div className="form-group">
-                                    <label htmlFor="add-plot-input" className="label-title">Plot Point</label>
-                                    <textarea className="form-control" id="add-plot-input" rows="5"/>
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className="btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className="btn-save-modal" id="add-new-plot" onClick={this.addNewPlot} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                <Modal
+                    id="add-plot-modal"
+                    modalTitle="Add a Plot Point"
+                    saveId="add-new-plot" 
+                    onClick={this.addNewPlot}
+                >
+                    {/* FORM FIELD TO ADD A NAME */}
+                    <div className="form-group">
+                        <label htmlFor="add-title-input" className="label-title" id="modal-title">Title of Plot Point</label>
+                        <FormFieldInput id="add-title-input" name="title"/>
                     </div>
-                </div>
+
+                    {/* FORM FIELD TO ADD A PLOT POINT */}
+                    <div className="form-group">
+                        <label htmlFor="add-plot-input" className="label-title">Plot Point</label>
+                        <textarea className="form-control" id="add-plot-input" rows="5"/>
+                    </div>
+                </Modal>
+                
 
                 {/* MODAL FOR UPDATING A PLOT ITEM */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="update-plot-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title">Edit a Plot Point</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* MODAL BODY */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO UPDATE THE NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="update-title-input" className="label-title">Title of Plot Point</label>
-                                    <FormFieldInput id="update-title-input" name="title"/>
-                                </div>
-
-                                {/* FORM FIELD OT UPDATE THE PLOT */}
-                                <div className="form-group">
-                                    <label htmlFor="update-plot-input" className="label-title">Plot Point</label>
-                                    <textarea className="form-control" id="update-plot-input" rows="7"/>
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className="btn-secondary" dataDismiss="modal">Close</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className="btn-save-modal" id="update-plot-save" onClick={this.updatePlot} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                <Modal
+                    id="update-plot-modal"
+                    modalTitle="Edit a Plot Point"
+                    saveId="update-plot-save" 
+                    onClick={this.updatePlot}
+                >
+                    {/* FORM FIELD TO UPDATE THE NAME */}
+                    <div className="form-group">
+                        <label htmlFor="update-title-input" className="label-title">Title of Plot Point</label>
+                        <FormFieldInput id="update-title-input" name="title"/>
                     </div>
-                </div>
+
+                    {/* FORM FIELD OT UPDATE THE PLOT */}
+                    <div className="form-group">
+                        <label htmlFor="update-plot-input" className="label-title">Plot Point</label>
+                        <textarea className="form-control" id="update-plot-input" rows="7"/>
+                    </div>
+                </Modal>
+               
             </div>
         )
     }

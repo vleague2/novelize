@@ -6,6 +6,7 @@ import StoryCard from "../../Components/StoryCard";
 import {FormFieldInput} from "../../Components/Form";
 import AddAnItem from "../../Components/AddAnItem";
 import Button from "../../Components/Button";
+import Modal from "../../Components/Modal";
 
 // CREATE STATEFUL COMPONENT
 class Dashboard extends Component {
@@ -287,114 +288,46 @@ class Dashboard extends Component {
                 </Row>
 
                 {/* MODAL FOR ADDING A NEW STORY */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="add-story-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
+                <Modal
+                    id="add-story-modal"
+                    modalTitle="Add a Story"
+                    saveId="add-new-story"
+                    onClick={this.addNewStory}
+                >
 
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title" id="modal-title">Add a Story</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true" id="x-button">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* MODAL BODY */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO ADD A NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="add-title-input" className="label-title" >Title of Story</label>
-                                    <FormFieldInput id="add-title-input" name="title" />
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className=" btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
-
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className=" btn-save-modal" id="add-new-story" onClick={this.addNewStory} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                    {/* FORM FIELD TO ADD A NAME */}
+                    <div className="form-group">
+                        <label htmlFor="add-title-input" className="label-title" >Title of Story</label>
+                        <FormFieldInput id="add-title-input" name="title" />
                     </div>
-                </div>
+                </Modal>
 
                 {/* MODAL FOR UPDATING THE TITLE */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="update-title-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title">Edit Story Title</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button type="button" className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* MODAL BODY */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO ADD A NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="update-title-input" className="label-title">Title </label>
-                                    <FormFieldInput id="update-title-input" name="title"/>
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className=" btn-secondary" dataDismiss="modal">Close</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button  className=" btn-save-modal" id="update-title-save" onClick={this.updateTitle} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                <Modal
+                    id="update-title-modal"
+                    modalTitle="Edit Story Title"
+                    saveId="update-title-save" 
+                    onClick={this.updateTitle}
+                >
+                    {/* FORM FIELD TO ADD A NAME */}
+                    <div className="form-group">
+                        <label htmlFor="update-title-input" className="label-title">Title </label>
+                        <FormFieldInput id="update-title-input" name="title"/>
                     </div>
-                </div>
+                </Modal>
+            
 
                 {/* MODAL FOR CONFIRMING DELETE */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="delete-story-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title">Are you sure?</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button className="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* MODAL BODY */}
-                            <div className="modal-body">
-                                <p>Once you delete this story, all of its data will be gone forever.</p>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className="btn-secondary" dataDismiss="modal">No</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className="btn-save-modal" id="delete-story-yes" onClick={this.confirmDelete} dataDismiss="modal">Yes</Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Modal
+                    id="delete-story-modal"
+                    modalTitle="Are you sure?"
+                    saveId="delete-story-yes" 
+                    onClick={this.confirmDelete}
+                    delBut="Yes"
+                >
+                    <p>Once you delete this story, all of its data will be gone forever.</p>
+                </Modal>
+                
             </div>
         )
     }

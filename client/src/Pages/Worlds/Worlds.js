@@ -8,6 +8,7 @@ import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import Button from "../../Components/Button";
 import API from "../../utils/API";
+import Modal from "../../Components/Modal";
 
 // CREATE A STATEFUL COMPONENT
 class WorldPage extends Component {
@@ -423,42 +424,19 @@ class WorldPage extends Component {
                 </Row>
 
                 {/* MODAL FOR ADDING A NEW WORLD ITEM */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="add-world-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title" id="modal-title">Add a Worldbuilding Item</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button  className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true" id="x-button">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* MODAL BODY */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO ADD A NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="add-title-input" className="label-title" >Title of Worldbuilding Item</label>
-                                    <FormFieldInput id="add-title-input" name="title" placeholder="i.e. setting"/>
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className="btn btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className="btn btn-save-modal" id="add-new-world" onClick={this.addNewWorld} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                <Modal 
+                    id="add-world-modal"
+                    modalTitle="Add a Worldbuilding Item"
+                    saveId="add-new-world" 
+                    onClick={this.addNewWorld}
+                >
+                    {/* FORM FIELD TO ADD A NAME */}
+                    <div className="form-group">
+                        <label htmlFor="add-title-input" className="label-title" >Title of Worldbuilding Item</label>
+                        <FormFieldInput id="add-title-input" name="title" placeholder="i.e. setting"/>
                     </div>
-                </div>
+                </Modal>
+                
             </div>
         )
     }

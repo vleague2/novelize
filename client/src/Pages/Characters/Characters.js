@@ -9,6 +9,7 @@ import Button from "../../Components/Button";
 import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
+import Modal from "../../Components/Modal";
 
 // CREATING A STATEFUL COMPONENT
 class CharacterPage extends Component {
@@ -537,55 +538,33 @@ decode = (data) => {
                     </Col>
                 </Row>
 
+
                 {/* MODAL FOR ADDING A NEW CHARACTER */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="add-char-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title" id="modal-title">Add a Character</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true" id="x-button">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* BODY OF THE MODAL */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO ADD A NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="add-name-input" className="label-title">Character Name</label>
-                                    <FormFieldInput id="add-name-input" name="name" placeholder="Jane Doe" />
-                                </div>
-
-                                {/* FORM FIELD TO ADD PREVIEW */}
-                                <div className="form-group">
-                                    <label htmlFor="add-preview-input" className="label-title">One-line bio</label>
-                                    <FormFieldInput id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
-                                </div>
-
-                                {/* FORM FIELD TO ADD IMAGE LINK */}
-                                <div className="form-group">
-                                    <label htmlFor="add-image-input" className="label-title">Image Link</label>
-                                    <FormFieldInput id="add-image-input" name="image" placeholder="Square images look best!"/>
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className="btn btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className="btn btn-save-modal" id="add-new-char" onClick={this.addNewChar} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                <Modal
+                    id="add-char-modal"
+                    modalTitle="Add a Character"
+                    saveId="add-new-char" 
+                    onClick={this.addNewChar}
+                >
+                    {/* FORM FIELD TO ADD A NAME */}
+                    <div className="form-group">
+                        <label htmlFor="add-name-input" className="label-title">Character Name</label>
+                        <FormFieldInput id="add-name-input" name="name" placeholder="Jane Doe" />
                     </div>
-                </div>
+
+                    {/* FORM FIELD TO ADD PREVIEW */}
+                    <div className="form-group">
+                        <label htmlFor="add-preview-input" className="label-title">One-line bio</label>
+                        <FormFieldInput id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
+                    </div>
+
+                    {/* FORM FIELD TO ADD IMAGE LINK */}
+                    <div className="form-group">
+                        <label htmlFor="add-image-input" className="label-title">Image Link</label>
+                        <FormFieldInput id="add-image-input" name="image" placeholder="Square images look best!"/>
+                    </div>
+                </Modal>
+
             </div>
         )
     }

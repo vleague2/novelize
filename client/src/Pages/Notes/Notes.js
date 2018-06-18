@@ -8,6 +8,7 @@ import BackButton from "../../Components/BackButton";
 import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
+import Modal from "../../Components/Modal";
 
 // CREATE STATEFUL COMPONENT
 class NotePage extends Component {
@@ -443,42 +444,19 @@ class NotePage extends Component {
                 </Row>
 
                 {/* MODAL FOR ADDING A NEW NOTE ITEM */}
-                <div className="modal fade" tabIndex="-1" role="dialog" id="add-note-modal">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-
-                                {/* MODAL TITLE */}
-                                <h5 className="modal-title" id="modal-title">Add a Note</h5>
-
-                                {/* X BUTTON SO YOU CAN CLOSE IT */}
-                                <Button className="close" dataDismiss="modal" ariaLabel="Close">
-                                    <span aria-hidden="true" id="x-button">&times;</span>
-                                </Button>
-                            </div>
-
-                            {/* BODY OF MODAL */}
-                            <div className="modal-body">
-
-                                {/* FORM FIELD TO ADD A NAME */}
-                                <div className="form-group">
-                                    <label htmlFor="add-title-input" className="label-title">Title of Note</label>
-                                    <FormFieldInput id="add-title-input" name="title"/>
-                                </div>
-                            </div>
-
-                            {/* BUTTONS AT MODAL BOTTOM */}
-                            <div className="modal-footer">
-
-                                {/* CLOSE THE MODAL */}
-                                <Button className="btn-secondary" dataDismiss="modal" id="close-button">Close</Button>
-
-                                {/* SAVE THE CONTENT WHICH ALSO CLOSES THE MODAL */}
-                                <Button className="btn-save-modal" id="add-new-note" onClick={this.addNewNote} dataDismiss="modal">Save</Button>
-                            </div>
-                        </div>
+                <Modal
+                    id="add-note-modal"
+                    modalTitle="Add a Note"
+                    saveId="add-new-note" 
+                    onClick={this.addNewNote}
+                >
+                    {/* FORM FIELD TO ADD A NAME */}
+                    <div className="form-group">
+                        <label htmlFor="add-title-input" className="label-title">Title of Note</label>
+                        <FormFieldInput id="add-title-input" name="title"/>
                     </div>
-                </div>
+                </Modal>
+                
             </div>
         )
     }
