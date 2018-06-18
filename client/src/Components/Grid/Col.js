@@ -1,7 +1,11 @@
 import React from "react";
 
-export const Col = ({ size, children, id, align }) => (
-  <div className={size.split(" ").map(size => "col-" + size).join(" ")} id={id}>
-    {children}
-  </div>
+// p and m are padding and margin
+export const Col = ({ size, children, id, p, m, align }) => (
+    <div className=
+    {`col-sm-${size}${p ? " " + p : ""}${m ? " " + m : ""}${align ? " " + align : ""}`} 
+    id={id}
+    >
+      {children}
+    </div>
 );

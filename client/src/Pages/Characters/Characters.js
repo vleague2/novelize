@@ -385,7 +385,7 @@ decode = (data) => {
                 <Row id="editor-char-row">
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
-                    <Col size="8" id="editor-char-col">
+                    <Col size="8" p="pr-0" id="editor-char-col">
 
                         {/* SUB-ROW TO HOLD THE BACK BUTTON, CHAR NAME EDIT, AND CHAR PREVIEW EDIT */}
                         <Row>
@@ -513,7 +513,7 @@ decode = (data) => {
                     </Col>
 
                     {/* THE RIGHT-HAND COLUMN, WHICH HOLDS OUR CHARACTER LIST */}
-                    <Col size="4" id="char-list-col">
+                    <Col size="4" p="pr-0 pl-0" m="mr-0" id="char-list-col">
 
                         {/* MAP THROUGH OUR CHARACTERS FROM THE STATE */}
                         {this.state.characters.map(character => {

@@ -171,7 +171,7 @@ class Home extends Component {
                     <Row>
 
                         {/* FEATURES TABS: CALL THE COLUMN COMPONENT AND GIVE IT A SIZE OF 4 */}
-                        <Col size="4" id="left-col">
+                        <Col size="4" p="p-0">
 
                             {/* ADD IN 5 CARDBODY COMPONENTS, WITH UNIQUE IDS AND FEED IT THE HANDLECLICK FUNCTION SO THAT THE FUNCTIONS ABOVE RUN WHEN THE TAB IS CLICKED */}
                             <CardBody id="env" onClick={this.handleClick}>Writing Environment <i className="fas fa-angle-right"></i></CardBody>
@@ -182,7 +182,7 @@ class Home extends Component {
                         </Col> 
 
                         {/* FEATURES INFO: CALL ANOTHER COLUMN SIZE 8 */}
-                        <Col size="8" id="right-col">
+                        <Col size="8" p="p-0">
 
                             {/* CALL THE FEATURESDISPLAY COMPONENT THAT TAKES THE STATE INFO FOR DYNAMIC UPDATING */}
                             <FeaturesDisplay id="info-container" title={this.state.title} content={this.state.content}/>
@@ -192,7 +192,7 @@ class Home extends Component {
                     {/* ANOTHER ROW COMPONENT FOR THE NEXT SET OF STUFF */}
                     <Row>
                         {/* COLUMN SIZE 12 TO HOLD A BUTTON */}
-                        <Col size="12" id="button-row">
+                        <Col size="12" align="text-center" m="mt-4">
 
                             {/* CALL THE BUTTON COMPONENT AND GIVE IT TEXT */}
                             <Button id="get-started" className="mt-3" onClick={this.login}>Get Started</Button>

@@ -339,7 +339,7 @@ class NotePage extends Component {
                 <Row id="editor-note-row">
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
-                    <Col size="8" id="editor-note-col">
+                    <Col size="8"  p="pr-0" id="editor-note-col">
 
                         {/* SUB-ROW TO HOLD THE BACK BUTTON, NOTE TITLE EDIT*/}
                         <Row>
@@ -420,7 +420,7 @@ class NotePage extends Component {
                     </Col>
 
                     {/* THE RIGHT-HAND COLUMN, WHICH HOLDS OUR NOTE LIST */}
-                    <Col size="4" id="note-list-col">
+                    <Col size="4" p="pl-0 pr-0" m="mr-0" id="note-list-col">
 
                         {/* MAP THROUGH OUR NOTES FROM THE STATE */}
                         {this.state.notes.map(note => {

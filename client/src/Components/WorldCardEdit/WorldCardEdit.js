@@ -1,5 +1,6 @@
 import React from "react";
 import "./WorldCardEdit.css";
+import { Col } from "./../Grid";
 
 const WorldCardEdit = (props) => (
     <div className="card rounded-0" id={props.id}>
@@ -8,9 +9,9 @@ const WorldCardEdit = (props) => (
                 {props.title}
             </p>
             <div className="row">
-                <div className="col-12">
+                <Col size="12">
                     <p className="edit-world text-right mb-0" onClick={props.onClick} id={props.id}>Edit</p>
-                </div>
+                </Col>
             </div>
         </div>
     </div>

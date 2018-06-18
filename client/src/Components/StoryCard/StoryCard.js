@@ -3,7 +3,7 @@ import "./StoryCard.css";
 import {Row, Col} from "../../Components/Grid";
 
 const StoryCard = (props) => (
-    <Col size="5" id="story-editor-col">
+    <Col size="5" m="ml-auto mr-auto">
         <div className="card story-card mb-4" id={props.id}>
             <div className="card-body">
                 <h5 className="card-title story-card-title text-center">
@@ -34,7 +34,7 @@ const StoryCard = (props) => (
                     </Col>
                 </Row>  
                 <Row>
-                    <Col size="12" id="delete-btn-story">
+                    <Col size="12" id="delete-btn-story" align="text-right">
                         <button className="btn mt-4 mb-1 trash" 
                             id={props.id} 
                             onClick={props.onDelete}

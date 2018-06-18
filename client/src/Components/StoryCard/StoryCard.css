@@ -1,8 +1,3 @@
-#story-editor-col {
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .story-card-title {
     font-family: 'Open-Sans', sans-serif;
     font-weight: 700
@@ -34,11 +29,7 @@
     color: red;
     cursor: pointer;
 }
-
-#delete-btn-story {
-    text-align: right;
-}
-
+/* 
 .popover-body {
     text-align: center;
-}
+} */

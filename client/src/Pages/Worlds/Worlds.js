@@ -319,7 +319,7 @@ class WorldPage extends Component {
                 <Row id="editor-world-row">
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
-                    <Col size="8" id="editor-world-col">
+                    <Col size="8" p="pr-0" id="editor-world-col">
 
                         {/* SUB-ROW TO HOLD THE BACK BUTTON, WORLD TITLE EDIT*/}
                         <Row>
@@ -400,7 +400,7 @@ class WorldPage extends Component {
                     </Col>
 
                     {/* THE RIGHT-HAND COLUMN, WHICH HOLDS OUR WORLD LIST */}
-                    <Col size="4" id="world-list-col">
+                    <Col size="4" p="pl-0 pr-0 mr-0" id="world-list-col">
 
                         {/* MAP THROUGH OUR WORLD ITEMS FROM THE STATE */}
                         {this.state.worlds.map(world => {

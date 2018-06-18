@@ -10,7 +10,6 @@
 #editor-char-col {
     height: 100%;
     max-height: 90vh;
-    padding-right: 0px;
 }
 
 #editor-char-row {
@@ -20,9 +19,6 @@
 }
 
 #char-list-col {
-    padding-left: 0px;
-    padding-right: 0px;
-    margin-right: 0px;
     overflow: auto;
     min-height: 85vh;
     max-height: 85vh;

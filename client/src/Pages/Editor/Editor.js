@@ -425,7 +425,7 @@ class EditorPage extends Component {
                 <Row id="editor-row">
 
                     {/* SETTING UP OUR 3-COL SYSTEM. THIS IS THE LEFT COL FOR LEFT TABS*/}
-                    <Col size="3" id="tabs-left">
+                    <Col size="3" p="pr-0" m="mb-4" id="tabs-left">
 
                         {/* TABS FOR CHARACTERS AND PLOT, WHICH ARE BUTTONS */}
                         <Button className="tab-btn rounded-0" id="char-tab" onClick={this.handleClick}>
@@ -436,7 +436,7 @@ class EditorPage extends Component {
                         </Button>
             
                         {/* DIV TO HOLD THE SIDEBAR CONTENT */}
-                        <div>
+                        <div className="pb-4">
 
                             {/* P CLASS TO HOLD THE LINK TO CENTER THE TEXT */}
                             <p className="justify-content-center text-center mt-2 mb-2">
@@ -451,7 +451,7 @@ class EditorPage extends Component {
                     </Col>
 
                     {/* CENTER COLUMN FOR THE TEXT EDITOR */}
-                    <Col size="6" id="editor-col">
+                    <Col size="6" p="p-0" id="editor-col">
 
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
@@ -499,7 +499,7 @@ class EditorPage extends Component {
                     </Col>
 
                     {/* COLUMN FOR RIGHT SIDEBAR */}
-                    <Col size="3" id="tabs-right">
+                    <Col size="3" p="pr-0 pl-0" m="mb-4" id="tabs-right">
 
                         {/* TABS FOR WORLD AND NOTES */}
                         <Button className="rounded-0 tab-btn" id="world-tab" onClick={this.handleClick}>

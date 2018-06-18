@@ -25,30 +25,24 @@
 }
 
 #editor-col {
-    padding: 0px;
     width: 99%;
 }
 
 #tabs-left {
     border-right: 1px solid #dfdfdf;
-    padding-right: 0px;
     overflow: auto;
     min-height: 85vh;
     max-height: 85vh;
     max-width: 100vh;
-    margin-bottom: 20px;
 }
 
 
 #tabs-right {
     border-left: 1px solid #dfdfdf;
-    padding-left:0px;
-    padding-right: 0px;
     overflow: auto;
     min-height: 85vh;
     max-height: 85vh;
     max-width: 100vh;
-    margin-bottom: 20px;
 }
 
 #text-editor {
