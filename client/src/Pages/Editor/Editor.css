@@ -26,13 +26,22 @@
 
 #editor-col {
     width: 99%;
+    height: 90vh;
+}
+
+#mceu_18, #mceu_18-body {
+    height: 90%;
+}
+
+#mceu_30 {
+    height: 90%;
 }
 
 #tabs-left {
     border-right: 1px solid #dfdfdf;
     overflow: auto;
-    min-height: 85vh;
-    max-height: 85vh;
+    min-height: 90vh;
+    max-height: 90vh;
     max-width: 100vh;
 }
 
@@ -40,14 +49,13 @@
 #tabs-right {
     border-left: 1px solid #dfdfdf;
     overflow: auto;
-    min-height: 85vh;
-    max-height: 85vh;
+    min-height: 90vh;
+    max-height: 90vh;
     max-width: 100vh;
 }
 
-#text-editor {
-    height: 78%;
-    max-height: 85vh;    
+#text-editor_ifr {
+    height: 100%;    
 }
 
 .mce-notification {

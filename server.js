@@ -27,7 +27,7 @@ app.use(cookieParser());
 // SESSION SETUP
 app.use(session({
   // ACCESS ENV COOKIE VARIABLE WHEN DEPLOYED
-  secret: process.env.COOKIE_SECRET || 'victorias secret',
+  secret: process.env.COOKIE_SECRET || 'secret cookie',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: new Date(Date.now() + (60 * 3000 * 30)) }
