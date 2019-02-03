@@ -1,30 +1,28 @@
 module.exports = function (sequelize, DataTypes) {
     var Story = sequelize.define("Story", {
-    
-    title: {
-        type: DataTypes.TEXT
-    },
+        title: {
+            type: DataTypes.TEXT
+        },
 
-    story_text: {
-        type: DataTypes.TEXT
-    }
-      
+        story_text: {
+            type: DataTypes.TEXT
+        }  
     });
   
     Story.associate = function(models) {
-        Story.hasMany(models.Character, { onDelete: 'cascade'});
+        Story.hasMany(models.Character, { onDelete: 'cascade' });
     };
 
     Story.associate = function(models) {
-        Story.hasMany(models.Plot, { onDelete: 'cascade'});
+        Story.hasMany(models.Plot, { onDelete: 'cascade' });
     };
 
     Story.associate = function(models) {
-        Story.hasMany(models.World, { onDelete: 'cascade'});
+        Story.hasMany(models.World, { onDelete: 'cascade' });
     };
 
     Story.associate = function(models) {
-        Story.hasMany(models.Note, { onDelete: 'cascade'});
+        Story.hasMany(models.Note, { onDelete: 'cascade' });
     };
 
     Story.associate = function(models) {
@@ -32,4 +30,4 @@ module.exports = function (sequelize, DataTypes) {
     }
 
     return Story;
-  };
+};

@@ -1,14 +1,12 @@
 module.exports = function (sequelize, DataTypes) {
     var World = sequelize.define("World", {
-    
-    title: {
-        type: DataTypes.TEXT
-    },
+        title: {
+            type: DataTypes.TEXT
+        },
 
-    world_text: {
-        type: DataTypes.TEXT
-    }
-      
+        world_text: {
+            type: DataTypes.TEXT
+        }
     });
   
     World.associate = function(models) {
@@ -16,4 +14,4 @@ module.exports = function (sequelize, DataTypes) {
     };
 
     return World;
-  };
+};
