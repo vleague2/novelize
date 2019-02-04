@@ -2,6 +2,8 @@ const express = require('express');
 const db = require("./../models");
 const he = require("he");
 
+const utils = require("../utils");
+
 const note = {
     findAll: function(req, res) {
         const { storyid } = req.params;
@@ -34,6 +36,11 @@ const note = {
         const { column, content } = req.body;
         const encoded_content = he.encode(content);
 
+        if (column === 'title' && !content) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
+
         db.Note.update(
             {[column]: encoded_content},
             {where: { id }}
@@ -46,6 +53,12 @@ const note = {
 
     addOne: function(req, res) {
         const { title, storyId } = req.body;
+
+        if (!title) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
+
         const encodedTitle = he.encode(title);
 
         db.Note.create(

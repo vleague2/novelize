@@ -230,6 +230,11 @@ class WorldPage extends Component {
             // PING THE DATABASE TO GET AN UPDATED WORLD LIST
             this.updateWorldList();
         }) 
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty title!");
+        })
     }
 
 //*********** EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
@@ -283,6 +288,11 @@ class WorldPage extends Component {
                 // UPDATE THE EDITOR WITH NEW WORLD DATA
                 this.updateEditor(newWorldRes.data.id)
             })
+        })
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty title!");
         })
     }
     

@@ -198,6 +198,11 @@ class Dashboard extends Component {
             // UDPATE THE STORY LIST
             this.updateStoriesList();
         })
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty story title!");
+        })
     }
 
 // ************ FUNCTION TO HANDLE WHEN THE USER SAVES A NEW STORY
@@ -232,6 +237,11 @@ class Dashboard extends Component {
             
             // EMPTY MODAL
             document.getElementById("add-title-input").value = "";
+        })
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty story title!");
         })
     }
 

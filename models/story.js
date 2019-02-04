@@ -1,7 +1,8 @@
 module.exports = function (sequelize, DataTypes) {
     var Story = sequelize.define("Story", {
         title: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNull: false
         },
 
         story_text: {

@@ -8,4 +8,11 @@ function checkAuthentication(req,res,next){
     }
 }
 
+function sendEmptyFieldError(res) {
+    res.status(400);
+    res.send("can't be empty");
+    console.log("tried to save empty required field");
+}
+
 module.exports.checkAuthentication = checkAuthentication;
+module.exports.sendEmptyFieldError = sendEmptyFieldError;

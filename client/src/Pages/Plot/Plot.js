@@ -216,6 +216,11 @@ class PlotPage extends Component {
             // UPDATE THE PLOT LIST
             this.updatePlotList();
         })
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty plot title!");
+        })
     }
 
 // ************ WHEN THE USER EDITS A PLOT ITEM, WE NEED TO POPULATE THE MODAL WITH THE CORRECT ITEM'S INFO
@@ -274,6 +279,11 @@ class PlotPage extends Component {
                 document.getElementById("update-title-input").value = "";
                 document.getElementById("update-plot-input").value = "";
             })
+        })
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty plot title!");
         })
     }
 

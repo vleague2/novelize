@@ -241,9 +241,17 @@ decode = (data) => {
         API.updateOne("characters", this.state.character_select, name, value)
         .then(res => {
 
+            console.log(res);
             // GET AN UPDATED CHARACTER LIST
             this.updateCharList();
         }) 
+        .catch(err => {
+            // @TODO change this from an alert. this is temporary......
+            alert("Name cannot be empty!");
+
+            // @TODO this would be a great place to use redux to replace the character name instead of making another API call
+            // replace character name field because now it's awkwardly blank
+        })
     }
 
 // ****************** EVERY TIME THE VALUE OF THE EDITOR CHANGES SO WE CAN AUTOSAVE
@@ -262,7 +270,7 @@ decode = (data) => {
     addNewChar = () => {
 
         // IN THE EVENT THAT THE USER HAS JUST ADDED THEIR FIRST CHARACTER, WE NEED TO FIX THE MODAL STUFF WE BROKE TO FORCE THEM TO ADD A CHARACTER
-
+        // @TODO for the love of god, make this a function in utils
             // LET THE USER CLICK AWAY TO CLOSE THE MODAL
             document.getElementById("add-char-modal").setAttribute("data-backdrop","true");
 
@@ -306,6 +314,12 @@ decode = (data) => {
                 // UPDATE THE EDITOR WITH THE NEW CHARACTER DATA
                 this.updateEditor(newCharRes.data.id)
             })
+        })
+        .catch(err => {
+            // @TODO temporarily an alert. please change
+            alert("Can't save empty character name!");
+            console.log(err);
+            // @TODO don't close the modal :(
         })
     }
 

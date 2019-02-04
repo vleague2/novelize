@@ -1,7 +1,8 @@
 module.exports = function (sequelize, DataTypes) {
     var Plot = sequelize.define("Plot", {
         title: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNull: false
         },
 
         plot_text: {

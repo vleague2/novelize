@@ -247,6 +247,11 @@ class NotePage extends Component {
 
             // PING THE DATABASE TO GET AN UPDATED NOTE LIST
             this.updateNoteList();
+        })
+        .catch(err => {
+            // @TODO
+            console.log(err);
+            alert("Can't save empty title!");
         }) 
     }
 
@@ -302,6 +307,11 @@ class NotePage extends Component {
                 // UPDATE THE EDITOR WITH NEW NOTE DATA
                 this.updateEditor(newNoteRes.data.id)
             })
+        })
+        .catch(err => {
+            console.log(err);
+            // @TODO
+            alert("Can't save empty note title!");
         })
     }
 

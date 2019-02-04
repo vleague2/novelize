@@ -3,6 +3,8 @@ const db = require("./../models");
 const he = require('he');
 const passport = require('passport');
 
+const utils = require("../utils");
+
 const story = {
     findAll: function(req, res) {
         console.log("user id in session: " + req.session.passport.user)
@@ -47,6 +49,11 @@ const story = {
     addOne: function(req, res) {
         const { title } = req.body;
 
+        if (!title) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
+
         const userId = req.session.passport.user;
 
         const encodedTitle = he.encode(title);
@@ -63,6 +70,11 @@ const story = {
     updateOne: function(req, res) {
         const { content, column } = req.body;
         const { id } = req.params;
+
+        if (column === 'title' && !content) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
 
         const encodedContent = he.encode(content);
         

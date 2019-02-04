@@ -2,6 +2,8 @@ const express = require('express');
 const db = require("./../models");
 const he = require("he");
 
+const utils = require("../utils");
+
 const world = {
     findAll: function(req, res) {
         const { storyid } = req.params;
@@ -32,6 +34,11 @@ const world = {
     updateOne: function(req, res) {
         const { id } = req.params;
         const { column, content } = req.body;
+
+        if (column === 'title' && !content) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
     
         const encodedContent = he.encode(content);
 
@@ -47,6 +54,11 @@ const world = {
 
     addOne: function(req, res) {
         const { title, storyId } = req.body;
+
+        if (!title) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
 
         const encodedTitle = he.encode(title)
 

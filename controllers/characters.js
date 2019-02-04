@@ -2,6 +2,8 @@ const express = require('express');
 const db = require("./../models");
 const he = require("he");
 
+const utils = require('../utils');
+
 const character = {
     findAll: function(req, res) {
         const { storyid } = req.params;
@@ -47,6 +49,11 @@ const character = {
 
         const encodedContent = he.encode(content);
 
+        if (column === 'name' && !content) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
+
         db.Character.update(
             {[column]: encodedContent},
             {where: { id }}
@@ -60,6 +67,10 @@ const character = {
     addOne: function(req, res) {
         const { name, preview, image, storyId } = req.body;
 
+        if (!name) {
+            utils.sendEmptyFieldError(res);
+            return;
+        }
         // @TODO: continuing other todo about encoding, maybe this can be a util service
         const character = {
             name: he.encode(name),
