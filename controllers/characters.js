@@ -2,27 +2,18 @@ const express = require('express');
 const db = require("./../models");
 const he = require("he");
 
-// CREATE A CHARACTER OBJECT
-let character = {
-
-    // FIND ALL FUNCTION THAT WILL PING DATABASE
+const character = {
     findAll: function(req, res) {
+        const { storyid } = req.params;
 
-        // PULL OUT THE STORY ID FROM THE URL PARAMETERS
-        let storyId = req.params.storyid;
-
-        // MAKE CALL TO THE DATABASE TO FIND ALL
         db.Character.findAll({
-
-            // WHERE THE STORY ID MATCHES 
-            where: {StoryId: storyId}
+            where: { StoryId: storyid }
         }).then(characters => {
-
-            // IF WE HAVE DATA COMING BACK FROM THE DB
             if (characters.length > 0 ) {
-
-                // SERVER SIDE SANITIZATION - DECODING TO SEND BACK TO USER. IF THERE IS DATA IN THE FIELD, DECODE IT
+                // Server-side sanitization
                 characters.forEach(character => {
+                    // @TODO: clean this up & shorten
+                    // @TODO: create new character object to avoid mutating data
                     if (character.name !==null) {
                         character.name = he.decode(character.name);
                     }
@@ -39,98 +30,60 @@ let character = {
                     }
                 })
 
-                // SEND THE CHARACTERS TO THE FRONT-END
                 res.send(characters);
             }
 
-            // IF WE HAVE NO DATA FROM THE SERVER
             else {
-
-                // SEND BACK AN EMPTY ARRAY
+                // Send back an empty array so the FE knows there are no characters yet
                 res.send([]);
             }  
         })
     },
 
-    // FUNCTION TO UPDATE A CHARACTER IN THE DB
     updateOne: function(req, res) {
+        const { id } = req.params;
 
-        // PULL OUT THE CHARACTER'S ID FROM THE URL PARAMETERS
-        let id = req.params.id;
+        const { column, content } = req.body;
 
-        // PULL OUT THE COLUMN NAME FROM THE FRONT-END REQUEST
-        let column_name = req.body.column;
+        const encodedContent = he.encode(content);
 
-        // PULL OUT THE CONTENT VALUE FROM THE FRONT-END REQUEST
-        let content_update = req.body.content;
-
-        // ENCODE THE CONTENT BEFORE WE PUT IT IN THE DB
-        let encodedContent = he.encode(content_update);
-
-        // MAKE DB CALL TO UPDATE
         db.Character.update(
-
-            // SEND THE COLUMN NAME AND ENCODED CONTENT
-            {[column_name]: encodedContent},
-
-            // WHERE THE IDS MATCH
-            {where: {id:id}}
+            {[column]: encodedContent},
+            {where: { id }}
         )
         .then(response => {
-            
-            // SEND AN UPDATE TO THE FRONT-END
             res.send("updated one character!");
             console.log("updated one character")
         })
     },
 
-    // FUNCTION TO ADD A CHARACTER
     addOne: function(req, res) {
+        const { name, preview, image, storyId } = req.body;
 
-        // PULL CHARACTER NAME FROM REQUEST BODY
-        let characterName = req.body.name;
+        // @TODO: continuing other todo about encoding, maybe this can be a util service
+        const character = {
+            name: he.encode(name),
+            preview_text: he.encode(preview),
+            character_image: he.encode(image),
+            StoryId: storyId
+        }
 
-        // PULL CHARACTER PREVIEW TEXT FROM REQUEST BODY
-        let characterPreview = req.body.preview;
-
-        // PULL CHARACTER IMAGE FROM REQUEST BODY
-        let characterImage = req.body.image;
-
-        // PULL STORY ID FROM THE REQUEST BODY
-        let storyId = req.body.storyId
-
-        // ENCODE THE DATA BEFORE SENDING IT INTO THE DB
-        let encodedName = he.encode(characterName);
-        let encodedPreview = he.encode(characterPreview);
-        let encodedImage = he.encode(characterImage);
-
-        // CALL DB TO CREATE A CHARACTER WITH DATA
         db.Character.create(
-            {name: encodedName, preview_text: encodedPreview, character_image: encodedImage, StoryId: storyId}
+            character
         )
         .then(response => {
-
-            // SEND THE DATA BACK TO THE FRONT-END
             console.log(response.dataValues);
             res.send(response.dataValues);
         })
     },
 
-    // FUNCTION TO DELETE A CHARACTER
     deleteOne: function(req, res) {
+        const { id } = req.params;
 
-        // PULL ID FROM THE URL PARAMETERS
-        let id = req.params.id;
-
-        // SEND DB CALL TO DELETE
         db.Character.destroy(
-
-            // WHERE THE ID MATCHES
-            {where: {id:id}}
+            {where: { id }}
         )
         .then(response => {
-
-            // SEND A NOTE TO THE FRONT END THAT IT WAS DELETED
             console.log(response);
             res.send("Deleted one character");
         })
