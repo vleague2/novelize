@@ -23,9 +23,9 @@ Novelize uses the following technologies:
 * Heroku
 
 ## How to Use Novelize
-* First, users must create an account
-* Upon first login, users will be prompted to add a new story to their account
-* They will then be able to open the main editing environment, or quick-jump to edit charaters, edit notes, edit plotline, or edit worldbuilding items. 
+* First, users must create an account.
+* Upon first login, users will be prompted to add a new story to their account.
+* They will then be able to open the main editing environment, or quick-jump to edit charaters, notes, plotlines, or worldbuilding items. 
 * Users are able to delete any of these items from their account.
 
 ## Novelize's Pages
@@ -82,3 +82,25 @@ Novelize is currently developing the following features:
 * Store session data in a more secure way
 * Incorporate Google login as an authentication option
 * Full mobile responsiveness
+
+On a more grainy level...
+
+* Remove comments from client code
+* Refactor client code, as there are a lot of repeat functions
+* Refactor server-side sanitization
+* Avoid mutating objects
+* Remove all the alerts just added as temporary notices for required fields
+
+* Add visual notice of required title fields
+* Debounce database writes from the client
+* Fix tinymce editor size
+* Adjust positioning of plot point dots (same line as title)
+* Allow users to login or register by hitting enter key
+* Adjust spacing for characters without images (left-align it)
+* Add an autosave indicator
+
+* Investigate redux as a solution for global data
+* Set up a linting service
+* Move to typescript
+* Add in error handling for all CRUD actions
+* Fix React compile warnings (mostly double ==)
