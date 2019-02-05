@@ -22,16 +22,16 @@ export default {
         return axios.delete(`/api/${URL}/` + id);
     },
 
-    addNewCharacter: function(name, preview, image, storyId) {
-        let encodedName = encodeURIComponent(name);
-        let encodedPreview = encodeURIComponent(preview);
-        let encodedImage = encodeURIComponent(image);
+    addNewCharacter: function(character) {
+        let encodedName = encodeURIComponent(character.name);
+        let encodedPreview = encodeURIComponent(character.preview);
+        let encodedImage = encodeURIComponent(character.image);
         
         return axios.post("/api/new/character", {
             name: encodedName,
             preview: encodedPreview,
             image: encodedImage,
-            storyId: storyId
+            storyId: character.storyId
         })
     },
 
