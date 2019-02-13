@@ -2,9 +2,7 @@ import React, {Component} from "react";
 import "./Notes.css";
 import {Row, Col} from "../../Components/Grid";
 import WorldCardEdit from "../../Components/WorldCardEdit";
-import { Editor } from '@tinymce/tinymce-react';
-import Button from "../../Components/Button";
-import BackButton from "../../Components/BackButton";
+import TinyMceEditor from "../../Components/TinyMceEditor";
 import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
@@ -347,62 +345,18 @@ class NotePage extends Component {
             // CONTAINER DIV BECAUSE REACT ONLY LETS YOU EXPORT ONE DIV
             <div id="note-edit">
 
-                {/* THIS ROW HOLDS OUR ENTIRE PAGE, BASICALLY */}
                 <Row id="editor-note-row">
-
-                    {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
                     <Col size="8"  p="pr-0" id="editor-note-col">
-                    
-                    <EditorRow
-                        mainFormLabel="Title"
-                        placeholder={this.state.title}
-                        onChange={this.handleInputChange}
-                        onDelete={this.deleteNote}
-                        formName="title"
-                    />
-
-                        {/*SET UP THE TEXT EDITOR*/}
-                        <Editor
-                            apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
-                            cloudChannel='dev'
-
-                            // DROPPING IN THE STATE VALUE TO POPULATE THE EDITOR INITIALLY
-                            initialValue={`<p>${this.state.editor}</p>`}
-                            id="text-editor-note"
-                            
-                            // INITIALIZE A BUNCH OF THINGS
-                            init={{
-
-                                // FUNCTIONALITY PLUGINS
-                                plugins: [
-                                    'advlist autolink lists link image charmap print preview anchor textcolor',
-                                    'searchreplace visualblocks code fullscreen',
-                                    'insertdatetime media table contextmenu paste code help wordcount'
-                                ],
-
-                                // EDITING OPTIONS
-                                toolbar: 'insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-
-                                // HIDE THE MENU BAR FOR FILE STUFF
-                                menubar: false,
-
-                                // ADD IN SOME CSS FOR FONTS AND SUCH
-                                content_css: [
-                                    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                                    '//www.tinymce.com/css/codepen.min.css'],
-                                height: 446,
-
-                                // MAKE SURE THE USER CAN HIT TAB TO ACTUALLY MAKE A TAB
-                                setup: function(ed) {
-                                    ed.on('keydown', function(event) {
-                                        if (event.keyCode === 9) { // tab pressed
-                                            ed.execCommand('mceInsertContent', false, '&emsp;'); 
-                                            event.preventDefault();
-                                            return false;
-                                        }
-                                    });
-                                }
-                            }}
+                        <EditorRow
+                            mainFormLabel="Title"
+                            placeholder={this.state.title}
+                            onChange={this.handleInputChange}
+                            onDelete={this.deleteNote}
+                            formName="title"
+                        />
+                        
+                        <TinyMceEditor
+                            editorText={this.state.editor}
                             onChange={this.handleEditorChange}
                         />
                     </Col>

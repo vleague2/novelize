@@ -42,11 +42,12 @@ export default {
     },
 
     changeClass: function(id, active) {
+        // @TODO this could probably be an actual component that takes in the active class instead of this awful garbage
         document.getElementById(id).setAttribute("class", `card rounded-0 ${active}`);
     },
 
     setEditorText: function(text) {
-        window.frames['text-editor-char_ifr'].contentDocument.getElementById('tinymce').innerHTML = text;
+        window.frames['text-editor_ifr'].contentDocument.getElementById('tinymce').innerHTML = text;
     },
 
     decode: function(array) {

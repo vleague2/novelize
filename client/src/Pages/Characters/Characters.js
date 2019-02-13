@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import "./Characters.css";
 import { Row, Col } from "../../Components/Grid";
 import CharacterCardEdit from "../../Components/CharacterCardEdit";
-import { Editor } from '@tinymce/tinymce-react';
-import BackButton from "../../Components/BackButton";
-import Button from "../../Components/Button";
+import TinyMceEditor from '../../Components/TinyMceEditor';
 import AddAnItem from "../../Components/AddAnItem";
 import { FormFieldInput } from "../../Components/Form";
 import API from "../../utils/API";
@@ -220,34 +218,8 @@ class CharacterPage extends Component {
                             rightFormName="character_image"             
                         />
 
-{/* @TODO make this a component */}
-                        <Editor
-                            apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
-                            cloudChannel='dev'
-                            initialValue={`<p>${this.state.editor}</p>`}
-                            id="text-editor-char"
-                            init={{
-                                plugins: [
-                                    'advlist autolink lists link image charmap print preview anchor textcolor',
-                                    'searchreplace visualblocks code fullscreen',
-                                    'insertdatetime media table contextmenu paste code help wordcount'
-                                ],
-                                toolbar: 'insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                                menubar: false,
-                                content_css: [
-                                    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                                    '//www.tinymce.com/css/codepen.min.css'],
-                                height: 386,
-                                setup: function(ed) {
-                                    ed.on('keydown', function(event) {
-                                        if (event.keyCode === 9) { // tab pressed
-                                            ed.execCommand('mceInsertContent', false, '&emsp;'); 
-                                            event.preventDefault();
-                                            return false;
-                                        }
-                                    });
-                                }
-                            }}
+                        <TinyMceEditor
+                            editorText={this.state.editor}
                             onChange={this.handleEditorChange}
                         />
                     </Col>
