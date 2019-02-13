@@ -9,6 +9,7 @@ import AddAnItem from "../../Components/AddAnItem";
 import {FormFieldInput} from "../../Components/Form";
 import API from "../../utils/API";
 import Modal from "../../Components/Modal";
+import EditorRow from "../../Components/EditorRow";
 
 // CREATE STATEFUL COMPONENT
 class NotePage extends Component {
@@ -351,38 +352,14 @@ class NotePage extends Component {
 
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
                     <Col size="8"  p="pr-0" id="editor-note-col">
-
-                        {/* SUB-ROW TO HOLD THE BACK BUTTON, NOTE TITLE EDIT*/}
-                        <Row>
-
-                            {/* A TINY COLUMN TO HOLD THE BACK ARROW */}
-                            <Col size="1">
-
-                                {/* IT TAKES YOU BACK TO THE EDITOR */}
-                                <BackButton/>
-                            </Col>
-
-                            {/* COLUMN TO HOLD THE FORM LABEL */}
-                            <Col size="2">
-
-                                {/* LABEL FOR TITLE FORM */}
-                                <p className="mt-3 form-text text-right">Title</p>
-                            </Col>
-
-                            {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
-                            <Col size="6">
-
-                                {/* FORM COMPONENT FOR TITLE */}
-                                <FormFieldInput id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
-                            </Col>
-
-                            {/* COLUMN TO HOLD THE DELETE BUTTON */}
-                            <Col size="3">
-
-                                {/* DELETE BUTTON */}
-                                <Button className="btn-danger delete-btn" onClick={this.deleteNote}>Delete Note </Button>
-                            </Col>
-                        </Row>
+                    
+                    <EditorRow
+                        mainFormLabel="Title"
+                        placeholder={this.state.title}
+                        onChange={this.handleInputChange}
+                        onDelete={this.deleteNote}
+                        formName="title"
+                    />
 
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
