@@ -10,6 +10,7 @@ import { FormFieldInput } from "../../Components/Form";
 import API from "../../utils/API";
 import helpers from "../../utils/helpers";
 import Modal from "../../Components/Modal";
+import EditorRow from "../../Components/EditorRow";
 
 class CharacterPage extends Component {
     constructor(props) {
@@ -203,58 +204,21 @@ class CharacterPage extends Component {
         return (
             <div id="char-edit">
                 <Row id="editor-char-row">
-                {/* @TODO honestly this entire thing could probably be a component */}
                     <Col size="8" p="pr-0" id="editor-char-col">
-                        <Row>
-                            <Col size="1">
-                                <BackButton/>
-                            </Col>
-
-                            <Col size="1">
-                                <p className="mt-3 form-text text-right">Name</p>
-                            </Col>
-
-                            <Col size="4">
-                                <FormFieldInput 
-                                    id="name-input" 
-                                    value={this.state.name} 
-                                    name="name" 
-                                    onChange={this.handleInputChange}
-                                />
-                            </Col>
-
-                            <Col size="1">
-                                <p className="mt-3 form-text text-right">Image</p>
-                            </Col>
-
-                            <Col size="4">
-                                <FormFieldInput 
-                                    id="image-input" 
-                                    value={this.state.character_image} 
-                                    name="character_image" 
-                                    onChange={this.handleInputChange}
-                                />
-                            </Col>
-                        </Row>
-
-                        <Row>
-                            <Col size="2">
-                                <p className="text-right mt-3 form-text">One-line Bio</p>
-                            </Col>
-
-                            <Col size="7">
-                                <FormFieldInput
-                                    id="preview-input" 
-                                    value={this.state.preview_text} 
-                                    name="preview_text" 
-                                    onChange={this.handleInputChange}
-                                />
-                            </Col>
-
-                            <Col size="2">
-                                <Button className="btn-danger delete-btn" onClick={this.deleteChar}>Delete Character </Button>
-                            </Col>
-                        </Row>
+                        <EditorRow
+                            mainFormLabel="One-line Bio"
+                            placeholder={this.state.preview_text}
+                            formName="preview_text"   
+                            onChange={this.handleInputChange}
+                            onDelete={this.deleteChar}
+                            shouldShowBottomRow={true}
+                            leftLabel="Name"
+                            leftPlaceholder={this.state.name}
+                            leftFormName="name"
+                            rightLabel="Image"
+                            rightPlaceholder={this.state.character_image}
+                            rightFormName="character_image"             
+                        />
 
 {/* @TODO make this a component */}
                         <Editor

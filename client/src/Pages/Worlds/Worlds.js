@@ -9,6 +9,7 @@ import {FormFieldInput} from "../../Components/Form";
 import Button from "../../Components/Button";
 import API from "../../utils/API";
 import Modal from "../../Components/Modal";
+import EditorRow from "../../Components/EditorRow";
 
 // CREATE A STATEFUL COMPONENT
 class WorldPage extends Component {
@@ -332,37 +333,13 @@ class WorldPage extends Component {
                     {/* LEFTHAND COLUMN, WHICH HOLDS THE EDITOR */}
                     <Col size="8" p="pr-0" id="editor-world-col">
 
-                        {/* SUB-ROW TO HOLD THE BACK BUTTON, WORLD TITLE EDIT*/}
-                        <Row>
-
-                            {/* A TINY COLUMN TO HOLD THE BACK ARROW */}
-                            <Col size="1">
-
-                                {/* IT TAKES YOU BACK TO THE EDITOR */}
-                                <BackButton/>
-                            </Col>
-
-                            {/* COLUMN TO HOLD THE FORM LABEL */}
-                            <Col size="2">
-
-                                {/* FORM LABEL FOR TITLE */}
-                                <p className="mt-3 form-text text-right">Title</p>
-                            </Col>
-
-                            {/* COLUMN TO HOLD THE FORM INPUT FOR NAME */}
-                            <Col size="6">
-
-                                {/* FORM FIELD INPUT FOR TITLE */}
-                                <FormFieldInput id="title-input" value={this.state.title} name="title" onChange={this.handleInputChange}/>
-                            </Col>
-
-                            {/* COLUMN TO HOLD THE DELETE BUTTON */}
-                            <Col size="3">
-
-                                {/* DELETE BUTTON */}
-                                <Button className="btn-danger delete-btn" onClick={this.deleteWorld}>Delete Item </Button>
-                            </Col>
-                        </Row>
+                        <EditorRow
+                            mainFormLabel="Title"
+                            placeholder={this.state.title}
+                            onChange={this.handleInputChange}
+                            onDelete={this.deleteWorld}
+                            formName="title"
+                        />
 
                         {/*SET UP THE TEXT EDITOR*/}
                         <Editor
