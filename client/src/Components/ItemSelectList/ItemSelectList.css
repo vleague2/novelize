@@ -1,0 +1,5 @@
+#item-list-col {
+    height: 100%;
+    overflow: auto;
+    max-height: 85vh;
+}

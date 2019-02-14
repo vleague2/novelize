@@ -349,7 +349,7 @@ class NotePage extends Component {
                     <Col size="8"  p="pr-0" id="editor-note-col">
                         <EditorRow
                             mainFormLabel="Title"
-                            placeholder={this.state.title}
+                            formValue={this.state.title}
                             onChange={this.handleInputChange}
                             onDelete={this.deleteNote}
                             formName="title"

@@ -205,16 +205,16 @@ class CharacterPage extends Component {
                     <Col size="8" p="pr-0" id="editor-char-col">
                         <EditorRow
                             mainFormLabel="One-line Bio"
-                            placeholder={this.state.preview_text}
+                            formValue={this.state.preview_text}
                             formName="preview_text"   
                             onChange={this.handleInputChange}
                             onDelete={this.deleteChar}
                             shouldShowBottomRow={true}
                             leftLabel="Name"
-                            leftPlaceholder={this.state.name}
+                            leftformValue={this.state.name}
                             leftFormName="name"
                             rightLabel="Image"
-                            rightPlaceholder={this.state.character_image}
+                            rightformValue={this.state.character_image}
                             rightFormName="character_image"             
                         />
 

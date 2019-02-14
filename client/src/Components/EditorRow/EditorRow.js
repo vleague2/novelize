@@ -1,4 +1,5 @@
 import React from "react";
+import "./EditorRow.css";
 import { Row, Col } from "../Grid";
 import BackButton from "../BackButton";
 import Button from "../Button";
@@ -32,7 +33,7 @@ import { FormFieldInput } from "../Form";
 // }
 
 const EditorRow = ( props ) => {
-    // @TODO this is awful
+    // @TODO this is awful. set default instead
     const shouldShowBottomRow = props.shouldShowBottomRow || false;
 
     return (
@@ -48,8 +49,7 @@ const EditorRow = ( props ) => {
 
                 <Col size="6">
                     <FormFieldInput
-                        id="ugh" 
-                        value={props.placeholder} 
+                        value={props.formValue} 
                         name={props.formName} 
                         onChange={props.onChange}
                     />
@@ -73,8 +73,7 @@ const EditorRow = ( props ) => {
 
                     <Col size="3">
                         <FormFieldInput 
-                            id="name-input" 
-                            value={props.leftPlaceholder} 
+                            value={props.leftFormValue} 
                             name={props.leftFormName}
                             onChange={props.onChange}
                         />
@@ -86,8 +85,7 @@ const EditorRow = ( props ) => {
 
                     <Col size="3">
                         <FormFieldInput 
-                            id="image-input" 
-                            value={props.rightPlaceholder} 
+                            value={props.rightFormValue} 
                             name={props.rightFormName} 
                             onChange={props.onChange}
                         />

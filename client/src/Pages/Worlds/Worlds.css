@@ -22,24 +22,24 @@
     overflow: auto;
     max-height: 85vh;
 }
-#title_input {
+/* #title_input {
     width: 100%;
-}
+} */
 
-.form-text {
+/* .form-text {
     font-family: 'Open-Sans', sans-serif;
     font-size: 15px;
-}
+} */
 
-.label-title {
+/* .label-title {
     font-family: 'Open-Sans', sans-serif;
-}
+} */
 
 .btn-save-modal {
     background-color: #7e4464;
     color: white;
 }
 
-.delete-btn:focus, .delete-btn:active {
+/* .delete-btn:focus, .delete-btn:active {
     box-shadow: none;
-}
+} */
