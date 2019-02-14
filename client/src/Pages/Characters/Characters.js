@@ -9,6 +9,7 @@ import API from "../../utils/API";
 import helpers from "../../utils/helpers";
 import Modal from "../../Components/Modal";
 import EditorRow from "../../Components/EditorRow";
+import ItemSelectList from "../../Components/ItemSelectList/ItemSelectList";
 
 class CharacterPage extends Component {
     constructor(props) {
@@ -224,24 +225,12 @@ class CharacterPage extends Component {
                         />
                     </Col>
 
-{/* @TODO this entire column probably can also be a component */}
-                    <Col size="4" p="pr-0 pl-0" m="mr-0" id="char-list-col">
-                        {this.state.characters.map(character => {
-                            return <CharacterCardEdit 
-                                id={character.id} 
-                                title={character.name} 
-                                preview={character.preview_text} 
-                                key={character.id} 
-                                image={character.character_image} 
-                                onClick={this.handleEditClick}
-                            />
-                        })}
-
-                        <AddAnItem
-                            id="add-char-prompt"
-                            target="#add-char-modal"
-                        >Add a Character </AddAnItem>
-                    </Col>
+                    <ItemSelectList
+                        items={this.state.characters}
+                        onClick={this.handleEditClick}
+                        modalId="add-char-prompt"
+                        modalTarget="#add-char-modal"
+                    />
                 </Row>
 
                 <Modal
