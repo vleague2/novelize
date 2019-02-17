@@ -12,9 +12,9 @@ const ItemCard = ( props ) => {
     
         return (
             <div>
-                <p className="view-more text-right mb-0" data-toggle="collapse" data-target={`#collapse${props.id}`}>View More</p>
+                <p className="view-more text-right mb-0" data-toggle="collapse" data-target={`#collapse-${props.itemType}-${props.id}`}>View More</p>
     
-                <p className="collapsible-text collapse" id={`collapse${props.id}`} dangerouslySetInnerHTML={{__html: props.text}}></p>
+                <p className="collapsible-text collapse" id={`collapse-${props.itemType}-${props.id}`} dangerouslySetInnerHTML={{__html: props.text}}></p>
             </div>
             
         )
@@ -24,14 +24,15 @@ const ItemCard = ( props ) => {
         <div className="card rounded-0" id={props.id}>
             <div className="card-body">
                 <Row>
-                    <Col size="4">
-                    {/* @TODO consider conditional rendering this entire column for blank image */}
-                        {props.image && 
+                    {props.image && 
+                        <Col size="3">
                             <img src={props.image} className="item-image" alt={props.title}/>
-                        }
-                    </Col>
-                    <Col size="8" p="pl-0">
+                        </Col>
+                    }
+
+                    <Col size="8" p="pl-3">
                         <p className="primary-text mb-1">{props.title}</p>
+                        {/* @TODO: text wrap? */}
                         <p className="secondary-text mb-1">{props.preview}</p>
                     </Col>
                 </Row>

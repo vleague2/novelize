@@ -22,7 +22,7 @@
     overflow: auto;
     max-height: 85vh;
 }
-#title_input {
+/* #title_input {
     width: 100%;
 }
 
@@ -38,4 +38,4 @@
 
 .delete-btn:focus, .delete-btn:active {
     box-shadow: none;
-}
+} */

@@ -45,8 +45,7 @@ class CharacterPage extends Component {
             this.changeClass(firstCharacter.id, "active-char");
         })
         .catch(err => {
-            helpers.openModalForced();
-            // this.forceAddCharacter();
+            helpers.openModalForced("character");
         })
     }
 
@@ -100,11 +99,11 @@ class CharacterPage extends Component {
         this.state.characters.forEach(character => {
             if (character.id === id) {
                 this.setState({
-                        character_select: id, 
-                        name: character.name,
-                        preview_text: character.preview_text, 
-                        character_image: character.character_image
-                    });
+                    character_select: id, 
+                    name: character.name,
+                    preview_text: character.preview_text, 
+                    character_image: character.character_image
+                });
 
                 this.changeClass(character.id, "active-char");
 
@@ -228,13 +227,14 @@ class CharacterPage extends Component {
                     <ItemSelectList
                         items={this.state.characters}
                         onClick={this.handleEditClick}
-                        modalId="add-char-prompt"
-                        modalTarget="#add-char-modal"
+                        promptId="add-character-prompt"
+                        modalTarget="#add-character-modal"
+                        itemType="character"
                     />
                 </Row>
 
                 <Modal
-                    id="add-char-modal"
+                    id="add-character-modal"
                     modalTitle="Add a Character"
                     saveId="add-new-char" 
                     onClick={this.addNewChar}

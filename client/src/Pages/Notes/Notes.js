@@ -376,7 +376,6 @@ class NotePage extends Component {
                             />
                         })}
 
-                        {/* LINK TO ADD A NOTE ITEM, WHICH WILL BRING UP A MODAL */}
                         <AddAnItem 
                             id="add-note-prompt"
                             target="#add-note-modal"
@@ -384,7 +383,6 @@ class NotePage extends Component {
                     </Col>
                 </Row>
 
-                {/* MODAL FOR ADDING A NEW NOTE ITEM */}
                 <Modal
                     id="add-note-modal"
                     modalTitle="Add a Note"

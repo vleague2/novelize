@@ -1,20 +1,18 @@
 import React, {Component} from "react";
 import "./Worlds.css";
 import {Row, Col} from "../../Components/Grid";
-import WorldCardEdit from "../../Components/WorldCardEdit";
 import TinyMceEditor from '../../Components/TinyMceEditor';
-import AddAnItem from "../../Components/AddAnItem";
-import {FormFieldInput, FormGroup} from "../../Components/Form";
+import { FormGroup } from "../../Components/Form";
 import API from "../../utils/API";
 import Modal from "../../Components/Modal";
 import EditorRow from "../../Components/EditorRow";
+import ItemSelectList from "../../Components/ItemSelectList/ItemSelectList";
+import helpers from "../../utils/helpers";
 
-// CREATE A STATEFUL COMPONENT
 class WorldPage extends Component {
     constructor(props) {
         super(props);
 
-        // SET THE STATE
         this.state = {
             worlds: [],
             editor: "",
@@ -22,87 +20,58 @@ class WorldPage extends Component {
             title: ""
         }
 
-        // BIND THIS FOR HANDLECLICK
         this.handleClick = this.handleClick.bind(this);
-
-        // BIND FOR ADD NEW WORLD CLICK
         this.addNewWorld = this.addNewWorld.bind(this);
     }
 
-// *************** AS SOON AS THE APP LOADS
     componentDidMount() {
-
-        // CALL THE FUNCTION TO UPDATE THE NOTE LIST
         this.updateWorldList()
-        .then(data => {
+        .then(worlds => {
+            const firstWorld = worlds[0];
 
-            // WE ALSO HAVE TO UPDATE THE EDITOR AND TITLE STATE AND CURRENT SELECT SO THAT THE EDITING COMPONENTS ARE POPULATED 
-            this.setState({editor: data[0].world_text, title: data[0].title, world_select: data[0].id});
+            this.setState({
+                editor: firstWorld.world_text, 
+                title: firstWorld.title, 
+                world_select: firstWorld.id
+            });
 
-            // SET THE FIRST WORLD CARD TO ACTIVE SINCE THAT'S WHAT SHOWS FIRST
-            this.changeClass(data[0].id, "active-world");
+            this.changeClass(firstWorld.id, "active-world");
+        })
+        .catch(err => {
+            helpers.openModalForced("world");
         })
     }
 
-// ********** FUNCTION THAT CALLS THE API AND UPDATES THE STATE
     updateWorldList = () => {
-
-        // THIS FUNCTION WILL RETURN A PROMISE
         return new Promise((resolve, reject) => {
+            const storyId = localStorage.getItem("currentStoryId");
 
-            // GRAB STORY ID FROM LOCAL STORAGE
-            let storyId = localStorage.getItem("currentStoryId");
-
-            // PING THE DATABASE TO GET AN UPDATED WORLD LIST
             API.getAll("worldbuilds", storyId)
             .then(res => {
-
-                // IF THERE'S AN ERROR, IT MEANS THE USER ISN'T AUTHENTICATED
                 if (res.data.error) {
-
-                    // SEND THEM TO THE LOGIN PAGE
                     window.location.href="/login"
                 }
 
-                // IF THERE'S NO ERRORS, THEN PROCEED
                 else {
-                    // PULL OUT THE WORLD DATA
-                    let data = res.data;
+                    const worlds = res.data;
 
-                    // IF WE ARE GETTING DATA FROM THE SERVER
-                    if (data.length > 0) {
+                    if (worlds.length > 0) {
+                        helpers.decode(worlds);
+                        
+                        this.setState({ worlds });
 
-                        // DECODE THE DATA
-                        this.decode(data);
-
-                        // UPDATE THE STATE WITH NEW WORLD DATA
-                        this.setState({worlds: data});
-
-                        // RESOLVE THE PROMISE BECAUSE THINGS WORKED! SEND THE DATA BACK IN CASE WE NEED IT
-                        resolve(data);
+                        resolve(worlds);
                     }
 
-                    // IF WE AREN'T GETTING DATA FROM THE SERVER, THE USER NEEDS TO ADD A WORLD
                     else {
-                        // CALL THE FUNCTION TO FORCE USER TO ADD A WORLD
-                        this.forceAddWorld();
-
-                        // UPDATE THE STATE WITH THE CURRENT DATA
-                        this.setState({worlds: data});
-
-                        // REJECT THE PROMISE SO NO OTHER CODE RUNS
-                        reject(data);
+                        reject();
                     }
                 }
             })
             
-            // IF THERE'S AN ERROR
             .catch(err => {
-
-                // IT MAY READ THE LOGIN ERROR AS AN ERROR SO.... SEND THEM TO THE LOGIN PAGE
                 window.location.href="/login"
 
-                // REJECT THE PROMISE
                 reject(err);
             })
         })
@@ -208,7 +177,8 @@ class WorldPage extends Component {
         this.setState({world_select: id, title: newWorldTitle});
 
         // SELECT THE IFRAME THAT HOLDS THE EDITOR AND REPLACE IT WITH THE NEW WORLD TEXT
-        window.frames['text-editor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML = newWorldText;
+        helpers.setEditorText(newWorldText);
+        // window.frames['text-editor-world_ifr'].contentDocument.getElementById('tinymce').innerHTML = newWorldText;
     }
 
 // *********** FUNCTION TO HANDLE WHEN THE WORLD NAME IS UPDATED
@@ -338,26 +308,13 @@ class WorldPage extends Component {
                         />
                     </Col>
 
-                    {/* THE RIGHT-HAND COLUMN, WHICH HOLDS OUR WORLD LIST */}
-                    <Col size="4" p="pl-0 pr-0 mr-0" id="world-list-col">
-
-                        {/* MAP THROUGH OUR WORLD ITEMS FROM THE STATE */}
-                        {this.state.worlds.map(world => {
-
-                            // CREATE WORLD CARD WITH ATTRIBUTES
-                            return <WorldCardEdit 
-                                id={world.id} 
-                                title={world.title} 
-                                key={world.id} 
-                                onClick={this.handleClick}
-                            />
-                        })}
-
-                        <AddAnItem 
-                            id="add-world-prompt"
-                            target="#add-world-modal"
-                        > Add a WorldBuilding Item </AddAnItem>
-                    </Col>
+                    <ItemSelectList
+                        items={this.state.worlds}
+                        onClick={this.handleClick}
+                        promptId="add-world-prompt"
+                        modalTarget="#add-world-modal"
+                        itemType="world"
+                    />
                 </Row>
 
                 <Modal 
