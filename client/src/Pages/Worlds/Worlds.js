@@ -4,7 +4,7 @@ import {Row, Col} from "../../Components/Grid";
 import WorldCardEdit from "../../Components/WorldCardEdit";
 import TinyMceEditor from '../../Components/TinyMceEditor';
 import AddAnItem from "../../Components/AddAnItem";
-import {FormFieldInput} from "../../Components/Form";
+import {FormFieldInput, FormGroup} from "../../Components/Form";
 import API from "../../utils/API";
 import Modal from "../../Components/Modal";
 import EditorRow from "../../Components/EditorRow";
@@ -353,7 +353,6 @@ class WorldPage extends Component {
                             />
                         })}
 
-                        {/* LINK TO ADD A WORLD ITEM, WHICH WILL BRING UP A MODAL */}
                         <AddAnItem 
                             id="add-world-prompt"
                             target="#add-world-modal"
@@ -361,20 +360,19 @@ class WorldPage extends Component {
                     </Col>
                 </Row>
 
-                {/* MODAL FOR ADDING A NEW WORLD ITEM */}
                 <Modal 
                     id="add-world-modal"
                     modalTitle="Add a Worldbuilding Item"
                     saveId="add-new-world" 
                     onClick={this.addNewWorld}
                 >
-                    {/* FORM FIELD TO ADD A NAME */}
-                    <div className="form-group">
-                        <label htmlFor="add-title-input" className="label-title" >Title of Worldbuilding Item</label>
-                        <FormFieldInput id="add-title-input" name="title" placeholder="i.e. setting"/>
-                    </div>
-                </Modal>
-                
+                    <FormGroup
+                        id="add-title-input"
+                        labelText="Title of Worldbuilding Item"
+                        formName="title"
+                        placeholder="i.e. setting"
+                    />
+                </Modal>           
             </div>
         )
     }

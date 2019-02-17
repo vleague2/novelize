@@ -4,7 +4,7 @@ import { Row, Col } from "../../Components/Grid";
 import CharacterCardEdit from "../../Components/CharacterCardEdit";
 import TinyMceEditor from '../../Components/TinyMceEditor';
 import AddAnItem from "../../Components/AddAnItem";
-import { FormFieldInput } from "../../Components/Form";
+import { FormFieldInput, FormGroup } from "../../Components/Form";
 import API from "../../utils/API";
 import helpers from "../../utils/helpers";
 import Modal from "../../Components/Modal";
@@ -239,21 +239,26 @@ class CharacterPage extends Component {
                     saveId="add-new-char" 
                     onClick={this.addNewChar}
                 >
-                {/* @TODO componentize these better */}
-                    <div className="form-group">
-                        <label htmlFor="add-name-input" className="label-title">Character Name</label>
-                        <FormFieldInput id="add-name-input" name="name" placeholder="Jane Doe" />
-                    </div>
+                    <FormGroup
+                        id="add-name-input"
+                        labelText="Character Name"
+                        formName="name"
+                        placeholder="Jane Doe"
+                    />
 
-                    <div className="form-group">
-                        <label htmlFor="add-preview-input" className="label-title">One-line bio</label>
-                        <FormFieldInput id="add-preview-input" name="preview_text" placeholder="A quick overview of the character"/>
-                    </div>
+                    <FormGroup
+                        id="add-preview-input"
+                        labelText="One-line bio"
+                        formName="preview_text"
+                        placeholder="A quick overview of the character"
+                    />
 
-                    <div className="form-group">
-                        <label htmlFor="add-image-input" className="label-title">Image Link</label>
-                        <FormFieldInput id="add-image-input" name="image" placeholder="Square images look best!"/>
-                    </div>
+                    <FormGroup
+                        id="add-image-input"
+                        labelText="Image Link"
+                        formName="image"
+                        placeholder="Square images look best!"
+                    />
                 </Modal>
             </div>
         )

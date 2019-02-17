@@ -4,7 +4,7 @@ import {Row, Col} from "../../Components/Grid";
 import WorldCardEdit from "../../Components/WorldCardEdit";
 import TinyMceEditor from "../../Components/TinyMceEditor";
 import AddAnItem from "../../Components/AddAnItem";
-import {FormFieldInput} from "../../Components/Form";
+import {FormFieldInput, FormGroup} from "../../Components/Form";
 import API from "../../utils/API";
 import Modal from "../../Components/Modal";
 import EditorRow from "../../Components/EditorRow";
@@ -391,11 +391,11 @@ class NotePage extends Component {
                     saveId="add-new-note" 
                     onClick={this.addNewNote}
                 >
-                    {/* FORM FIELD TO ADD A NAME */}
-                    <div className="form-group">
-                        <label htmlFor="add-title-input" className="label-title">Title of Note</label>
-                        <FormFieldInput id="add-title-input" name="title"/>
-                    </div>
+                    <FormGroup
+                        id="add-title-input"
+                        labelText="Title of Note"
+                        formName="title"
+                    />
                 </Modal>
                 
             </div>
