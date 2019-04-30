@@ -6,9 +6,40 @@
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-1.0.6.tgz#3e02972728c69248c2af08d60a48cbb8680fffdf"
 
+"@types/jest-diff@*":
+  version "20.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
+
+"@types/jest@^24.0.12":
+  version "24.0.12"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.12.tgz#0553dd0a5ac744e7dc4e8700da6d3baedbde3e8f"
+  dependencies:
+    "@types/jest-diff" "*"
+
 "@types/node@*":
   version "10.3.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.0.tgz#078516315a84d56216b5d4fed8f75d59d3b16cac"
+
+"@types/node@^11.13.8":
+  version "11.13.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.8.tgz#e5d71173c95533be9842b2c798978f095f912aab"
+
+"@types/prop-types@*":
+  version "15.7.1"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.1.tgz#f1a11e7babb0c3cad68100be381d1e064c68f1f6"
+
+"@types/react-dom@^16.8.4":
+  version "16.8.4"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.4.tgz#7fb7ba368857c7aa0f4e4511c4710ca2c5a12a88"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*", "@types/react@^16.8.15":
+  version "16.8.15"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.15.tgz#a76515fed5aa3e996603056f54427fec5f2a5122"
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
 
 abbrev@1:
   version "1.1.1"
@@ -489,6 +520,10 @@ cross-spawn@^5.0.1:
 crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
+
+csstype@^2.2.0:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.4.tgz#d585a6062096e324e7187f80e04f92bd0f00e37f"
 
 d@1:
   version "1.0.0"
@@ -2622,6 +2657,10 @@ type-is@~1.6.15, type-is@~1.6.16:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.18"
+
+typescript@^3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
 
 ua-parser-js@^0.7.9:
   version "0.7.18"

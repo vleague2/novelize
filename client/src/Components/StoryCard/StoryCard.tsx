@@ -1,9 +1,19 @@
 import React from "react";
 import "./StoryCard.css";
-import {Row, Col} from "../../Components/Grid";
+import {Row, Col} from "../Grid";
 
-const StoryCard = (props) => (
-    <Col size="5" m="ml-auto mr-auto">
+type TStoryCard = {
+    id?: any,
+    title?: any,
+    onClick?: any,
+    datatarget?: any,
+    modalClick?: any,
+    onDelete?: any,
+    onDeleteTarget?: any,
+}
+
+const StoryCard = (props: TStoryCard) => (
+    <Col size={5} margin="ml-auto mr-auto">
         <div className="card story-card mb-4" id={props.id}>
             <div className="card-body">
                 <h5 className="card-title story-card-title text-center">
@@ -18,23 +28,23 @@ const StoryCard = (props) => (
                     Jump to edit:
                 </p>
                 <Row>
-                    <Col size="6">
+                    <Col size={6}>
                         <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="characters"> Characters </button>
                     </Col>
-                    <Col size="6">
+                    <Col size={6}>
                         <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="plot"> Plot </button>
                     </Col>
                 </Row>
                 <Row id="edit-story-button-row2">
-                    <Col size="6">
+                    <Col size={6}>
                         <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="world"> Worldbuilding </button>
                     </Col>
-                    <Col size="6">
+                    <Col size={6}>
                         <button className="btn btn-secondary btn-block quick-edit" onClick={props.onClick} id={props.id} name="notes"> Notes </button>
                     </Col>
                 </Row>  
                 <Row>
-                    <Col size="12" id="delete-btn-story" align="text-right">
+                    <Col size={12} id="delete-btn-story" align="text-right">
                         <button className="btn mt-4 mb-1 trash" 
                             id={props.id} 
                             onClick={props.onDelete}

@@ -1,28 +1,44 @@
 import React, { Component } from "react";
 import "./Characters.css";
 import { Row, Col } from "../../Components/Grid";
-import CharacterCardEdit from "../../Components/CharacterCardEdit";
 import TinyMceEditor from '../../Components/TinyMceEditor';
-import AddAnItem from "../../Components/AddAnItem";
-import { FormFieldInput, FormGroup } from "../../Components/Form";
+import { FormGroup } from "../../Components/Form";
 import API from "../../utils/API";
 import helpers from "../../utils/helpers";
 import Modal from "../../Components/Modal";
 import EditorRow from "../../Components/EditorRow";
 import ItemSelectList from "../../Components/ItemSelectList/ItemSelectList";
 
-class CharacterPage extends Component {
-    constructor(props) {
-        super(props);
+type TCharacter = {
+    name: string,
+    id: number,
+    preview_text?: string,
+    character_text?: string,
+    character_image?: string,
+}
 
-        this.state = {
-            characters: [],
-            editor: "",
-            character_select: "",
-            name: "",
-            preview_text: "",
-            character_image: ""
-        }
+type TState = {
+    characters: TCharacter[],
+    editor: any,
+    character_select: number,
+    name: any,
+    preview_text: any,
+    character_image: any,
+}
+
+class CharacterPage extends Component {
+    readonly state: TState = {
+        characters: [],
+        editor: "",
+        character_select: 0,
+        name: "",
+        preview_text: "",
+        character_image: ""
+    }
+
+    // @TODO what props??
+    constructor(props: any) {
+        super(props);
 
         this.handleEditClick = this.handleEditClick.bind(this);
         this.addNewChar = this.addNewChar.bind(this);
@@ -30,7 +46,7 @@ class CharacterPage extends Component {
 
     componentDidMount() {
         this.updateCharList()
-        .then(characters => {    
+        .then((characters: TCharacter[]) => {    
             const firstCharacter = characters[0];
 
             this.setState({
@@ -44,12 +60,12 @@ class CharacterPage extends Component {
             // @TODO there's gotta be a better way to do this
             this.changeClass(firstCharacter.id, "active-char");
         })
-        .catch(err => {
+        .catch((err: any) => {
             helpers.openModalForced("character");
         })
     }
 
-    updateCharList = () => {
+    updateCharList = (): Promise<TCharacter[]> => {
         return new Promise((resolve, reject) => {
             // @TODO good place to use redux
             const storyId = localStorage.getItem("currentStoryId");
@@ -85,17 +101,21 @@ class CharacterPage extends Component {
     }
 
     // @TODO helper function-ize
-    changeClass(id, active) {
-        document.getElementById(id).setAttribute("class", `card rounded-0 ${active}`);
+    changeClass(id: number, active?: string) {
+        const idString = id.toString();
+
+        const element = document.getElementById(idString) as HTMLElement;
+
+        element.setAttribute("class", `card rounded-0 ${active}`);
     }
 
-    handleEditClick(e) {
+    handleEditClick(e: any) {
         const id = parseInt(e.target.id);
 
         this.updateEditor(id);
     }
 
-    updateEditor = (id) => {
+    updateEditor = (id: number) => {
         this.state.characters.forEach(character => {
             if (character.id === id) {
                 this.setState({
@@ -117,7 +137,7 @@ class CharacterPage extends Component {
         })
     }
 
-    handleInputChange = (e) => {
+    handleInputChange = (e: any) => {
         const { name, value } = e.target;
 
         this.setState({
@@ -139,7 +159,7 @@ class CharacterPage extends Component {
         })
     }
 
-    handleEditorChange = (e) => {
+    handleEditorChange = (e: any) => {
         API.updateOne("characters", this.state.character_select, "character_text", e.target.getContent())
         .then(res => {
             this.updateCharList();
@@ -150,10 +170,14 @@ class CharacterPage extends Component {
         // if user has just added their first character, this will make the modal closeable
         helpers.removeModalForcedAttributes();
 
+        const name = document.getElementById("add-name-input") as HTMLInputElement;
+        const preview = document.getElementById("add-preview-input") as HTMLInputElement;
+        const image = document.getElementById("add-image-input") as HTMLInputElement;
+
         const newCharacter = {
-            name: document.getElementById("add-name-input").value.trim(),
-            preview: document.getElementById("add-preview-input").value.trim(),
-            image: document.getElementById("add-image-input").value.trim(),
+            name: name.value.trim(),
+            preview: preview.value.trim(),
+            image: image.value.trim(),
             storyId: localStorage.getItem("currentStoryId")
         }
 
@@ -202,7 +226,7 @@ class CharacterPage extends Component {
         return (
             <div id="char-edit">
                 <Row id="editor-char-row">
-                    <Col size="8" p="pr-0" id="editor-char-col">
+                    <Col size={8} padding="pr-0" id="editor-char-col">
                         <EditorRow
                             mainFormLabel="One-line Bio"
                             formValue={this.state.preview_text}
@@ -211,10 +235,10 @@ class CharacterPage extends Component {
                             onDelete={this.deleteChar}
                             shouldShowBottomRow={true}
                             leftLabel="Name"
-                            leftformValue={this.state.name}
+                            leftFormValue={this.state.name}
                             leftFormName="name"
                             rightLabel="Image"
-                            rightformValue={this.state.character_image}
+                            rightFormValue={this.state.character_image}
                             rightFormName="character_image"             
                         />
 

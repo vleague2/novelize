@@ -1,8 +1,17 @@
 import React from "react";
-import Button from "./../Button";
+import Button from "../Button";
 
-const Modal = ({id, modalTitle, saveId, onClick, children, delBut}) => (
-    <div className="modal fade" tabIndex="-1" role="dialog" id={id}>
+type TModal = {
+    id?: any,
+    modalTitle?: any,
+    saveId?: any,
+    onClick?: any,
+    children?: any,
+    delBut?: any,
+}
+
+const Modal = ({id, modalTitle, saveId, onClick, children, delBut}: TModal) => (
+    <div className="modal fade" tabIndex={-1} role="dialog" id={id}>
         <div className="modal-dialog" role="document">
             <div className="modal-content">
                 <div className="modal-header">

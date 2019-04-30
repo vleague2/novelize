@@ -2,7 +2,18 @@ import React from "react";
 import { Row, Col } from "../Grid";
 import "./ItemCard.css";
 
-const ItemCard = ( props ) => {
+type TItemCard = {
+    isEditable?: boolean,
+    onClick?: () => void,
+    id?: string,
+    itemType?: any,
+    text?: any,
+    image?: any,
+    title?: any,
+    preview?: any,
+}
+
+const ItemCard = ( props: TItemCard ) => {
     function getLinkText() {
         if (props.isEditable) {
             return (
@@ -25,19 +36,19 @@ const ItemCard = ( props ) => {
             <div className="card-body">
                 <Row>
                     {props.image && 
-                        <Col size="3">
+                        <Col size={3}>
                             <img src={props.image} className="item-image" alt={props.title}/>
                         </Col>
                     }
 
-                    <Col size="8" p="pl-3">
+                    <Col size={8} padding="pl-3">
                         <p className="primary-text mb-1">{props.title}</p>
                         {/* @TODO: text wrap? */}
                         <p className="secondary-text mb-1">{props.preview}</p>
                     </Col>
                 </Row>
                 <Row>
-                    <Col size="12">
+                    <Col size={12}>
                         { getLinkText() }
                     </Col>
                 </Row>

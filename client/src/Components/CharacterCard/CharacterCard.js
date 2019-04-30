@@ -2,6 +2,10 @@ import React from "react";
 import "./CharacterCard.css";
 import {Row, Col} from "../Grid";
 
+/**
+ * @deprecated in favor of ItemCard
+ */
+
 const CharacterCard = (props) => (
     <div className="card rounded-0">
         <div className="card-body" id={props.id}>

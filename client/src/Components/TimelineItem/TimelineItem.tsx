@@ -1,13 +1,22 @@
 import React from "react";
 import "./TimelineItem.css";
-import {Row, Col} from "../../Components/Grid";
+import {Row, Col} from "../Grid";
 
-const TimelineItem = (props) => (
+type TTimelineItem = {
+    id?: any,
+    title?: any,
+    children?: any,
+    target?: any,
+    onEdit?: any,
+    onDelete?: any,
+}
+
+const TimelineItem = (props: TTimelineItem) => (
     <Row id="timeline-row">
-        <Col size="2" id="line-col">
+        <Col size={2} id="line-col">
             <div className="circle"/>
         </Col>
-        <Col size="8" id="plot-col">
+        <Col size={8} id="plot-col">
             <div className="card" id = {props.id}>
                 <div className="card-body">
                     <h4 className="card-title timeline-title">{props.title}</h4>

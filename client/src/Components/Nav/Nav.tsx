@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Nav = () => {
 
-  const logout = (e) => {
+  const logout = (e: any) => {
     console.log(e.target.id);
     if (e.target.id == "logout") {
       axios.get("/auth/logout")

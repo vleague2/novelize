@@ -1,7 +1,15 @@
 import React from "react";
 import "./FormFieldInput.css";
 
-export const FormFieldInput = (props) => (
+type TFormFieldInput = {
+    id?: string,
+    name?: string,
+    placeholder?: string,
+    value?: string,
+    onChange?: any,
+}
+
+export const FormFieldInput = (props: TFormFieldInput) => (
     <input 
         type="text" 
         className="form-control mt-2 mr-2 form-field-input" 

@@ -1,7 +1,13 @@
 import React from "react";
 import "./NoteCards.css";
 
-const NoteCard = (props) => (
+type TNoteCard = {
+    id?: any,
+    title?: any,
+    text?: any,
+}
+
+const NoteCard = (props: TNoteCard) => (
     <div className="card rounded-0">
         <div className="card-body" id={props.id}>
            <p className="note-title mb-1">

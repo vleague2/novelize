@@ -5,49 +5,41 @@ import BackButton from "../BackButton";
 import Button from "../Button";
 import { FormFieldInput } from "../Form";
 
-// possible props
-// handleInputChange for each form field
-// Title for world and note
-// Name for character
-// image for character
-// one-line bio for character
-// onDelete for delete button
-
 // maybe pass in a type: character, note, world
 // and have a switch on that
 
 
-// type TEditorRowProps {
-//     mainFormLabel: string;
-//     placeholder: string;
-//     formName: string;
-//     onChange: function;
-//     onDelete: function;
-//     shouldShowBottomRow: boolean;
-//     leftLabel?: string;
-//      left placeholder?: stringl
-//      left formName?: string;
-//      rightLabel?: string;
-//      right placeholder?: string;
-//      right formName?: string;
-// }
+type TEditorRowProps = {
+    mainFormLabel: string,
+    formName: string,
+    formValue: string,
+    onChange: (e: any) => void,
+    onDelete: () => void,
+    shouldShowBottomRow: boolean,
+    leftLabel?: string,
+    leftFormValue?: string,
+    leftFormName?: string,
+    rightLabel?: string,
+    rightFormValue?:string,
+    rightFormName?: string,
+}
 
-const EditorRow = ( props ) => {
+const EditorRow = ( props: TEditorRowProps ) => {
     // @TODO this is awful. set default instead
     const shouldShowBottomRow = props.shouldShowBottomRow || false;
 
     return (
         <div>
             <Row>
-                <Col size="1">
+                <Col size={1}>
                     <BackButton/>
                 </Col>
 
-                <Col size="2">
+                <Col size={2}>
                     <p className="text-right mt-3 form-text">{props.mainFormLabel}</p>
                 </Col>
 
-                <Col size="6">
+                <Col size={6}>
                     <FormFieldInput
                         value={props.formValue} 
                         name={props.formName} 
@@ -55,7 +47,7 @@ const EditorRow = ( props ) => {
                     />
                 </Col>
 
-                <Col size="3">
+                <Col size={3}>
                     <Button 
                         className="btn-danger delete-btn" 
                         onClick={props.onDelete}
@@ -67,11 +59,11 @@ const EditorRow = ( props ) => {
              
             { shouldShowBottomRow && 
                 <Row>
-                    <Col size="3">
+                    <Col size={3}>
                         <p className="mt-3 form-text text-right">{props.leftLabel}</p>
                     </Col>
 
-                    <Col size="3">
+                    <Col size={3}>
                         <FormFieldInput 
                             value={props.leftFormValue} 
                             name={props.leftFormName}
@@ -79,11 +71,11 @@ const EditorRow = ( props ) => {
                         />
                     </Col>
 
-                    <Col size="1">
+                    <Col size={1}>
                         <p className="mt-3 form-text text-right">{props.rightLabel}</p>
                     </Col>
 
-                    <Col size="3">
+                    <Col size={3}>
                         <FormFieldInput 
                             value={props.rightFormValue} 
                             name={props.rightFormName} 

@@ -1,7 +1,12 @@
 import React from "react";
 import "./Grid.css";
 
-export const Container = ({ fluid, children }) => (
+type TContainer = {
+  fluid?: any,
+  children?: any,
+}
+
+export const Container = ({ fluid, children }: TContainer) => (
   <div id="container" className={`container${fluid ? "-fluid" : ""}`}>
     {children}
   </div>

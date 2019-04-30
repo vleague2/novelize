@@ -1,7 +1,13 @@
 import React from "react";
 import "./WorldCards.css";
 
-const WorldCard = (props) => (
+type TWorldCard = {
+    id?: any,
+    title?: any,
+    descr?: any,
+}
+
+const WorldCard = (props: TWorldCard) => (
     <div className="card rounded-0">
         <div className="card-body" id={props.id}>
            <p className="world-title mb-0">

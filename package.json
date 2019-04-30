@@ -21,6 +21,10 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "@types/jest": "^24.0.12",
+    "@types/node": "^11.13.8",
+    "@types/react": "^16.8.15",
+    "@types/react-dom": "^16.8.4",
     "axios": "^0.18.0",
     "bcrypt-nodejs": "^0.0.3",
     "bcryptjs": "^2.4.3",
@@ -39,6 +43,7 @@
     "passport-local": "^1.0.0",
     "react-router-dom": "^4.2.2",
     "sequelize": "^4.37.10",
-    "sequelize-cli": "^4.0.0"
+    "sequelize-cli": "^4.0.0",
+    "typescript": "^3.4.5"
   }
 }

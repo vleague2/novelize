@@ -1,11 +1,19 @@
 import React from "react";
 import "./ItemSelectList.css";
 import { Col } from "../Grid";
-import AddAnItem from "../../Components/AddAnItem";
+import AddAnItem from "../AddAnItem";
 import ItemCard from "../ItemCard";
 
-const ItemSelectList = ( props ) => (
-    <Col size="4" p="pl-0 pr-0 mr-0" id="item-list-col">
+type TItemSelectList = {
+    items: any[],
+    itemType: string,
+    onClick: any,
+    promptId: string,
+    modalTarget: any,
+}
+
+const ItemSelectList = ( props: TItemSelectList ) => (
+    <Col size={3} padding="pl-0 pr-0 mr-0" id="item-list-col">
         {props.items.map(item => {
             return <ItemCard
                 id={item.id} 

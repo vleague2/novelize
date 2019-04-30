@@ -1,15 +1,21 @@
 import React from "react";
 import "./WorldCardEdit.css";
-import { Col } from "./../Grid";
+import { Col } from "../Grid";
 
-const WorldCardEdit = (props) => (
+type TWorldCardEdit = {
+    id?: any,
+    title?: any,
+    onClick?: any,
+}
+
+const WorldCardEdit = (props: TWorldCardEdit) => (
     <div className="card rounded-0" id={props.id}>
         <div className="card-body">
             <p className="world-title mb-0">
                 {props.title}
             </p>
             <div className="row">
-                <Col size="12">
+                <Col size={12}>
                     <p className="edit-world text-right mb-0" onClick={props.onClick} id={props.id}>Edit</p>
                 </Col>
             </div>

@@ -1,7 +1,12 @@
 import React from "react";
 import { Editor } from '@tinymce/tinymce-react';
 
-const TinyMceEditor = ( props ) => (
+type TTinyMceEditor = {
+    editorText: string,
+    onChange: (e: any) => void,
+}
+
+const TinyMceEditor = ( props: TTinyMceEditor ) => (
     <Editor
         apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
         cloudChannel='dev'
@@ -20,8 +25,8 @@ const TinyMceEditor = ( props ) => (
                 '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
                 '//www.tinymce.com/css/codepen.min.css'],
             height: 446,
-            setup: function(ed) {
-                ed.on('keydown', function(event) {
+            setup: function(ed: any) {
+                ed.on('keydown', function(event: any) {
                     if (event.keyCode === 9) { // tab pressed
                         ed.execCommand('mceInsertContent', false, '&emsp;'); 
                         event.preventDefault();
