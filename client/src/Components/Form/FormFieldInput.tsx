@@ -2,11 +2,11 @@ import React from "react";
 import "./FormFieldInput.css";
 
 type TFormFieldInput = {
-    id?: string,
-    name?: string,
-    placeholder?: string,
-    value?: string,
-    onChange?: any,
+    id?: string;
+    name?: string;
+    placeholder?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const FormFieldInput = (props: TFormFieldInput) => (

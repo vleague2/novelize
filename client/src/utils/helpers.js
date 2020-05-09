@@ -60,20 +60,6 @@ export default {
                     item[key] = "";
                 }
             })
-
-            // item.name = decodeURIComponent(item.name)
-
-            // if (item.character_text !== null) {
-            //     item.character_text = decodeURIComponent(item.character_text);
-            // }
-
-            // else {
-            //     // if we don't do anything, it just says "null" which is ugly
-            //     item.character_text = "";
-            // }
-
-            // item.preview_text = decodeURIComponent(item.preview_text);
-            // item.character_image = decodeURIComponent(item.character_image);
         })
     },
 }
