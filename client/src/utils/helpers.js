@@ -43,7 +43,7 @@ export default {
 
     changeClass: function(id, active) {
         // @TODO this could probably be an actual component that takes in the active class instead of this awful garbage
-        document.getElementById(id).setAttribute("class", `card rounded-0 ${active}`);
+        document.getElementById(id).setAttribute("class", `card rounded-0 ${active ? active : ''}`);
     },
 
     setEditorText: function(text) {

@@ -58,7 +58,7 @@ class CharacterPage extends Component {
             });
 
             // @TODO there's gotta be a better way to do this
-            this.changeClass(firstCharacter.id, "active-char");
+            helpers.changeClass(firstCharacter.id, "active-char");
         })
         .catch((err: any) => {
             helpers.openModalForced("character");
@@ -100,15 +100,6 @@ class CharacterPage extends Component {
         })
     }
 
-    // @TODO helper function-ize
-    changeClass(id: number, active?: string) {
-        const idString = id.toString();
-
-        const element = document.getElementById(idString) as HTMLElement;
-
-        element.setAttribute("class", `card rounded-0 ${active}`);
-    }
-
     handleEditClick(e: any) {
         const id = parseInt(e.target.id);
 
@@ -125,14 +116,14 @@ class CharacterPage extends Component {
                     character_image: character.character_image
                 });
 
-                this.changeClass(character.id, "active-char");
+                helpers.changeClass(character.id, "active-char");
 
                 helpers.setEditorText(character.character_text);
             }
 
             else {
                 // this removes the active class. @TODO probably can conditionally set class in template
-                this.changeClass(character.id);
+                helpers.changeClass(character.id);
             }
         })
     }
