@@ -11,14 +11,30 @@ import Note from "./Pages/Notes/Notes";
 import Plot from "./Pages/Plot/Plot";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import NoMatch from "./Pages/404/404";
+import API from './utils/API';
 
 export const StoryContext = React.createContext({
-  storyId: 1,
-  setStoryId: (id: number) => {},
+  storyId: "0",
+  setStoryId: (id: string) => {},
 });
 
 const App = () => {
-  const [storyId, setStoryId] = React.useState<number>(1);
+  const storedStoryId = localStorage.getItem("currentStoryId");
+
+  const [storyId, setStoryId] = React.useState<string>(storedStoryId);
+
+  React.useEffect(() => {
+    if (!storyId) {
+      API.getAllStories()
+      .then((res) => {
+        setStoryId(res.data[0].id);
+      })
+    }
+  }, [])
+
+  React.useEffect(() => {
+    localStorage.setItem("currentStoryId", storyId);
+  }, [storyId])
 
   return (
     <Router>
@@ -27,15 +43,15 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
-          <Route exact path ="/dashboard" component={Dashboard} />
-          <Route exact path = "/editor" component={Editor} />
-          <Route exact path = "/character-edit" component={Character}/>
-          <Route exact path = "/world-edit" component={World}/>
-          <Route exact path = "/notes-edit" component={Note}/>
-          <Route exact path = "/plot-edit" component={Plot}/>
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path= "/editor" component={Editor} />
+          <Route exact path= "/character-edit" component={Character}/>
+          <Route exact path= "/world-edit" component={World}/>
+          <Route exact path= "/notes-edit" component={Note}/>
+          <Route exact path= "/plot-edit" component={Plot}/>
           <Route component={NoMatch}/>
         </Switch>
-        <Footer/>
+        {/* <Footer/> */}
       </StoryContext.Provider>
     </Router>
   )

@@ -29,7 +29,7 @@
     color: red;
     cursor: pointer;
 }
-/* 
-.popover-body {
-    text-align: center;
-} */
+
+.link:hover {
+  text-decoration: none;
+}

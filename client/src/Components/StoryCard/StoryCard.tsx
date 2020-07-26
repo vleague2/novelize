@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./StoryCard.css";
 import { Row, Col } from "../Grid";
 import Modal from "../Modal";
@@ -44,15 +45,17 @@ const StoryCard = (props: TStoryCard) => {
             <h5 className="card-title story-card-title text-center">
               {props.title}
             </h5>
-            <button
-              className="btn btn-block mb-3 edit-story"
-              onClick={e => {
-                setActiveStory();
-                navigateTo("/editor");
-              }}
-            >
-              Open Story Editor
-            </button>
+            <Link to="/editor" className="link">
+              <button
+                className="btn btn-block mb-3 edit-story"
+                onClick={e => {
+                  setActiveStory();
+                }}
+              >
+                Open Story Editor
+              </button>
+            </Link>
+
             <p
               className="card-subtitle text-center mb-4 edit-story-title"
               id={props.id.toString()}
@@ -66,15 +69,16 @@ const StoryCard = (props: TStoryCard) => {
             <Row>
               {navigationButtons.map(button => (
                 <Col size={6} key={button.text}>
-                  <button
-                    className="btn btn-secondary btn-block quick-edit mt-3"
-                    onClick={e => {
-                      setActiveStory();
-                      navigateTo(button.url);
-                    }}
-                  >
-                    {button.text}
-                  </button>
+                  <Link to={button.url} className="link">
+                    <button
+                      className="btn btn-secondary btn-block quick-edit mt-3"
+                      onClick={e => {
+                        setActiveStory();
+                      }}
+                    >
+                      {button.text}
+                    </button>
+                  </Link>
                 </Col>
               ))}
             </Row>
@@ -148,11 +152,7 @@ const StoryCard = (props: TStoryCard) => {
 
   function setActiveStory() {
     localStorage.setItem("currentStoryId", props.id.toString());
-    storyContext.setStoryId(props.id);
-  }
-
-  function navigateTo(url: string) {
-    window.location.href = url;
+    storyContext.setStoryId(props.id.toString());
   }
 };
 export default StoryCard;

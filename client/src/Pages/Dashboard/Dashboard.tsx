@@ -3,7 +3,7 @@ import "./Dashboard.css";
 import { Row, Col } from "../../Components/Grid";
 import API from "../../utils/API";
 import StoryCard from "../../Components/StoryCard";
-import { FormFieldInput } from "../../Components/Form";
+import { FormGroup } from "../../Components/Form";
 import AddAnItem from "../../Components/AddAnItem";
 import Modal from "../../Components/Modal";
 import helpers from "../../utils/helpers";
@@ -63,19 +63,15 @@ const Dashboard = () => {
         onClick={addNewStory}
         canClose={!state.forceAddStory}
       >
-        <div className="form-group">
-          <label htmlFor="add-title-input" className="label-title">
-            Title of Story
-          </label>
-          <FormFieldInput
-            id="add-title-input"
-            name="title"
-            value={state.newStoryTitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setState({ ...state, newStoryTitle: e.target.value })
-            }
-          />
-        </div>
+        <FormGroup
+          id="add-title-input"
+          labelText="Title of Story"
+          formName="title"
+          value={state.newStoryTitle}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setState({ ...state, newStoryTitle: e.target.value })
+          }
+        />
       </Modal>
     </>
   );

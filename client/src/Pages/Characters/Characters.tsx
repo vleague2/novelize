@@ -1,283 +1,232 @@
 import React, { Component } from "react";
+
 import "./Characters.css";
 import { Row, Col } from "../../Components/Grid";
-import TinyMceEditor from '../../Components/TinyMceEditor';
 import { FormGroup } from "../../Components/Form";
 import API from "../../utils/API";
 import helpers from "../../utils/helpers";
 import Modal from "../../Components/Modal";
-import EditorRow from "../../Components/EditorRow";
 import ItemSelectList from "../../Components/ItemSelectList/ItemSelectList";
+import { StoryContext } from "../../App";
+import CharacterEditorRow from "../../Components/CharacterEditRow/CharacterEditorRow";
+import { Editor } from "../../Components/Editor/Editor";
 
-type TCharacter = {
-    name: string,
-    id: number,
-    preview_text?: string,
-    character_text?: string,
-    character_image?: string,
-}
+export type TCharacter = {
+  name: string;
+  id: number;
+  preview_text?: string;
+  character_text?: string;
+  character_image?: string;
+};
 
 type TState = {
-    characters: TCharacter[],
-    editor: any,
-    character_select: number,
-    name: any,
-    preview_text: any,
-    character_image: any,
-}
+  characters: TCharacter[];
+  newCharacterName: string;
+  newCharacterBio: string;
+  newCharacterImage: string;
+  activeCharacter: TCharacter;
+};
 
-class CharacterPage extends Component {
-    readonly state: TState = {
-        characters: [],
-        editor: "",
-        character_select: 0,
-        name: "",
-        preview_text: "",
-        character_image: ""
+const CharacterPage = () => {
+  const storyContext = React.useContext(StoryContext);
+
+  const [state, setState] = React.useState<TState>({
+    characters: [],
+    newCharacterName: "",
+    newCharacterBio: "",
+    newCharacterImage: "",
+    activeCharacter: {name: undefined, id: undefined},
+  });
+
+  const [forceAddCharacter, setForceAddCharacter] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    updateCharList();
+  }, []);
+
+  React.useEffect(() => {
+    if (state.characters.length > 0 && state.activeCharacter.id === undefined) {
+      setState({ ...state, activeCharacter: state.characters[0]});
     }
+  }, [state.characters])
 
-    // @TODO what props??
-    constructor(props: any) {
-        super(props);
-
-        this.handleEditClick = this.handleEditClick.bind(this);
-        this.addNewChar = this.addNewChar.bind(this);
+  React.useEffect(() => {
+    if (state.characters.length === 0) {
+      setForceAddCharacter(true);
+    } else {
+      setForceAddCharacter(false);
     }
+  }, [state.characters])
 
-    componentDidMount() {
-        this.updateCharList()
-        .then((characters: TCharacter[]) => {    
-            const firstCharacter = characters[0];
+  function updateCharList(): Promise<TCharacter[]> {
+    return new Promise((resolve, reject) => {
+      API.getAll("characters", storyContext.storyId)
+        .then(res => {
+          if (res.data.error) {
+            // @TODO why is the API sending it back like this 
+            window.location.href = "/login";
+          } else {
+            const characters = res.data;
 
-            this.setState({
-                editor: firstCharacter.character_text, 
-                name: firstCharacter.name, 
-                preview_text: firstCharacter.preview_text, 
-                character_select: firstCharacter.id, 
-                character_image: firstCharacter.character_image
-            });
+            helpers.decode(characters);
 
-            // @TODO there's gotta be a better way to do this
-            helpers.changeClass(firstCharacter.id, "active-char");
+            setState({ ...state, characters });
+          }
         })
-        .catch((err: any) => {
-            helpers.openModalForced("character");
-        })
-    }
+        .catch(err => {
+          window.location.href = "/login";
 
-    updateCharList = (): Promise<TCharacter[]> => {
-        return new Promise((resolve, reject) => {
-            // @TODO good place to use redux
-            const storyId = localStorage.getItem("currentStoryId");
-
-            API.getAll("characters", storyId)
-            .then(res => {
-                if (res.data.error) {
-                    window.location.href="/login"
-                }
-
-                else {
-                    const characters = res.data;
-
-                    if (characters.length > 0) {
-                        helpers.decode(characters);
-
-                        this.setState({ characters });
-
-                        resolve(characters);
-                    }
-
-                    else {
-                        reject();
-                    }
-                }
-            })
-            .catch(err => {
-                window.location.href="/login"
-
-                reject(err);
-            })
-        })
-    }
-
-    handleEditClick(e: any) {
-        const id = parseInt(e.target.id);
-
-        this.updateEditor(id);
-    }
-
-    updateEditor = (id: number) => {
-        this.state.characters.forEach(character => {
-            if (character.id === id) {
-                this.setState({
-                    character_select: id, 
-                    name: character.name,
-                    preview_text: character.preview_text, 
-                    character_image: character.character_image
-                });
-
-                helpers.changeClass(character.id, "active-char");
-
-                helpers.setEditorText(character.character_text);
-            }
-
-            else {
-                // this removes the active class. @TODO probably can conditionally set class in template
-                helpers.changeClass(character.id);
-            }
-        })
-    }
-
-    handleInputChange = (e: any) => {
-        const { name, value } = e.target;
-
-        this.setState({
-            [name]: value
+          reject(err);
         });
+    });
+  }
 
-        API.updateOne("characters", this.state.character_select, name, value)
-        .then(res => {
-            console.log(res);
+  function handleEditClick(characterId: number) {
+    const character = state.characters.find((character) => character.id === characterId);
 
-            this.updateCharList();
-        })
-        .catch(err => {
-            // @TODO change this from an alert. this is temporary......
-            alert("Name cannot be empty!");
+    setState({ ...state, activeCharacter: character});
+  }
 
-            // @TODO this would be a great place to use redux to replace the character name instead of making another API call
-            // replace character name field because now it's awkwardly blank
-        })
-    }
+  function handleEditorChange(editor) {
+    setState((current) => ({
+      ...current,
+      activeCharacter: {
+        ...current.activeCharacter,
+        character_text: editor.getData(),
+      }
+    }))
+  }
 
-    handleEditorChange = (e: any) => {
-        API.updateOne("characters", this.state.character_select, "character_text", e.target.getContent())
-        .then(res => {
-            this.updateCharList();
-        })
-    }
+  function addNewChar() {
+    const newCharacter = {
+      name: state.newCharacterName.trim(),
+      preview: state.newCharacterBio.trim(),
+      image: state.newCharacterImage.trim(),
+      storyId: storyContext.storyId,
+    };
 
-    addNewChar = () => {
-        // if user has just added their first character, this will make the modal closeable
-        helpers.removeModalForcedAttributes();
+    console.log(newCharacter)
 
-        const name = document.getElementById("add-name-input") as HTMLInputElement;
-        const preview = document.getElementById("add-preview-input") as HTMLInputElement;
-        const image = document.getElementById("add-image-input") as HTMLInputElement;
+    API.addNewCharacter(newCharacter)
+      .then(addedCharacter => {
+        updateCharList();
+      })
+      .catch(err => {
+        // @TODO temporarily an alert. please change
+        alert("Can't save empty character name!");
+        console.log(err);
+        // @TODO don't close the modal :(
+      });
+  }
 
-        const newCharacter = {
-            name: name.value.trim(),
-            preview: preview.value.trim(),
-            image: image.value.trim(),
-            storyId: localStorage.getItem("currentStoryId")
-        }
+  function saveActiveCharacter() {
+    const contentToUpdate = {
+      name: state.activeCharacter.name,
+      preview_text: state.activeCharacter.preview_text,
+      character_image: state.activeCharacter.character_image,
+      character_text: state.activeCharacter.character_text,
+    };
 
-        API.addNewCharacter(newCharacter)
-        .then(addedCharacter => {
-            // @TODO this can probably happen in the modal component instead
-            helpers.emptyModalContent();
+    API.updateAll("characters", state.activeCharacter.id, contentToUpdate)
+      .then(res => {
+        updateCharList();
+      })
+      .catch((response) => {
+        // @TODO this is temporary until we have client-side validation
+        alert("Can't save empty character name!");
+        // @TODO error handling (i.e. failed to save, try again)
+      })
+  }
 
-            this.updateCharList()
-            .then(characters => {
-                this.updateEditor(addedCharacter.data.id)
-            })
-        })
-        .catch(err => {
-            // @TODO temporarily an alert. please change
-            alert("Can't save empty character name!");
-            console.log(err);
-            // @TODO don't close the modal :(
-        })
-    }
+  function deleteChar() {
+    API.deleteOne("characters", state.activeCharacter.id).then(res => {
+      updateCharList();
+    });
+  }
 
-    deleteChar = () => {
-        const id = this.state.character_select;
+  function updateActiveCharacter(e: React.ChangeEvent<HTMLInputElement>, propertyKey: string) {
+    setState({ 
+      ...state,
+      activeCharacter: {
+        ...state.activeCharacter,
+        [propertyKey]: e.target.value,
+      }
+    })
+  }
 
-        API.deleteOne("characters", id)
-        .then(res => {
-            console.log(res);
+  return (
+    <div id="char-edit">
+      <Row id="editor-char-row">
+        <Col size={8} padding="pr-0" id="editor-char-col">
+          <CharacterEditorRow
+            previewTextValue={state.activeCharacter.preview_text}
+            nameValue={state.activeCharacter.name}
+            imageValue={state.activeCharacter.character_image}
+            onPreviewTextChange={(e) => updateActiveCharacter(e, 'preview_text')}
+            onNameChange={(e) => updateActiveCharacter(e, 'name')}
+            onImageChange={(e) => updateActiveCharacter(e, 'character_image')}
+            onSave={saveActiveCharacter}
+            onDelete={deleteChar}
+          />
 
-            this.updateCharList()
-            .then(characters => {
-                // display the first character in the editor since the selected one is now deleted
-                const newSelectId = characters[0].id;
+          <Editor 
+            onChange={handleEditorChange}
+            data={state.activeCharacter.character_text}
+          />
+        </Col>
 
-                this.updateEditor(newSelectId);
-            })
-            .catch(characters => {
-                // if we're catching an error, that means we have no characters
-                this.setState({ characters: [] });
+        <ItemSelectList
+          items={state.characters}
+          onEditClick={handleEditClick}
+          promptId="add-character-prompt"
+          modalTarget="#add-character-modal"
+          itemType="character"
+          activeCharacter={state.activeCharacter.id}
+        />
+      </Row>
 
-                helpers.openModalForced();
-            })
-        })
-    }
+      <Modal
+        id="add-character-modal"
+        modalTitle="Add a Character"
+        saveId="add-new-char"
+        onClick={addNewChar}
+        canClose={!forceAddCharacter}
+      >
+        <FormGroup
+          id="add-name-input"
+          labelText="Character Name"
+          formName="name"
+          placeholder="Jane Doe"
+          value={state.newCharacterName}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setState({ ...state, newCharacterName: e.target.value })
+          }
+        />
 
-    render() {
-        return (
-            <div id="char-edit">
-                <Row id="editor-char-row">
-                    <Col size={8} padding="pr-0" id="editor-char-col">
-                        <EditorRow
-                            mainFormLabel="One-line Bio"
-                            formValue={this.state.preview_text}
-                            formName="preview_text"   
-                            onChange={this.handleInputChange}
-                            onDelete={this.deleteChar}
-                            shouldShowBottomRow={true}
-                            leftLabel="Name"
-                            leftFormValue={this.state.name}
-                            leftFormName="name"
-                            rightLabel="Image"
-                            rightFormValue={this.state.character_image}
-                            rightFormName="character_image"             
-                        />
+        <FormGroup
+          id="add-preview-input"
+          labelText="One-line bio"
+          formName="preview_text"
+          placeholder="A quick overview of the character"
+          value={state.newCharacterBio}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setState({ ...state, newCharacterBio: e.target.value })
+          }
+        />
 
-                        <TinyMceEditor
-                            editorText={this.state.editor}
-                            onChange={this.handleEditorChange}
-                        />
-                    </Col>
-
-                    <ItemSelectList
-                        items={this.state.characters}
-                        onClick={this.handleEditClick}
-                        promptId="add-character-prompt"
-                        modalTarget="#add-character-modal"
-                        itemType="character"
-                    />
-                </Row>
-
-                <Modal
-                    id="add-character-modal"
-                    modalTitle="Add a Character"
-                    saveId="add-new-char" 
-                    onClick={this.addNewChar}
-                >
-                    <FormGroup
-                        id="add-name-input"
-                        labelText="Character Name"
-                        formName="name"
-                        placeholder="Jane Doe"
-                    />
-
-                    <FormGroup
-                        id="add-preview-input"
-                        labelText="One-line bio"
-                        formName="preview_text"
-                        placeholder="A quick overview of the character"
-                    />
-
-                    <FormGroup
-                        id="add-image-input"
-                        labelText="Image Link"
-                        formName="image"
-                        placeholder="Square images look best!"
-                    />
-                </Modal>
-            </div>
-        )
-    }
-}
+        <FormGroup
+          id="add-image-input"
+          labelText="Image Link"
+          formName="image"
+          placeholder="Square images look best!"
+          value={state.newCharacterImage}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setState({ ...state, newCharacterImage: e.target.value })
+          }
+        />
+      </Modal>
+    </div>
+  )
+};
 
 export default CharacterPage;

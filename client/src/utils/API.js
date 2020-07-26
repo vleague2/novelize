@@ -9,6 +9,7 @@ export default {
         return axios.get(`/api/${URL}/` + id);
     },
 
+    // @TODO combine both endpoints
     updateOne: function(URL, id, col, con) {
         let encodedCon = encodeURIComponent(con);
 
@@ -16,6 +17,12 @@ export default {
             column: col,
             content: encodedCon
         });
+    },
+
+    updateAll: function(URL, id, content) {
+      // @TODO encoding
+
+      return axios.post(`/api/${URL}/update/` + id, content)
     },
 
     deleteOne: function(URL, id) {

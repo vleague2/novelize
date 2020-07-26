@@ -4,7 +4,10 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-decoupled-document": "^20.0.0",
+    "@ckeditor/ckeditor5-react": "^2.1.0",
     "@tinymce/tinymce-react": "^2.2.5",
+    "@types/react-router-dom": "^5.1.5",
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "react": "^16.13.1",

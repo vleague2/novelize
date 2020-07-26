@@ -1,3 +1,4 @@
+// Deprecated. Use Editor.tsx instead
 import React from "react";
 import { Editor } from '@tinymce/tinymce-react';
 
@@ -10,7 +11,7 @@ const TinyMceEditor = ( props: TTinyMceEditor ) => (
     <Editor
         apiKey='gbm0zd2ds9781n2k8pn8uz62cjz9o1f5p8fe0gz39e6mcaqh' 
         cloudChannel='dev'
-        initialValue={`<p>${props.editorText}</p>`}
+        value={`<p>${props.editorText}</p>`}
         // @TODO id/class this properly & add CSS
         id="text-editor"
         init={{
